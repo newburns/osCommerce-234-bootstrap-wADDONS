@@ -18,6 +18,9 @@
 */
 
   require('includes/application_top.php');
+// SIMPLE CHECKOUT START
+if(SIMPLE_CHECKOUT_ENABLED == 'True') tep_redirect(tep_href_link(FILENAME_CHECKOUT, '', 'SSL'));
+// SIMPLE CHECKOUT END
 
 // if the customer is not logged on, redirect them to the login page
   if (!tep_session_is_registered('customer_id')) {
