@@ -177,7 +177,7 @@
 // total, we don't want to go to paypal etc.
 //
     function pre_confirmation_check() {
-      global $payment, $order, $credit_covers;
+      global $payment, $order, $credit_covers, $customer_id;
       if (MODULE_ORDER_TOTAL_INSTALLED) {
         $total_deductions  = 0;
         reset($this->modules);

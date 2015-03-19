@@ -120,7 +120,7 @@
     }
 
     function pre_confirmation_check() {
-      global $cartID, $cart, $order;
+      global $cartID, $cart, $credit_covers, $order;
 
       if (empty($cart->cartID)) {
         $cartID = $cart->cartID = $cart->generate_cart_id();
@@ -134,8 +134,10 @@
       $order->info['payment_method'] = '<img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" border="0" alt="PayPal Logo" style="padding: 3px;" />';
     }
 
+/* ** Altered for CCGV ** */	
     function confirmation() {
       global $cartID, $cart_PayPal_Standard_ID, $customer_id, $languages_id, $order, $order_total_modules;
+/* ** EOF alterations for CCGV ** */ 
 
       if (tep_session_is_registered('cartID')) {
         $insert_order = false;
@@ -257,7 +259,7 @@
 
             $order_products_id = tep_db_insert_id();
 /* ** Altered for CCGV ** */
-            $order_total_modules->update_credit_account($i);
+            $order_total_modules->update_credit_account($i,$insert_id);
 /* **EOF alteration for CCGV ** */
             $attributes_exist = '0';
             if (isset($order->products[$i]['attributes'])) {
@@ -312,7 +314,7 @@
     }
 
     function process_button() {
-      global $customer_id, $order, $sendto, $currency, $cart_PayPal_Standard_ID, $shipping, $order_total_modules;
+      global $customer_id, $order, $sendto, $currency, $cart_PayPal_Standard_ID, $credit_covers, $shipping, $order_total_modules;
 
       $total_tax = $order->info['tax'];
 
@@ -498,14 +500,13 @@
       return $process_button_string;
     }
 
+/* ** Altered for CCGV ** */	
     function before_process() {
 	  global $customer_id, $order, $order_totals, $sendto, $billto, $languages_id, $payment, $currencies, $cart, $cart_PayPal_Standard_ID, $$payment, $_GET, $_POST, $messageStack, $order_total_modules;
      
       $result = false;
-	   
-/* ** Altered for CCGV ** */
-    require_once(DIR_WS_CLASSES . 'order_total.php');
-    $order_total_modules = new order_total;
+                                
+    $order_total_modules->apply_credit();
 /* **EOF alteration for CCGV ** */	
 							 
       if ( isset($_POST['receiver_email']) && (($_POST['receiver_email'] == MODULE_PAYMENT_PAYPAL_STANDARD_ID) || (defined('MODULE_PAYMENT_PAYPAL_STANDARD_PRIMARY_ID') && tep_not_null(MODULE_PAYMENT_PAYPAL_STANDARD_PRIMARY_ID) && ($_POST['receiver_email'] == MODULE_PAYMENT_PAYPAL_STANDARD_PRIMARY_ID))) ) {
@@ -638,9 +639,6 @@
 
         $products_ordered .= $order->products[$i]['qty'] . ' x ' . $order->products[$i]['name'] . ' (' . $order->products[$i]['model'] . ') = ' . $currencies->display_price($order->products[$i]['final_price'], $order->products[$i]['tax'], $order->products[$i]['qty']) . $products_ordered_attributes . "\n";
       }
-/* ** Altered for CCGV ** */
-        $order_total_modules->apply_credit();
-/* ** EOF alterations for CCGV ** */
        
 // lets start with the email confirmation
       $email_order = STORE_NAME . "\n" .
