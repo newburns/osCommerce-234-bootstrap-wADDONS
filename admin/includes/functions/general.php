@@ -1424,7 +1424,7 @@ return tep_draw_password_field('configuration_value', $password);
       $parts = explode('.', $ip_address);
 
       foreach ($parts as $ip_parts) {
-        if ( (intval($ip_parts) > 255) || (intval($ip_parts) < 0) ) {
+        if ( ((int)($ip_parts) > 255) || ((int)($ip_parts) < 0) ) {
           return false; // number is not within 0-255
         }
       }
@@ -1505,6 +1505,7 @@ return tep_draw_password_field('configuration_value', $password);
       return is_writable($file);
     }
   }
+<<<<<<< HEAD
 /* ** Altered for SEO Header Tags Reloaded ** */
   function tep_get_category_description($category_id, $language_id) {
     $category_query = tep_db_query("select categories_description from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . (int)$category_id . "' and language_id = '" . (int)$language_id . "'");
@@ -1788,3 +1789,5 @@ return $output;
 	$mimemessage->send($mail, $email_address, $sender_name, $sender, $output_subject, $output_content_html, $output_content_txt);
   }
 /* ** EOF alterations for Mail Manager ** */
+?>
+
