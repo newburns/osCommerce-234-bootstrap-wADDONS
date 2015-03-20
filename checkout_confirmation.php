@@ -51,17 +51,9 @@
   }
 
 // load the selected payment module
-/* ** Altered for CCGV **
-  require(DIR_WS_CLASSES . 'payment.php');
-  $payment_modules = new payment($payment);
-
-  require(DIR_WS_CLASSES . 'order.php');
-  $order = new order;
-
-  $payment_modules->update_status();
 
   if ( ($payment_modules->selected_module != $payment) || ( is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !is_object($$payment) ) || (is_object($$payment) && ($$payment->enabled == false)) ) {
-*/
+
   require(DIR_WS_CLASSES . 'payment.php');
 
   if ($credit_covers) $payment=''; // CCGV  
@@ -90,11 +82,7 @@
 // load the selected shipping module
   require(DIR_WS_CLASSES . 'shipping.php');
   $shipping_modules = new shipping($shipping);
-/* ** Altered for CCGV ** Commented out and place above in previous alteration
-  require(DIR_WS_CLASSES . 'order_total.php');
-  $order_total_modules = new order_total;
-  $order_total_modules->process();
-*/
+
 // Stock Check
   $any_out_of_stock = false;
   if (STOCK_CHECK == 'true') {
