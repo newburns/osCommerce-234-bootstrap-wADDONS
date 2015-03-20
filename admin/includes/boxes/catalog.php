@@ -14,34 +14,34 @@
     'heading' => BOX_HEADING_CATALOG,
     'apps' => array(
       array(
-        'code' => 'categories.php',
+        'code' => FILENAME_CATEGORIES,
         'title' => BOX_CATALOG_CATEGORIES_PRODUCTS,
-        'link' => tep_href_link('categories.php')
+        'link' => tep_href_link(FILENAME_CATEGORIES)
       ),
       array(
-        'code' => 'products_attributes.php',
+        'code' => FILENAME_PRODUCTS_ATTRIBUTES,
         'title' => BOX_CATALOG_CATEGORIES_PRODUCTS_ATTRIBUTES,
-        'link' => tep_href_link('products_attributes.php')
+        'link' => tep_href_link(FILENAME_PRODUCTS_ATTRIBUTES)
       ),
       array(
-        'code' => 'manufacturers.php',
+        'code' => FILENAME_MANUFACTURERS,
         'title' => BOX_CATALOG_MANUFACTURERS,
-        'link' => tep_href_link('manufacturers.php')
+        'link' => tep_href_link(FILENAME_MANUFACTURERS)
       ),
       array(
-        'code' => 'reviews.php',
+        'code' => FILENAME_REVIEWS,
         'title' => BOX_CATALOG_REVIEWS,
-        'link' => tep_href_link('reviews.php')
+        'link' => tep_href_link(FILENAME_REVIEWS)
       ),
       array(
-        'code' => 'specials.php',
+        'code' => FILENAME_SPECIALS,
         'title' => BOX_CATALOG_SPECIALS,
-        'link' => tep_href_link('specials.php')
+        'link' => tep_href_link(FILENAME_SPECIALS)
       ),
       array(
-        'code' => 'products_expected.php',
+        'code' => FILENAME_PRODUCTS_EXPECTED,
         'title' => BOX_CATALOG_PRODUCTS_EXPECTED,
-        'link' => tep_href_link('products_expected.php')
+        'link' => tep_href_link(FILENAME_PRODUCTS_EXPECTED)
       )
     )
   );

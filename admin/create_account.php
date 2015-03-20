@@ -16,7 +16,7 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'create_account.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ACCOUNT);
 
 require('includes/form_check.js.php'); ?>
 </head>
@@ -46,7 +46,7 @@ require('includes/form_check.js.php'); ?>
   if (sizeof($navigation->snapshot) > 0) {
 ?>
       <tr>
-        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link('login.php', tep_get_all_get_params(), 'SSL')); ?></td>
+        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link(FILENAME_LOGIN, tep_get_all_get_params(), 'SSL')); ?></td>
       </tr>
 <?php
   }

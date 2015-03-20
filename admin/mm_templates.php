@@ -41,7 +41,7 @@
             		tep_db_perform(TABLE_MM_TEMPLATES, $sql_data_array, 'update', "template_id = '" . (int)$template_id . "'");
           		
           		
-          		tep_redirect(tep_href_link('mm_templates.php', (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'nID=' . $template_id));
+          		tep_redirect(tep_href_link(FILENAME_MM_TEMPLATES, (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'nID=' . $template_id));
         		} else {
           		$action = 'new';
         		}
@@ -49,7 +49,7 @@
       		case 'deleteconfirm':
         		$template_id = tep_db_prepare_input($HTTP_GET_VARS['nID']);
         		tep_db_query("delete from " . TABLE_MM_TEMPLATES . " where template_id = '" . (int)$template_id . "'");
-        		tep_redirect(tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page']));
+        		tep_redirect(tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page']));
        		 break;
       		case 'delete':
       		case 'new': if (!isset($HTTP_GET_VARS['nID'])) break;
@@ -99,7 +99,7 @@
       <tr>
         <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
       </tr>
-      <tr><?php echo tep_draw_form('newsletter', 'mm_templates.php', (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'action=' . $form_action); if ($form_action == 'update') echo tep_draw_hidden_field('template_id', $nID); ?>
+      <tr><?php echo tep_draw_form('newsletter', FILENAME_MM_TEMPLATES, (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'action=' . $form_action); if ($form_action == 'update') echo tep_draw_hidden_field('template_id', $nID); ?>
         <td><table border="0" cellspacing="0" cellpadding="2">
           
           <tr>
@@ -146,7 +146,7 @@
         <td>
         	<table border="0" width="100%" cellspacing="0" cellpadding="2">
           		<tr>
-            		<td class="main" align="right"><?php echo (($form_action == 'insert') ? tep_image_submit('button_save.gif', IMAGE_SAVE) : tep_image_submit('button_update.gif', IMAGE_UPDATE)) . tep_draw_button(IMAGE_CANCEL, 'cancel', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td>
+            		<td class="main" align="right"><?php echo (($form_action == 'insert') ? tep_image_submit('button_save.gif', IMAGE_SAVE) : tep_image_submit('button_update.gif', IMAGE_UPDATE)) . tep_draw_button(IMAGE_CANCEL, 'cancel', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td>
           		</tr>
         	</table>
         </td>
@@ -167,9 +167,9 @@
 			.$newsletter['htmlfooter'];
     
 ?>
-      <tr><td class="smallText" align="right"><?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td></tr>	
+      <tr><td class="smallText" align="right"><?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td></tr>	
       <tr><td><?php echo $output_content_html; ?></td></tr>
-      <tr><td class="smallText" align="right"><?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td></tr>	  
+      <tr><td class="smallText" align="right"><?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?></td></tr>	  
 <?php
   }elseif ($action == 'confirm') {
     $nID = tep_db_prepare_input($HTTP_GET_VARS['nID']);
@@ -202,15 +202,15 @@
       }
 
       if (isset($nInfo) && is_object($nInfo) && ($template['template_id'] == $nInfo->template_id) ) {
-        echo '<tr id="defaultSelected" class="dataTableRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=preview') . '\'">' . "\n";
+        echo '<tr id="defaultSelected" class="dataTableRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=preview') . '\'">' . "\n";
       } else {
-        echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id']) . '\'">' . "\n";
+        echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id']) . '\'">' . "\n";
       }
 ?>
                 
-                <td class="dataTableContent"><?php echo '<a href="' . tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id'] . '&action=preview') . '">' . tep_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $template['title']; ?></td>
+                <td class="dataTableContent"><?php echo '<a href="' . tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id'] . '&action=preview') . '">' . tep_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $template['title']; ?></td>
                 <td class="dataTableContent" align="right"><?php echo number_format($template['content_length']) . ' bytes'; ?></td>
-                <td class="dataTableContent" align="right"><?php if (isset($nInfo) && is_object($nInfo) && ($template['template_id'] == $nInfo->template_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if (isset($nInfo) && is_object($nInfo) && ($template['template_id'] == $nInfo->template_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $template['template_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }
@@ -224,10 +224,10 @@
                   	</tr>
                   	<tr>
                     	<td>						
-						<?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link('mm_mail_manager.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?>
+						<?php echo tep_draw_button(IMAGE_BACK, 'triangle-1-w', tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'])); ?>
 						</td>
                         <td align="right">						
-						<?php echo tep_draw_button(IMAGE_NEW_TEMPLATE, 'plusthick', tep_href_link('mm_templates.php',  'action=new')); ?>
+						<?php echo tep_draw_button(IMAGE_NEW_TEMPLATE, 'plusthick', tep_href_link(FILENAME_MM_TEMPLATES,  'action=new')); ?>
 						</td>
                   	</tr>
                 	</table>
@@ -242,19 +242,19 @@
     case 'delete':
       $heading[] = array('text' => '<b>' . $nInfo->title . '</b>');
 
-      $contents = array('form' => tep_draw_form('newsletters', 'mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=deleteconfirm'));
+      $contents = array('form' => tep_draw_form('newsletters', FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=deleteconfirm'));
       $contents[] = array('text' => TEXT_INFO_DELETE_INTROO);
       $contents[] = array('text' => '<br><b>' . $nInfo->title . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<br>' . tep_image_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<br>' . tep_image_submit('button_delete.gif', IMAGE_DELETE) . ' <a href="' . tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
       break;
     default:
       if (is_object($nInfo)) {
         $heading[] = array('text' => '<b>' . $nInfo->title . '</b>');
 
           $contents[] = array('align' => 'center', 'text' => 
-						tep_draw_button(IMAGE_EDIT, 'document', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=new')) . 
-						tep_draw_button(IMAGE_DELETE, 'trash', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=delete')) . 
-						tep_draw_button(IMAGE_PREVIEW, 'circle-zoomout', tep_href_link('mm_templates.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=preview')));       
+						tep_draw_button(IMAGE_EDIT, 'document', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=new')) . 
+						tep_draw_button(IMAGE_DELETE, 'trash', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=delete')) . 
+						tep_draw_button(IMAGE_PREVIEW, 'circle-zoomout', tep_href_link(FILENAME_MM_TEMPLATES, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->template_id . '&action=preview')));       
       }
       break;
   }

@@ -12,9 +12,9 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'gv_faq.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_FAQ);
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_faq.php'));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_FAQ));
 
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -34,7 +34,7 @@
 
 
   <div class="buttonSet">
-    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link('index.php')); ?></span>
+    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link(FILENAME_DEFAULT)); ?></span>
   </div>
 </div>
 

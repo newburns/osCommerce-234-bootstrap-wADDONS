@@ -162,7 +162,7 @@
         if (tep_db_num_rows($gv_query) != 0) {
           $redeem_query = tep_db_query("select * from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $gv_result['coupon_id'] . "'");
           if ( (tep_db_num_rows($redeem_query) != 0) && ($gv_result['coupon_type'] == 'G') ) {
-            tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_GV), 'SSL'));
+            tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_GV), 'SSL'));
           }
         }
 
@@ -190,10 +190,10 @@
             // no gv_amount so insert
             $gv_insert = tep_db_query("insert into " . TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('" . $customer_id . "', '" . $total_gv_amount . "')");
           }
-          tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_REDEEMED_AMOUNT. $currencies->format($gv_amount)), 'SSL'));
+          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_REDEEMED_AMOUNT. $currencies->format($gv_amount)), 'SSL'));
        }
      }
-     if ($_POST['submit_redeem_x'] && $gv_result['coupon_type'] == 'G') tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
+     if ($_POST['submit_redeem_x'] && $gv_result['coupon_type'] == 'G') tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
    }
     function calculate_credit($amount) {
       global $customer_id, $order;

@@ -75,23 +75,23 @@ global $_POST, $customer_id, $currencies, $cc_id;
   $coupon_result=tep_db_fetch_array($coupon_query);
   if ($coupon_result['coupon_type'] != 'G') {
     if (tep_db_num_rows($coupon_query)==0) {
-      tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_COUPON), 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_COUPON), 'SSL'));
     }
     $date_query=tep_db_query("select coupon_start_date from " . TABLE_COUPONS . " where coupon_start_date <= now() and coupon_code='".$_POST['gv_redeem_code']."'");
     if (tep_db_num_rows($date_query)==0) {
-      tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_INVALID_STARTDATE_COUPON), 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_INVALID_STARTDATE_COUPON), 'SSL'));
     }
     $date_query=tep_db_query("select coupon_expire_date from " . TABLE_COUPONS . " where coupon_expire_date >= now() and coupon_code='".$_POST['gv_redeem_code']."'");
     if (tep_db_num_rows($date_query)==0) {
-      tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_INVALID_FINISDATE_COUPON), 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_INVALID_FINISDATE_COUPON), 'SSL'));
     }
     $coupon_count = tep_db_query("select coupon_id from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $coupon_result['coupon_id']."'");
     $coupon_count_customer = tep_db_query("select coupon_id from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $coupon_result['coupon_id']."' and customer_id = '" . $customer_id . "'");
     if (tep_db_num_rows($coupon_count)>=$coupon_result['uses_per_coupon'] && $coupon_result['uses_per_coupon'] > 0) {
-      tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_INVALID_USES_COUPON . $coupon_result['uses_per_coupon'] . TIMES ), 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_INVALID_USES_COUPON . $coupon_result['uses_per_coupon'] . TIMES ), 'SSL'));
     }
     if (tep_db_num_rows($coupon_count_customer)>=$coupon_result['uses_per_user'] && $coupon_result['uses_per_user'] > 0) {
-      tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_INVALID_USES_USER_COUPON . $coupon_result['uses_per_user'] . TIMES ), 'SSL'));
+      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_INVALID_USES_USER_COUPON . $coupon_result['uses_per_user'] . TIMES ), 'SSL'));
     }
     if ($coupon_result['coupon_type']=='S') {
       $coupon_amount = $order->info['shipping_cost'];
@@ -103,7 +103,7 @@ global $_POST, $customer_id, $currencies, $cc_id;
     if (!tep_session_is_registered('cc_id')) tep_session_register('cc_id');
     $cc_id = $coupon_result['coupon_id'];
   }
-  if ($_POST['submit_redeem_coupon_x'] && !$_POST['gv_redeem_code']) tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
+  if ($_POST['submit_redeem_coupon_x'] && !$_POST['gv_redeem_code']) tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
   }
 }
 function calculate_credit($amount) {

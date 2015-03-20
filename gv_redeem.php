@@ -14,7 +14,7 @@
   // if the customer is not logged on, redirect them to the login page
 if (!tep_session_is_registered('customer_id')) {
 $navigation->set_snapshot();
-tep_redirect(tep_href_link('login.php', '', 'SSL'));
+tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
 }
 
 // check for a voucher number in the url
@@ -36,7 +36,7 @@ tep_redirect(tep_href_link('login.php', '', 'SSL'));
       }
     }
   } else {
-    tep_redirect('index.php');
+    tep_redirect(FILENAME_DEFAULT);
   }
   if ((!$error) && (tep_session_is_registered('customer_id'))) {
 // Update redeem status
@@ -45,9 +45,9 @@ tep_redirect(tep_href_link('login.php', '', 'SSL'));
     tep_gv_account_update($customer_id, $gv_id);
     tep_session_unregister('gv_id');   
   } 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'gv_redeem.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_REDEEM);
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_redeem.php'));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_REDEEM));
 
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -75,7 +75,7 @@ tep_redirect(tep_href_link('login.php', '', 'SSL'));
 
 
   <div class="buttonSet">
-    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link('index.php')); ?></span>
+    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link(FILENAME_DEFAULT)); ?></span>
   </div>
 </div>
 

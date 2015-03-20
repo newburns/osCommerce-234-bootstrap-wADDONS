@@ -17,7 +17,7 @@
 
 require 'includes/application_top.php';
 
-if(!tep_session_is_registered('admin') && isset($sessionTimeout) && $sessionTimeout==true) tep_redirect(tep_href_link('login.php', (isset($redirect_origin['auth_user']) ? 'action=process' : '')));
+if(!tep_session_is_registered('admin') && isset($sessionTimeout) && $sessionTimeout==true) tep_redirect(tep_href_link(FILENAME_LOGIN, (isset($redirect_origin['auth_user']) ? 'action=process' : '')));
 
 //store all session variables under admin|AAS
 if(!isset($_SESSION['admin']['AAS'])) $_SESSION['admin']['AAS']=array();
@@ -35,7 +35,7 @@ else{ ?>
 <h1>Alternative Administration System</h1>
 Error: cannot find language file: <strong>ext/aas/languages/<?php echo $language; ?>.php</strong>
 <br><br>
-<a href="<?php echo tep_href_link('index.php', ''); ?>" >Back to default admin panel <img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a>
+<a href="<?php echo tep_href_link(FILENAME_DEFAULT, ''); ?>" >Back to default admin panel <img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a>
 </div>
 <?php
 exit;
@@ -95,9 +95,9 @@ modules_installed['<?php echo $module["code"]; ?>']=<?php echo $module["version"
 
 <div id="panel" style="<?php echo isset($search) && $search!='' ? '':'display:none;'; ?>">
   <div style="overflow:hidden;text-align:center">
-    <?php echo tep_draw_form('search', 'aas.php', '', 'get');
+    <?php echo tep_draw_form('search', FILENAME_AAS, '', 'get');
     echo tep_draw_input_field('search','','id="lfora" class="lfora0" placeholder="'.AAS_TEXT_PLACEHOLDER_SEARCH.'" style="display:inline-block;vertical-align:top;" required="required"'); ?>
-    <?php if(isset($_GET['search'])){ ?><input class="search_clear_button lfor" onclick="clearSearchQuery('<?php echo isset($_SESSION['admin']['AAS']['preSearchUrl']) ? $_SESSION['admin']['AAS']['preSearchUrl'] : tep_href_link('aas.php', ''); ?>')" type="button" value="x" /><?php } ?>
+    <?php if(isset($_GET['search'])){ ?><input class="search_clear_button lfor" onclick="clearSearchQuery('<?php echo isset($_SESSION['admin']['AAS']['preSearchUrl']) ? $_SESSION['admin']['AAS']['preSearchUrl'] : tep_href_link(FILENAME_AAS, ''); ?>')" type="button" value="x" /><?php } ?>
     <?php echo tep_draw_pull_down_menu('searchOnField', $searchOnFieldArray, '', ' style="display:inline-block;vertical-align:top;" onchange="this.form.submit();"'); ?>
 
     <select style="display:inline-block;vertical-align:top;" name="orderBy" onchange="submit();">
@@ -184,13 +184,13 @@ modules_installed['<?php echo $module["code"]; ?>']=<?php echo $module["version"
   <div class="koumpakia_spacer"></div>
   <?php if($defaults['displaySettingsButton']){ ?><div id="trigger_settings_dialog" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_DISPLAY_SETTINGS; ?>" ><img src="ext/aas/images/glyphicons_280_settings.png" alt=""></div><?php } ?>
 
-  <?php if($defaults['displayGoToDefaultAdministrationPanel']){ ?><div class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_DEFAULT_ADMIN; ?>" ><a href="<?php echo tep_href_link('index.php', ''); ?>" ><img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a></div><?php } ?>
+  <?php if($defaults['displayGoToDefaultAdministrationPanel']){ ?><div class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_DEFAULT_ADMIN; ?>" ><a href="<?php echo tep_href_link(FILENAME_DEFAULT, ''); ?>" ><img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a></div><?php } ?>
 
-  <?php if($defaults['displayLogoffButton']){ ?><div id="logoffbutton" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_LOGOFF; ?>" ><a href="<?php echo tep_href_link('login.php', 'action=logoff'); ?>" ><img src="ext/aas/images/glyphicons_026_road.png" alt="" style="height:23px;"></a></div><?php } ?>
+  <?php if($defaults['displayLogoffButton']){ ?><div id="logoffbutton" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_LOGOFF; ?>" ><a href="<?php echo tep_href_link(FILENAME_LOGIN, 'action=logoff'); ?>" ><img src="ext/aas/images/glyphicons_026_road.png" alt="" style="height:23px;"></a></div><?php } ?>
 
 <?php if($defaults['displayGoBackButton']){
     if(!empty($cPath_back)) { ?>
-  <div style="padding:8px 5px;" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_PARENT; ?>" ><a href="<?php echo tep_href_link('aas.php', 'cPath='.$parent_id); ?>"><img src="ext/aas/images/glyphicons_221_unshare.png" alt=""></a></div>
+  <div style="padding:8px 5px;" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_PARENT; ?>" ><a href="<?php echo tep_href_link(FILENAME_AAS, 'cPath='.$parent_id); ?>"><img src="ext/aas/images/glyphicons_221_unshare.png" alt=""></a></div>
     <?php }
   } ?>
 
@@ -223,7 +223,7 @@ $modules_counter=1; foreach($modules as $key => $module){ ?>
 ?>
 <div id="nav">
   <span class="selected_language_wrapper">[<img title="<?php echo AAS_TEXT_SELECTED_LANGUAGE.$languages_selected['name'].' / '.$languages_selected['code']; ?>" src="<?php echo DIR_WS_CATALOG_LANGUAGES . $languages_selected['directory'] . '/images/' . $languages_selected['image']; ?>" alt="<?php echo $languages_selected['name']; ?>" height="10" >]</span>
-  <a href="<?php echo tep_href_link('aas.php', 'cPath=0'); ?>"><?php echo AAS_TEXT_TOP; ?></a>&nbsp;<span class="raquo" data-catid="0">&raquo;</span>
+  <a href="<?php echo tep_href_link(FILENAME_AAS, 'cPath=0'); ?>"><?php echo AAS_TEXT_TOP; ?></a>&nbsp;<span class="raquo" data-catid="0">&raquo;</span>
 <?php
   $pathakia_count=count($pathakia);
   $pathakia_cnt=0;
@@ -231,7 +231,7 @@ $modules_counter=1; foreach($modules as $key => $module){ ?>
     if($currentcPath==$key){ ?>
   <a class="active"><?php echo $pathy; ?></a>
 <?php }else{ ?>
-  <a href="<?php echo tep_href_link('aas.php', 'cPath='.$key); ?>"><?php echo $pathy; ?></a>
+  <a href="<?php echo tep_href_link(FILENAME_AAS, 'cPath='.$key); ?>"><?php echo $pathy; ?></a>
 <?php }
     
 if(++$pathakia_cnt < $pathakia_count || $categories_entries>0){ ?><span class="raquo" data-catid="<?php echo $key; ?>">&raquo;</span>&nbsp;<?php }
@@ -296,7 +296,7 @@ if(++$pathakia_cnt < $pathakia_count || $categories_entries>0){ ?><span class="r
     ?>
     <tr class="folder gradeX" id="cat_<?php echo $categories['categories_id']; ?>">
       <td class="nojedit centerAlign checkboxen" ><input type="checkbox" id="category_<?php echo $categories['categories_id']; ?>" disabled="disabled"></td>
-      <td class="nojedit centerAlign previewPage" style="padding:0px;"><?php echo '<a href="' . tep_href_link('aas.php','cPath='.$categories['categories_id']) . '">' . tep_image(DIR_WS_ICONS . 'folder.gif', ICON_FOLDER) . '</a>'; ?>
+      <td class="nojedit centerAlign previewPage" style="padding:0px;"><?php echo '<a href="' . tep_href_link(FILENAME_AAS,'cPath='.$categories['categories_id']) . '">' . tep_image(DIR_WS_ICONS . 'folder.gif', ICON_FOLDER) . '</a>'; ?>
 
         <a target="_blank" class="view_category_class" title="<?php echo AAS_VIEW_CATEGORYS_PAGE; ?>" href="<?php echo tep_aas_link('front','index.php','cPath='.$categories['categories_id'].'&&language='.$languages_selected['code']); ?>"><img src="ext/aas/images/glyphicons_152_new_window_op.png" alt=""></a>
       </td>
@@ -681,7 +681,7 @@ if(isset($specials_products[$products['products_id']])){
                     array_pop($tjohn);
                     echo '<div id="'.$propro['cid'].'_'.$products['products_id'].'">';
                     echo count($tjohn)>0 ? implode('&nbsp;&raquo;&nbsp;',$tjohn) : AAS_TEXT_TOP;
-                    echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link('aas.php', 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a>&nbsp;<button data-cid="'.$propro['cid'].'" data-pid="'.$products['products_id'].'" class="applyButton removeLinkedProductFromParent" style="font-size:10px;margin:2px 0">Unlink</button></div>';
+                    echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link(FILENAME_AAS, 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a>&nbsp;<button data-cid="'.$propro['cid'].'" data-pid="'.$products['products_id'].'" class="applyButton removeLinkedProductFromParent" style="font-size:10px;margin:2px 0">Unlink</button></div>';
 
                   }
 
@@ -699,7 +699,7 @@ if(isset($specials_products[$products['products_id']])){
                       $tjohn=array_reverse(tep_get_category_parents($propro['cid']));
                       array_pop($tjohn);
                       echo count($tjohn)>0 ? implode('&nbsp;&raquo;&nbsp;',$tjohn) : AAS_TEXT_TOP;
-                      echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link('aas.php', 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a><br><br>';
+                      echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link(FILENAME_AAS, 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a><br><br>';
 
                     }else{
 
@@ -708,7 +708,7 @@ if(isset($specials_products[$products['products_id']])){
                       $tjohn=array_reverse(tep_get_category_parents($propro['cid']));
                       array_pop($tjohn);
                       echo count($tjohn)>0 ? implode('&nbsp;&raquo;&nbsp;',$tjohn) : AAS_TEXT_TOP;
-                      echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link('aas.php', 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a><br>';
+                      echo '&nbsp;&raquo;&nbsp;<a href="'.tep_href_link(FILENAME_AAS, 'cPath='.$propro['cid']).'">'.$propro['cname'].'</a><br>';
 
                     }
                 }
@@ -983,13 +983,13 @@ if(isset($specials_products[$products['products_id']])){
 <section id="floatBottomBar">
 <?php if (sizeof($languages_array) > 1 && $defaults['displayLanguageSelection']) { ?>
   <div class="floatBottomBar-item">
-    <?php echo tep_draw_form('adminlanguage1', 'aas.php', 'cPath='.$cPath_back, 'get') . tep_draw_pull_down_menu('language', $languages_array, $languages_selected['code'], 'onchange="this.form.submit();"') . tep_draw_hidden_field('cPath', $cPath_back). '</form>'; ?>
+    <?php echo tep_draw_form('adminlanguage1', FILENAME_AAS, 'cPath='.$cPath_back, 'get') . tep_draw_pull_down_menu('language', $languages_array, $languages_selected['code'], 'onchange="this.form.submit();"') . tep_draw_hidden_field('cPath', $cPath_back). '</form>'; ?>
 
   </div>
 <?php } ?>
 
   <div class="floatBottomBar-item">
-    <?php echo tep_draw_form('goto', 'aas.php', '', 'get'); ?>
+    <?php echo tep_draw_form('goto', FILENAME_AAS, '', 'get'); ?>
       <select name="cPath" onchange="this.form.submit();">
         <?php echo $cats_fields; ?>
       </select>        

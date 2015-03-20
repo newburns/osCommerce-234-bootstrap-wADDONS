@@ -22,73 +22,73 @@
     'heading' => BOX_HEADING_TOOLS,
     'apps' => array(
       array(
-        'code' => 'action_recorder.php',
+        'code' => FILENAME_ACTION_RECORDER,
         'title' => BOX_TOOLS_ACTION_RECORDER,
-        'link' => tep_href_link('action_recorder.php')
+        'link' => tep_href_link(FILENAME_ACTION_RECORDER)
       ),
       array(
-        'code' => 'backup.php',
+        'code' => FILENAME_BACKUP,
         'title' => BOX_TOOLS_BACKUP,
-        'link' => tep_href_link('backup.php')
+        'link' => tep_href_link(FILENAME_BACKUP)
       ),
       array(
-        'code' => 'banner_manager.php',
+        'code' => FILENAME_BANNER_MANAGER,
         'title' => BOX_TOOLS_BANNER_MANAGER,
-        'link' => tep_href_link('banner_manager.php')
+        'link' => tep_href_link(FILENAME_BANNER_MANAGER)
       ),
       array(
-        'code' => 'cache.php',
+        'code' => FILENAME_CACHE,
         'title' => BOX_TOOLS_CACHE,
-        'link' => tep_href_link('cache.php')
+        'link' => tep_href_link(FILENAME_CACHE)
       ),
       array(
-        'code' => 'define_language.php',
+        'code' => FILENAME_DEFINE_LANGUAGE,
         'title' => BOX_TOOLS_DEFINE_LANGUAGE,
-        'link' => tep_href_link('define_language.php')
+        'link' => tep_href_link(FILENAME_DEFINE_LANGUAGE)
       ),
       array(
-        'code' => 'mail.php',
+        'code' => FILENAME_MAIL,
         'title' => BOX_TOOLS_MAIL,
-        'link' => tep_href_link('mail.php')
+        'link' => tep_href_link(FILENAME_MAIL)
       ),
       array(
-        'code' => 'newsletters.php',
+        'code' => FILENAME_NEWSLETTERS,
         'title' => BOX_TOOLS_NEWSLETTER_MANAGER,
-        'link' => tep_href_link('newsletters.php')
+        'link' => tep_href_link(FILENAME_NEWSLETTERS)
       ),
       array(
-        'code' => 'sec_dir_permissions.php',
+        'code' => FILENAME_SEC_DIR_PERMISSIONS,
         'title' => BOX_TOOLS_SEC_DIR_PERMISSIONS,
-        'link' => tep_href_link('sec_dir_permissions.php')
+        'link' => tep_href_link(FILENAME_SEC_DIR_PERMISSIONS)
       ),
       array(
-        'code' => 'server_info.php',
+        'code' => FILENAME_SERVER_INFO,
         'title' => BOX_TOOLS_SERVER_INFO,
-        'link' => tep_href_link('server_info.php')
+        'link' => tep_href_link(FILENAME_SERVER_INFO)
       ),
       array(
-        'code' => 'version_check.php',
+        'code' => FILENAME_VERSION_CHECK,
         'title' => BOX_TOOLS_VERSION_CHECK,
-        'link' => tep_href_link('version_check.php')
+        'link' => tep_href_link(FILENAME_VERSION_CHECK)
       ),
 /* ** Altered for Database Check 1.4 ** */
 	 array(
-        'code' => 'database_check.php',
+        'code' => FILENAME_DATABASE_CHECK,
         'title' => BOX_TOOLS_DATABASE_CHECK,
-        'link' => tep_href_link('database_check.php')
+        'link' => tep_href_link(FILENAME_DATABASE_CHECK)
       ),
 /* ** EOF alteration for Database Check 1.4 ** */
 /* ** Altered for Mail Manager ** */
 	 array( 
 		'code' => FILENAME_MAIL_MANAGER, 
 		'title' => BOX_TOOLS_MAIL_MANAGER, 
-		'link' => tep_href_link('mm_mail_manager.php') 
+		'link' => tep_href_link(FILENAME_MM_MAIL_MANAGER) 
 	 ), 
 /* ** EOF alterations for Mail Manager ** */
       array(
-        'code' => 'whos_online.php',
+        'code' => FILENAME_WHOS_ONLINE,
         'title' => BOX_TOOLS_WHOS_ONLINE,
-        'link' => tep_href_link('whos_online.php')
+        'link' => tep_href_link(FILENAME_WHOS_ONLINE)
       )
     )
   );

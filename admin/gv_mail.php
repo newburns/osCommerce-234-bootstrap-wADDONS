@@ -58,7 +58,7 @@
        $coupon_id = tep_db_insert_id();
        tep_db_query("insert into " . TABLE_COUPON_EMAIL_TRACK . " (coupon_id, customer_id_sent, sent_firstname, sent_lastname, emailed_to, date_sent) values ('" . (int)$coupon_id . "', '". $mail['customers_id'] . "', '" . $mail['customers_firstname'] . "', '" . $mail['customers_lastname'] . "', '" . $mail['customers_email_address'] . "', now() )");
 }
-    tep_redirect(tep_href_link('gv_mail.php', 'mail_sent_to=' . urlencode($mail_sent_to)));
+    tep_redirect(tep_href_link(FILENAME_GV_MAIL, 'mail_sent_to=' . urlencode($mail_sent_to)));
   }
   if ( ($_GET['action'] == 'preview') && (!$_POST['customers_email_address']) ) {
     $messageStack->add(ERROR_NO_CUSTOMER_SELECTED, 'error');
@@ -96,7 +96,7 @@
         break;
     }
 ?>
-          <tr><?php echo tep_draw_form('mail', 'gv_mail.php', 'action=send_email_to_user'); ?>
+          <tr><?php echo tep_draw_form('mail', FILENAME_GV_MAIL, 'action=send_email_to_user'); ?>
             <td><table border="0" width="100%" cellpadding="0" cellspacing="2">
               <tr>
                 <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
@@ -141,7 +141,7 @@
         echo tep_draw_hidden_field($key, htmlspecialchars(stripslashes($value)));
       }
     }
-    echo tep_draw_button(IMAGE_SEND_EMAIL, 'mail-closed', null, 'primary') . tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link('gv_mail.php'));
+    echo tep_draw_button(IMAGE_SEND_EMAIL, 'mail-closed', null, 'primary') . tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_GV_MAIL));
 ?>
                 </td>
               </tr>
@@ -150,7 +150,7 @@
 <?php
   } else {
 ?>
-          <tr><?php echo tep_draw_form('mail', 'gv_mail.php', 'action=preview'); ?>
+          <tr><?php echo tep_draw_form('mail', FILENAME_GV_MAIL, 'action=preview'); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
               <tr>
                 <td colspan="2"><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>

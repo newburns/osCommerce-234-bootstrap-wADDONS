@@ -14,19 +14,19 @@
     'heading' => BOX_HEADING_LOCALIZATION,
     'apps' => array(
       array(
-        'code' => 'currencies.php',
+        'code' => FILENAME_CURRENCIES,
         'title' => BOX_LOCALIZATION_CURRENCIES,
-        'link' => tep_href_link('currencies.php')
+        'link' => tep_href_link(FILENAME_CURRENCIES)
       ),
       array(
-        'code' => 'languages.php',
+        'code' => FILENAME_LANGUAGES,
         'title' => BOX_LOCALIZATION_LANGUAGES,
-        'link' => tep_href_link('languages.php')
+        'link' => tep_href_link(FILENAME_LANGUAGES)
       ),
       array(
-        'code' => 'orders_status.php',
+        'code' => FILENAME_ORDERS_STATUS,
         'title' => BOX_LOCALIZATION_ORDERS_STATUS,
-        'link' => tep_href_link('orders_status.php')
+        'link' => tep_href_link(FILENAME_ORDERS_STATUS)
       )
     )
   );
