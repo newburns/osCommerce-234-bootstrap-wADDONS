@@ -188,8 +188,8 @@ config={
   modules_check_link:'http://www.alternative-administration-system.com/r/modules_list/',
 
   url:{
-    aas:'<?php echo 'aas.php'; ?>',
-    aas_link:'<?php echo tep_href_link('aas.php'); ?>',
+    aas:'<?php echo FILENAME_AAS; ?>',
+    aas_link:'<?php echo tep_href_link(FILENAME_AAS); ?>',
     ajax:'ext/aas/plugins/core/ajax/aas.php',
     actions:'ext/aas/plugins/core/actions/aas.php',
     attributes_actions:'ext/aas/plugins/attributes_manager/aas.php',

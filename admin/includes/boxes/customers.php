@@ -14,15 +14,15 @@
     'heading' => BOX_HEADING_CUSTOMERS,
     'apps' => array(
       array(
-        'code' => 'customers.php',
+        'code' => FILENAME_CUSTOMERS,
         'title' => BOX_CUSTOMERS_CUSTOMERS,
-        'link' => tep_href_link('customers.php')
+        'link' => tep_href_link(FILENAME_CUSTOMERS)
       ),
 /* ** Altered for Manual Order Maker ** */	  
       array(
-        'code' => 'create_order.php',
+        'code' => FILENAME_CREATE_ORDER,
         'title' => BOX_CUSTOMERS_CREATE_ORDER,
-        'link' => tep_href_link('create_order.php')
+        'link' => tep_href_link(FILENAME_CREATE_ORDER)
       )
 /* ** EOF for Manual Order Maker ** */	  
     )

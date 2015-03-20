@@ -49,7 +49,7 @@
 		if ($gv_result['amount'] > 0 )
 			{
 			$gv_contents_string = '<div class="ui-widget-content infoBoxContents"><div style="float:left;">' . VOUCHER_BALANCE . '</div><div style="float:right;">' . $currencies->format($gv_result['amount']) . '</div><div style="clear:both;"></div>';
-			$gv_contents_string .= '<div style="text-align:center; width:100%; margin:auto;"><a href="'. tep_href_link('gv_send.php') . '">' . BOX_SEND_TO_FRIEND . '</a></div></div>';
+			$gv_contents_string .= '<div style="text-align:center; width:100%; margin:auto;"><a href="'. tep_href_link(FILENAME_GV_SEND) . '">' . BOX_SEND_TO_FRIEND . '</a></div></div>';
 			}
 		}
 	if (tep_session_is_registered('gv_id'))
@@ -81,7 +81,7 @@
 
           $cart_contents_string .= $products[$i]['quantity'] . '&nbsp;x&nbsp;';
 
-          $cart_contents_string .= '<a href="' . tep_href_link('product_info.php', 'products_id=' . $products[$i]['id']) . '">';
+          $cart_contents_string .= '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $products[$i]['id']) . '">';
 
           $cart_contents_string .= $products[$i]['name'];
 

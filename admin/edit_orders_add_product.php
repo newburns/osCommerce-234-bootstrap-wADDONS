@@ -20,7 +20,7 @@
   include('order_editor/functions.php');
   include('order_editor/cart.php');
   include('order_editor/order.php');
-  include(DIR_WS_LANGUAGES . $language. '/' . 'edit_orders.php');
+  include(DIR_WS_LANGUAGES . $language. '/' . FILENAME_ORDERS_EDIT);
 
   // Include currencies class
   require(DIR_WS_CLASSES . 'currencies.php');
@@ -213,7 +213,7 @@
         $add_product_products_id = 0;
         
 			 
-		tep_redirect(tep_href_link('edit_orders_add_product.php', 'oID=' . $oID . '&step=1&submitForm=yes'));
+		tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $oID . '&step=1&submitForm=yes'));
         
 		break;
     }
@@ -299,7 +299,7 @@
             <td class="dataTableHeadingContent" colspan="3" align="center"><?php echo sprintf(ADDING_TITLE, $oID); ?></td>
           </tr>
           <tr class="dataTableRow">
-           <form action="<?php echo tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID']); ?>" method="POST">
+           <form action="<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID']); ?>" method="POST">
             <td class="dataTableContent" align="right"><?php echo TEXT_STEP_1; ?></td>
             <td class="dataTableContent" valign="top"><?php echo tep_draw_pull_down_menu('add_product_categories_id', tep_get_category_tree('0', '', '0', $category_array), $add_product_categories_id,'style="width:300px;" onchange="this.form.submit();"'); ?></td>
             <td class="dataTableContent" align="center">
@@ -314,7 +314,7 @@
             <td class="dataTableContent" colspan="3" align="center"><?php echo TEXT_PRODUCT_SEARCH; ?></td>
           </tr>
           <tr class="dataTableRow">
-          <form action="<?php echo tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID']); ?>" method="POST">
+          <form action="<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID']); ?>" method="POST">
             <td>&nbsp;</td>
             <td class="dataTableContent" valign="top">&nbsp;<input type="text" name="product_search" value="<?php if(isset($_POST['product_search'])) echo $_POST['product_search']; ?>" onchange="this.form.submit();">
 			</td>
@@ -339,7 +339,7 @@
             <td colspan="3" style="border-top: 1px solid #C9C9C9;"><?php echo tep_draw_separator('pixel_trans.gif', '1', '1'); ?></td>
           </tr>
           <tr class="dataTableRow">
-          <form action="<?php echo tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID']); ?>" method="POST">
+          <form action="<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID']); ?>" method="POST">
             <td class="dataTableContent" align="right"><?php echo TEXT_STEP_2; ?></td>
             <td class="dataTableContent" valign="top"><?php echo tep_draw_pull_down_menu('add_product_products_id', $product_array, $add_product_products_id, 'style="width:300px;" onchange="this.form.submit();"'); ?></td>
             <td class="dataTableContent" align="center"><noscript><input type="submit" value="<?php echo TEXT_BUTTON_SELECT_PRODUCT; ?>"></noscript><input type="hidden" name="step" value="3">
@@ -360,7 +360,7 @@
          '          </tr>' . "\n" .
          '          <tr class="dataTableRow">' . "\n";
     
-    if ($has_attributes) echo '          <form action="' . tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID']) . '" method="post">' . "\n";
+    if ($has_attributes) echo '          <form action="' . tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID']) . '" method="post">' . "\n";
 
     echo '            <td class="dataTableContent" align="right">' . TEXT_STEP_3 . '</td>' . "\n";
 
@@ -412,7 +412,7 @@
          '          <tr class="dataTableRow">' . "\n" .
          '            <td colspan="3" style="border-top: 1px solid #C9C9C9;">' . tep_draw_separator('pixel_trans.gif', '1', '1') . '</td>' . "\n" .
          '          </tr>' . "\n" .
-         '          <form action="' . tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID'] . '&action=add_product') . '" method="post">' . "\n" .
+         '          <form action="' . tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID'] . '&action=add_product') . '" method="post">' . "\n" .
          '          <tr class="dataTableRow">' . "\n" .
          '            <td class="dataTableContent" align="right" valign="middle">' . TEXT_STEP_4 . '</td>' . "\n" .
          '            <td class="dataTableContent" align="left" valign="middle">' . TEXT_QUANTITY . '&nbsp;<input name="add_product_quantity" size="3" value="1"></td>' . "\n" .

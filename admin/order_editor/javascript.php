@@ -82,7 +82,7 @@ function updateOrdersField(field, value) {
 
 		createRequest();
 		
-		var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_order_field&oID=<?php echo $_GET['oID']; ?>&field=" + field + "&new_value=" + value;
+		var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_order_field&oID=<?php echo $_GET['oID']; ?>&field=" + field + "&new_value=" + value;
 		
 		xmlHttp.open("GET", url, true);
         
@@ -100,7 +100,7 @@ function updateProductsField(action, pid, field, value, info) {
 
 		if ( (action == 'update') || (action == 'reload1') ) {
 
-        var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_product_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value;
+        var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_product_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value;
 
 		xmlHttp.open("GET", url, true);
 
@@ -120,7 +120,7 @@ function updateProductsField(action, pid, field, value, info) {
 		var price = document.getElementById("update_products[" + pid + "][price]").value;
 		var final_price = document.getElementById("update_products[" + pid + "][final_price]").value;
 		
-		var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_product_value_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&price=" + price + "&final_price=" + final_price;
+		var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_product_value_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&price=" + price + "&final_price=" + final_price;
 
 		xmlHttp.open("GET", url, true);
 
@@ -134,7 +134,7 @@ function updateProductsField(action, pid, field, value, info) {
 
 		  if (confirm('<?php echo AJAX_CONFIRM_PRODUCT_DELETE; ?>')) {
 
-           var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=delete_product_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value;
+           var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=delete_product_field&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value;
 
 		   xmlHttp.open("GET", url, true);
 
@@ -155,12 +155,12 @@ function updateProductsField(action, pid, field, value, info) {
 	 createRequest();        
 		
 		if (action == 'simple') {
-		var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_attributes_field&oID=<?php echo $_GET['oID']; ?>&aid=" + aid +"&pid=" + pid + "&field=" + field + "&new_value=" + value;
+		var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_attributes_field&oID=<?php echo $_GET['oID']; ?>&aid=" + aid +"&pid=" + pid + "&field=" + field + "&new_value=" + value;
 		}
 	 
         if (action == 'hard') {
 	    var final_price = document.getElementById("update_products[" + pid + "][final_price]").value;
-		var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_attributes_field&oID=<?php echo $_GET['oID']; ?>&aid=" + aid +"&pid=" + pid + "&field=" + field + "&new_value=" + value + "&final_price=" + final_price;
+		var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_attributes_field&oID=<?php echo $_GET['oID']; ?>&aid=" + aid +"&pid=" + pid + "&field=" + field + "&new_value=" + value + "&final_price=" + final_price;
 		}
 
 		xmlHttp.open("GET", url, true);
@@ -190,7 +190,7 @@ function updateProductsField(action, pid, field, value, info) {
 	  
 	  createRequest();
 	  
-	    var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_downloads&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value + "&did=" + did;
+	    var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_downloads&oID=<?php echo $_GET['oID']; ?>&pid=" + pid + "&field=" + field + "&new_value=" + value + "&did=" + did;
 
 		xmlHttp.open("GET", url, true);
 
@@ -208,7 +208,7 @@ function updateCommentsField(action, id, status, value, info) {
 	     if (confirm('<?php echo AJAX_CONFIRM_COMMENT_DELETE; ?>')) {
 		    
 			createRequest();
-		    var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=delete_comment&cID=" + id + "&oID=<?php echo $_GET['oID']; ?>";
+		    var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=delete_comment&cID=" + id + "&oID=<?php echo $_GET['oID']; ?>";
 		    xmlHttp.open("GET", url, true);
 			
 			xmlHttp.onreadystatechange=
@@ -223,7 +223,7 @@ function updateCommentsField(action, id, status, value, info) {
 	 if (action == 'update') {
 	 
 	  		createRequest();
-		    var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_comment&cID=" + id + "&comment=" + value + "&oID=<?php echo $_GET['oID']; ?>";
+		    var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_comment&cID=" + id + "&comment=" + value + "&oID=<?php echo $_GET['oID']; ?>";
 		    xmlHttp.open("GET", url, true);
 			
 			xmlHttp.onreadystatechange=
@@ -264,7 +264,7 @@ function updateShippingZone(field, value) {
 			var value = document.getElementById("update_shipping["+method+"][value]").value;
 			var id = document.getElementById("update_shipping["+method+"][id]").value;
 			var sort_order = "<?php echo MODULE_ORDER_TOTAL_SHIPPING_SORT_ORDER ?>";
-		    var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=insert_shipping&title=" + title + "&id=" + id + "&value=" + value + "&sort_order=" + sort_order + "&oID=<?php echo $_GET['oID']; ?>";
+		    var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=insert_shipping&title=" + title + "&id=" + id + "&value=" + value + "&sort_order=" + sort_order + "&oID=<?php echo $_GET['oID']; ?>";
 		    xmlHttp.open("GET", url, true);
 			
 			xmlHttp.onreadystatechange=
@@ -309,7 +309,7 @@ function updateShippingZone(field, value) {
 		<?php if (ORDER_EDITOR_USE_AJAX == 'true') { ?>
 		
 		createRequest();
-	    var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=update_currency&oID=<?php echo $_GET['oID']; ?>&table=<?php echo TABLE_ORDERS; ?>&currency=" + currency + "&currency_value=" + currency_value;
+	    var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=update_currency&oID=<?php echo $_GET['oID']; ?>&table=<?php echo TABLE_ORDERS; ?>&currency=" + currency + "&currency_value=" + currency_value;
 		
 		xmlHttp.open("GET", url, true);
         
@@ -337,7 +337,7 @@ function updateShippingZone(field, value) {
 	   var notify = document.getElementById("notify").checked;
 	   var notifyComments = document.getElementById("notify_comments").checked;
 	   var comments = encodeURIComponent(document.getElementById("comments").value);
-	   var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=insert_new_comment&oID=<?php echo $_GET['oID']; ?>&status=" + status +"&notify=" + notify + "&notify_comments=" + notifyComments + "&comments=" + comments;
+	   var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=insert_new_comment&oID=<?php echo $_GET['oID']; ?>&status=" + status +"&notify=" + notify + "&notify_comments=" + notifyComments + "&comments=" + comments;
 		
 		xmlHttp.open("GET", url, true);
         
@@ -363,7 +363,7 @@ function updateShippingZone(field, value) {
 		  formdata += "action=reload_totals&";
 		  formdata += "oID=<?php echo $_GET['oID']; ?>"
 		
-	 var url = "<?php echo 'edit_orders_ajax.php'; ?>";
+	 var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>";
 	 
 	  //hey- we're busy here
 	  document.getElementById("totalsBlock").innerHTML = '<div align="center"><img src="order_editor/images/working.gif"><br><?php echo AJAX_WORKING; ?><br></div>';  
@@ -395,9 +395,9 @@ function updateShippingZone(field, value) {
 	 
 	    createRequest();
 	    //if (comments) { 
-		//var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=new_order_email&comments=" + encodeURIComponent(comments) + "&oID=<?php echo $_GET['oID']; ?>";
+		//var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=new_order_email&comments=" + encodeURIComponent(comments) + "&oID=<?php echo $_GET['oID']; ?>";
 		//} else {
-		var url = "<?php echo 'edit_orders_ajax.php'; ?>?action=new_order_email&oID=<?php echo $_GET['oID']; ?>";
+		var url = "<?php echo FILENAME_ORDERS_EDIT_AJAX; ?>?action=new_order_email&oID=<?php echo $_GET['oID']; ?>";
 		//}
 		
 		xmlHttp.open("GET", url, true);

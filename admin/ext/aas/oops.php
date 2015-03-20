@@ -49,7 +49,7 @@ if(isset($_POST['execQueryAASSettings'])){
   if(tep_db_query($query_aas_settings)){
      
    tep_db_query($query_aas_settings_fill);
-   tep_redirect(tep_href_link('aas.php', '', 'SSL', false));
+   tep_redirect(tep_href_link(FILENAME_AAS, '', 'SSL', false));
     
   }else $error='Cannot create [ aas_settings ] table. Please try again or do it manually.';
   
@@ -75,7 +75,7 @@ if(isset($_POST['execQueryAASSettings'])){
 <p><b>AAS</b> requires a new table [ aas_settings ] in osCommerce db to be installed. This table is used to store some configuration values such as admin access control, columns disable actions, columns sorting, modules e.t.c.<br><br>If you have any questions contact <a target="_blank" href="http://www.alternative-administration-system.com/support">support</a>.</p>
 <div class="margin-10-auto"></div>
 Copy & paste bellow code into phpmyadmin's sql tab textarea and press the [ Go ] button or click
-<?php echo tep_draw_form('execQueryAASSettings', 'aas.php', '', 'post','style="display:inline-block;"'); ?>
+<?php echo tep_draw_form('execQueryAASSettings', FILENAME_AAS, '', 'post','style="display:inline-block;"'); ?>
 <input type="submit" name="execQueryAASSettings" class="applyButton" value="here">
 </form> and let AAS execute those queries for you.
 <?php if($error!='') echo '<p style="margin:10px auto;color:#f00">'.$error.'</p>'; ?>

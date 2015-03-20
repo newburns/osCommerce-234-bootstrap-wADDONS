@@ -25,7 +25,7 @@
   include('order_editor/order.php');
   include('order_editor/shipping.php');
   include('order_editor/http_client.php');
-  include(DIR_WS_LANGUAGES . $language. '/' . 'edit_orders.php');
+  include(DIR_WS_LANGUAGES . $language. '/' . FILENAME_ORDERS_EDIT);
 
    
   // Include currencies class
@@ -433,7 +433,7 @@ if ($action == 'update_downloads') {
                 <td valign="top" width="100%">
 				 <br>
 				   <div>
-					<a href="javascript:openWindow('<?php echo tep_href_link('edit_orders_add_product.php', 'oID=' . $_POST['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
+					<a href="javascript:openWindow('<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_POST['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
 					</div>
 					<br>
 				</td>
@@ -599,14 +599,14 @@ if ($action == 'update_downloads') {
 //			  $email = STORE_NAME . "\n" .
 //			           EMAIL_SEPARATOR . "\n" . 
 //					   EMAIL_TEXT_ORDER_NUMBER . ' ' . $_GET['oID'] . "\n" . 
-//	                   EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link('account_history_info.php', 'order_id=' . $_GET['oID'], 'SSL') . "\n" . 
+//	                   EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . $_GET['oID'], 'SSL') . "\n" . 
 //					   EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($check_status['date_purchased']) . "\n\n" . 
 //					   sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$_GET['status']]) . $notify_comments . sprintf(EMAIL_TEXT_STATUS_UPDATE2);
 //BEGIN SEND HTML MAIL//			  
 //			  $email = STORE_NAME . "\n" .
 //			           EMAIL_SEPARATOR . "\n" . 
 //					   EMAIL_TEXT_ORDER_NUMBER . ' ' . (int)$oID . "\n" . 
-//                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link('account_history_info.php', 'order_id=' . (int)$oID, 'SSL') . "\n" . 
+//                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . (int)$oID, 'SSL') . "\n" . 
 //					   EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($check_status['date_purchased']) . "\n\n" . sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$status]) . $notify_comments . sprintf(EMAIL_TEXT_STATUS_UPDATE2);
 
 	     if (FILENAME_EMAIL_STATUS !== 'FILENAME_EMAIL_STATUS'     ) {
@@ -638,7 +638,7 @@ if ($action == 'update_downloads') {
 			  $email = STORE_NAME . "\n" .
 			           EMAIL_SEPARATOR . "\n" . 
 					   EMAIL_TEXT_ORDER_NUMBER . ' ' . $_GET['oID'] . "\n" . 
-                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link('account_history_info.php', 'order_id=' . (int)$oID, 'SSL') . "\n" . 
+                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . (int)$oID, 'SSL') . "\n" . 
 					   EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($check_status['date_purchased']) . "\n\n" . sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$status]) . $notify_comments . sprintf(EMAIL_TEXT_STATUS_UPDATE2);
 		   }
 	     } else {		// send standaard email if html email is not installed
@@ -647,7 +647,7 @@ if ($action == 'update_downloads') {
 	    	$email = STORE_NAME . "\n" .
 			           EMAIL_SEPARATOR . "\n" . 
 					   EMAIL_TEXT_ORDER_NUMBER . ' ' . $_GET['oID'] . "\n" . 
-                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link('account_history_info.php', 'order_id=' . (int)$oID, 'SSL') . "\n" . 
+                       EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . (int)$oID, 'SSL') . "\n" . 
 					   EMAIL_TEXT_DATE_ORDERED . ' ' . tep_date_long($check_status['date_purchased']) . "\n\n" . sprintf(EMAIL_TEXT_STATUS_UPDATE, $orders_status_array[$status]) . $notify_comments . sprintf(EMAIL_TEXT_STATUS_UPDATE2);
 	     }		
 	
@@ -822,7 +822,7 @@ if (tep_db_num_rows($orders_history_query)) {
                 <td valign="top" width="100%">
 				 <br>
 				   <div>
-					<a href="javascript:openWindow('<?php echo tep_href_link('edit_orders_add_product.php', 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
+					<a href="javascript:openWindow('<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
 					</div>
 					<br>
 				</td>
@@ -1045,7 +1045,7 @@ if (tep_db_num_rows($orders_history_query)) {
       $text = $werte["eorder_text_one"];
 			$text = preg_replace('/<-STORE_NAME->/', STORE_NAME, $text);
 			$text = preg_replace('/<-insert_id->/', $oID, $text);
-			$text = preg_replace('/<-INVOICE_URL->/', tep_href_link('account_history_info.php', 'order_id=' . $oID, 'SSL', false), $text);
+			$text = preg_replace('/<-INVOICE_URL->/', tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false), $text);
 			$text = preg_replace('/<-DATE_ORDERED->/', tep_date_long( $order->info[ 'date_purchased' ] ), $text ) ;
 			if ($order->info['comments']) {
 				$text = preg_replace('/<-Customer_Comments->/', tep_db_output($order->info['comments']), $text);
@@ -1070,7 +1070,7 @@ if (tep_db_num_rows($orders_history_query)) {
 			}
 			elseif($order->content_type == 'virtual') {	
 					if ((DOWNLOAD_ENABLED == 'true') && isset($attributes_values['products_attributes_filename']) && tep_not_null($attributes_values['products_attributes_filename'])) {
-		  			$text = preg_replace('/<-DELIVERY_Adress->/', EMAIL_TEXT_DOWNLOAD_SHIPPING . "\n" . tep_href_link('account_history_info.php', 'order_id=' . $oID, 'SSL', false), $text);
+		  			$text = preg_replace('/<-DELIVERY_Adress->/', EMAIL_TEXT_DOWNLOAD_SHIPPING . "\n" . tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $oID, 'SSL', false), $text);
 					} else{
 		  			$text = preg_replace('/<-DELIVERY_Adress->/', '', $text);
 					}	
@@ -1104,7 +1104,7 @@ if (tep_db_num_rows($orders_history_query)) {
 	  	$email_order = 	STORE_NAME . "\n" . 
       	             	EMAIL_SEPARATOR . "\n" . 
 											EMAIL_TEXT_ORDER_NUMBER . ' ' . (int)$oID . "\n" .
-  										EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link('account_history_info.php', 'order_id=' . (int)$oID, 'SSL') . "\n" .
+  										EMAIL_TEXT_INVOICE_URL . ' ' . tep_catalog_href_link(FILENAME_CATALOG_ACCOUNT_HISTORY_INFO, 'order_id=' . (int)$oID, 'SSL') . "\n" .
             	    	  EMAIL_TEXT_DATE_MODIFIED . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n";
 
 	  	$email_order .= EMAIL_TEXT_PRODUCTS . "\n" . 

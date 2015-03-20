@@ -16,10 +16,10 @@
 // if the customer is not logged on, redirect them to the login page
   if (!tep_session_is_registered('customer_id')) {
     $navigation->set_snapshot();
-    tep_redirect(tep_href_link('login.php', '', 'SSL'));
+    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'gv_send.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_SEND);
 
   if (($_POST['back_x']) || ($_POST['back_y'])) {
     $_GET['action'] = '';
@@ -73,7 +73,7 @@
         $gv_email .= stripslashes($_POST['message']) . "\n\n";
       }
       $gv_email .= sprintf(EMAIL_GV_REDEEM, $id1) . "\n\n";
-      $gv_email .= EMAIL_GV_LINK . tep_href_link('gv_redeem.php', 'gv_no=' . $id1,'NONSSL',false);;
+      $gv_email .= EMAIL_GV_LINK . tep_href_link(FILENAME_GV_REDEEM, 'gv_no=' . $id1,'NONSSL',false);;
       $gv_email .= "\n\n";
       $gv_email .= EMAIL_GV_FIXED_FOOTER . "\n\n";
       $gv_email .= EMAIL_GV_SHOP_FOOTER . "\n\n";;
@@ -82,7 +82,7 @@
     }
   }
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_send.php'));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_SEND));
 
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -101,7 +101,7 @@
     </div>
 
   <div class="buttonSet">
-    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link('index.php')); ?></span>
+    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link(FILENAME_DEFAULT)); ?></span>
   </div>
 
 <?php
@@ -116,7 +116,7 @@
 ?>
 
 <tr>
-        <td><form action="<?php echo tep_href_link('gv_send.php', 'action=process', 'NONSSL'); ?>" method="post"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+        <td><form action="<?php echo tep_href_link(FILENAME_GV_SEND, 'action=process', 'NONSSL'); ?>" method="post"><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td class="main"><?php echo sprintf(MAIN_MESSAGE, $currencies->format($_POST['amount']), stripslashes($_POST['to_name']), $_POST['email'], stripslashes($_POST['to_name']), $currencies->format($_POST['amount']), $send_name); ?></td>
           </tr>
@@ -147,7 +147,7 @@
         <td class="main"><?php echo HEADING_TEXT; ?></td>
       </tr>
       <tr>
-        <td><form action="<?php echo tep_href_link('gv_send.php', 'action=send', 'NONSSL'); ?>" method="post"><table border="0" width="100%" cellspacing="0" cellpadding="2">
+        <td><form action="<?php echo tep_href_link(FILENAME_GV_SEND, 'action=send', 'NONSSL'); ?>" method="post"><table border="0" width="100%" cellspacing="0" cellpadding="2">
           <tr>
             <td class="main"><?php echo ENTRY_NAME; ?><br><?php echo tep_draw_input_field('to_name', stripslashes($_POST['to_name']));?></td>
           </tr>
@@ -166,7 +166,7 @@
 <?php
     $back = sizeof($navigation->path)-2;
 ?>
-            <td class="main"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'triangle-1-w', tep_href_link('account.php', '', 'SSL')); ?></td>
+            <td class="main"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'triangle-1-w', tep_href_link(FILENAME_ACCOUNT, '', 'SSL')); ?></td>
             <td class="main" align="right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', null, 'primary'); ?></td>
           </tr>
         </table></form></td>

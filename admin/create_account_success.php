@@ -16,7 +16,7 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'create_account.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ACCOUNT);
 
 
 require(DIR_WS_INCLUDES . 'template_top.php'); ?>
@@ -38,7 +38,7 @@ require(DIR_WS_INCLUDES . 'template_top.php'); ?>
         </table></td>
       </tr>
       <tr>
-        <td align="right" class="main"><?php echo ' <a href="' . tep_href_link('customers.php', tep_get_all_get_params(array('action'))) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+        <td align="right" class="main"><?php echo ' <a href="' . tep_href_link(FILENAME_CUSTOMERS, tep_get_all_get_params(array('action'))) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
       </tr>
     </table></td>
 <!-- body_text_eof //-->

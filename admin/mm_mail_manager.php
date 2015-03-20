@@ -36,19 +36,19 @@
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_NOTE; ?>&nbsp;</td>
               
               </tr>
-			 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_bulkmail.php') . '\'">' . "\n"; ?>
+			 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_BULKMAIL) . '\'">' . "\n"; ?>
                 <td class="dataTableContent"><?php echo TEXT_BULKMAIL;?></td>
                 <td class="dataTableContent"><?php echo TEXT_NOTE_BULKMAIL;?></td>
                 </tr>
-                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_responsemail.php') . '\'">' . "\n"; ?>
+                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_RESPONSEMAIL) . '\'">' . "\n"; ?>
                 <td class="dataTableContent"><?php echo TEXT_RESPONSEMAIL;?></td>
                 <td class="dataTableContent"><?php echo TEXT_NOTE_RESPONSEMAIL;?></td>
                 </tr>
-                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_templates.php') . '\'">' . "\n"; ?>
+                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_TEMPLATES) . '\'">' . "\n"; ?>
                 <td class="dataTableContent"><?php echo TEXT_TEMPLATES;?></td>
                 <td class="dataTableContent"><?php echo TEXT_NOTE_TEMPLATES;?></td>
                 </tr>
-                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_email.php') . '\'">' . "\n"; ?>
+                 <?php  echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_EMAIL) . '\'">' . "\n"; ?>
                 <td class="dataTableContent"><?php echo TEXT_EMAIL;?></td>
                 <td class="dataTableContent"><?php echo TEXT_NOTE_EMAIL;?></td>
                 </tr>

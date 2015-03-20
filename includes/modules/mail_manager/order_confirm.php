@@ -29,7 +29,7 @@ $output_subject = EMAIL_TEXT_CONFIRM.STORE_NAME;
 //define values for placeholder variables
 $order_no = EMAIL_TEXT_ORDER_NUMBER . ' ' . $insert_id;
 $order_date = EMAIL_TEXT_DATE_ORDERED . ' ' . strftime(DATE_FORMAT_LONG);
-$invoice_url = EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link('account_history_info.php', 'order_id=' . $insert_id, 'SSL', false);
+$invoice_url = EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $insert_id, 'SSL', false);
 $delivery_address = tep_address_label($customer_id, $sendto, 0, '', '<br />');
 $billing_address = tep_address_label($customer_id, $billto, 0, '', '<br />');
 $order_comments = $order->info['comments'];

@@ -77,7 +77,7 @@
               		tep_db_perform(TABLE_MM_RESPONSEMAIL_RESTORE, $sql_data_array, 'update', "mail_id = '" . (int)$mail_id . "'");
           			}
 
-          		tep_redirect(tep_href_link('mm_responsemail.php', (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'nID=' . $mail_id));
+          		tep_redirect(tep_href_link(FILENAME_MM_RESPONSEMAIL, (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'nID=' . $mail_id));
           		} else {
            			$action = 'new';       
          			}
@@ -127,7 +127,7 @@
 		<td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
 	</tr>
      <tr>
-     	<td><?php echo tep_draw_form('mail', 'mm_responsemail.php', (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'action=' . $form_action); if ($form_action == 'update') echo tep_draw_hidden_field('mail_id', $nID); ?>       
+     	<td><?php echo tep_draw_form('mail', FILENAME_MM_RESPONSEMAIL, (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . 'action=' . $form_action); if ($form_action == 'update') echo tep_draw_hidden_field('mail_id', $nID); ?>       
         	<table border="0" cellspacing="0" cellpadding="2">
         	<?php       	
         	 	$newmailid = '<tr><td class="main">'.TEXT_NEWMAIL_WARNING.'</td></tr>
@@ -184,7 +184,7 @@
         	<table border="0" width="100%" cellspacing="0" cellpadding="2">
           		<tr>
             		<td class="main" align="right">
-            		<?php echo (($form_action == 'insert') ? tep_image_submit('button_save.gif', IMAGE_SAVE) : tep_image_submit('button_update.gif', IMAGE_UPDATE)). '&nbsp;&nbsp;<a href="' . tep_href_link('mm_responsemail.php', (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . (isset($HTTP_GET_VARS['nID']) ? 'nID=' . $HTTP_GET_VARS['nID'] : '')) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?>
+            		<?php echo (($form_action == 'insert') ? tep_image_submit('button_save.gif', IMAGE_SAVE) : tep_image_submit('button_update.gif', IMAGE_UPDATE)). '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, (isset($HTTP_GET_VARS['page']) ? 'page=' . $HTTP_GET_VARS['page'] . '&' : '') . (isset($HTTP_GET_VARS['nID']) ? 'nID=' . $HTTP_GET_VARS['nID'] : '')) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>'; ?>
             		</td>
           		</tr>
         	</table>
@@ -209,7 +209,7 @@
             	$newstatus='Inactive';
             	}
             	            
-            echo '<tr><td class="main">Status changed to: <strong>'.$newstatus.'</strong><a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' .$HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a></td></tr>';    	
+            echo '<tr><td class="main">Status changed to: <strong>'.$newstatus.'</strong><a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' .$HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a></td></tr>';    	
           
         
   }elseif ($action == 'preview') {
@@ -225,9 +225,9 @@
     $output_content_html = $template['htmlheader'].$mail['htmlcontent'].$template['htmlfooter'];
     $output_content_txt = $template['txtheader'].$mail['txtcontent'].$template['txtfooter'];  
 ?>
-      <tr><td align="right"><?php echo '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td></tr>
+      <tr><td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td></tr>
       <tr><td><tt><?php echo $output_content_html; ?></tt></td></tr>
-      <tr><td align="right"><?php echo '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td></tr>
+      <tr><td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td></tr>
 
 <?php
 
@@ -254,7 +254,7 @@
 		<tr>
 			<td><em><?php echo $mail['title'].'</em> sent to '.STORE_OWNER_EMAIL_ADDRESS; ?></td></tr>
     	<tr>
-    		<td><?php echo '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK); ?></a></td></tr>
+    		<td><?php echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK); ?></a></td></tr>
 
 	<?php 
    }else{
@@ -285,25 +285,25 @@
       }
 
       if (isset($nInfo) && is_object($nInfo) && ($mail['mail_id'] == $nInfo->mail_id) ) {
-       echo '<tr id="defaultSelected" class="dataTableRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=preview') . '\'">' . "\n";      
+       echo '<tr id="defaultSelected" class="dataTableRowSelected" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=preview') . '\'">' . "\n";      
       } else {
-        echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id']) . '\'">' . "\n";
+        echo '<tr class="dataTableRow" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this)" onclick="document.location.href=\'' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id']) . '\'">' . "\n";
       }
 							?>             
-                					<td class="dataTableContent"><?php echo '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id'] . '&action=preview') . '">' . tep_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $mail['title']; ?></td>
+                					<td class="dataTableContent"><?php echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id'] . '&action=preview') . '">' . tep_image(DIR_WS_ICONS . 'preview.gif', ICON_PREVIEW) . '</a>&nbsp;' . $mail['title']; ?></td>
                 					<td class="dataTableContent" align="right"><?php echo $mail['mail_id']; ?></td>
                 					<!--<td class="dataTableContent" align="right"><?php echo number_format($mail['htmlcontent_length']) . ' bytes'; ?></td>  -->             			
                 					<td class="dataTableContent" align="right"><?php echo $mail['template']; ?></td>
                 					<td class="dataTableContent" align="right">
                 						<?php 
                 							if ($mail['status'] == '1') {
-        									echo tep_image(DIR_WS_IMAGES . 'icon_status_green.gif', IMAGE_ICON_STATUS_GREEN, 10, 10) . '&nbsp;&nbsp;<a href="' . tep_href_link('mm_responsemail.php', 'action=setflag&flag=0&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_red_light.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
+        									echo tep_image(DIR_WS_IMAGES . 'icon_status_green.gif', IMAGE_ICON_STATUS_GREEN, 10, 10) . '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'action=setflag&flag=0&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_red_light.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
       										} else {
-       								 		echo '<a href="' . tep_href_link('mm_responsemail.php', 'action=setflag&flag=1&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_green_light.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>&nbsp;&nbsp;' . tep_image(DIR_WS_IMAGES . 'icon_status_red.gif', IMAGE_ICON_STATUS_RED, 10, 10);
+       								 		echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'action=setflag&flag=1&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_green_light.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>&nbsp;&nbsp;' . tep_image(DIR_WS_IMAGES . 'icon_status_red.gif', IMAGE_ICON_STATUS_RED, 10, 10);
      									 		}               					               			
        						?>
        								 		</td>                			
-                					<td class="dataTableContent" align="right"><?php if (isset($nInfo) && is_object($nInfo) && ($mail['mail_id'] == $nInfo->mail_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                					<td class="dataTableContent" align="right"><?php if (isset($nInfo) && is_object($nInfo) && ($mail['mail_id'] == $nInfo->mail_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif', ''); } else { echo '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $mail['mail_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               					</tr>
 	<?php
     	}
@@ -317,7 +317,7 @@
                   							</tr>
                   							<tr>
                     							<td>
-                    							<?php echo '<a href="' . tep_href_link('mm_mail_manager.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?> 
+                    							<?php echo '<a href="' . tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?> 
                     							</td>
                                                 <td>
 												
@@ -347,20 +347,20 @@ switch ($action) {
       $heading[] = array('text' => '<b>' . $nInfo->title . '</b>');
       $contents[] = array('text' => $text_confirm);
       $contents[] = array('text' => '<br><b>' . $nInfo->title . '</b>');
-      $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action='.$confirm_action) . '">' . tep_image_button('button_confirm.gif', 'confirm') . '</a>
-      								<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action='.$confirm_action) . '">' . tep_image_button('button_confirm.gif', 'confirm') . '</a>
+      								<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_cancel.gif', IMAGE_CANCEL) . '</a>');
     break;
     default:
       if (is_object($nInfo)) {
         $heading[] = array('text' => '<b>' . $nInfo->title . '</b>');  
           $contents[] = array('align' => 'center', 'text' => '
-          				<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=new') . '">' . tep_image_button('button_edit.gif', IMAGE_EDIT) . '</a> 
-          				<a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=preview') . '">' . tep_image_button('button_preview.gif', IMAGE_PREVIEW) . '</a>           							       				
-          				<table><tr><td class="main"><a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=restore') . '">' . tep_image_button('button_restore.gif', 'restore') . '</a>           				          				         				
+          				<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=new') . '">' . tep_image_button('button_edit.gif', IMAGE_EDIT) . '</a> 
+          				<a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=preview') . '">' . tep_image_button('button_preview.gif', IMAGE_PREVIEW) . '</a>           							       				
+          				<table><tr><td class="main"><a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=restore') . '">' . tep_image_button('button_restore.gif', 'restore') . '</a>           				          				         				
           				</td></tr><tr><td class="main">'.TEXT_BACKUP_MESSAGE.'
-          				</td></tr></table><table><tr><td class="main"><a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=reset') . '">' . tep_image_button('button_reset.gif', 'reset') . '</a>           				          				
+          				</td></tr></table><table><tr><td class="main"><a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=reset') . '">' . tep_image_button('button_reset.gif', 'reset') . '</a>           				          				
           				</td></tr><tr><td class="main">'.TEXT_RESET_MESSAGE.'
-          				</td></tr></table><table><tr><td class="main"><a href="' . tep_href_link('mm_responsemail.php', 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=test') . '">' . tep_image_button('button_send.gif', 'test') . '</a>
+          				</td></tr></table><table><tr><td class="main"><a href="' . tep_href_link(FILENAME_MM_RESPONSEMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $nInfo->mail_id . '&action=test') . '">' . tep_image_button('button_send.gif', 'test') . '</a>
           				</td></tr><tr><td class="main">'.TEXT_TEST_MESSAGE.'</td></tr></table>
           				');
    break;       

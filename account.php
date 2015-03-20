@@ -14,12 +14,12 @@
 
   if (!tep_session_is_registered('customer_id')) {
     $navigation->set_snapshot();
-    tep_redirect(tep_href_link('login.php', '', 'SSL'));
+    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'account.php');
+  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_ACCOUNT);
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('account.php', '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
 
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -54,8 +54,8 @@
 }
   }
 ?>    <ul class="accountLinkList">
-      <li><span class="ui-icon ui-icon-mail-closed accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link('gv_send.php', '', 'SSL') . '">' . CCGV_SENDVOUCHER . '</a>'; ?></li>
-      <li><span class="ui-icon ui-icon-heart accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link('gv_faq.php', '', 'SSL') . '">' . CCGV_FAQ . '</a>'; ?></li>  
+      <li><span class="ui-icon ui-icon-mail-closed accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link(FILENAME_GV_SEND, '', 'SSL') . '">' . CCGV_SENDVOUCHER . '</a>'; ?></li>
+      <li><span class="ui-icon ui-icon-heart accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link(FILENAME_GV_FAQ, '', 'SSL') . '">' . CCGV_FAQ . '</a>'; ?></li>  
     </ul>
 <?php /* ** EOF alteration for CCGV ** */ ?>
 	</div>

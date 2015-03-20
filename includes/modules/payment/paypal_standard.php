@@ -63,8 +63,6 @@
         }
       }
 
-      if ( defined(''modules.php'') && ($PHP_SELF == 'modules.php') && isset($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'install') && isset($HTTP_GET_VARS['subaction']) && ($HTTP_GET_VARS['subaction'] == 'conntest') ) {
-
       if ( defined('FILENAME_MODULES') && ($PHP_SELF == FILENAME_MODULES) && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
         echo $this->getTestConnectionResult();
         exit;
@@ -336,8 +334,8 @@
                           'no_note' => '1',
                           'notify_url' => tep_href_link('ext/modules/payment/paypal/standard_ipn.php', '', 'SSL', false, false),
                           'rm' => '2',
-                          'return' => tep_href_link('checkout_process.php', '', 'SSL'),
-                          'cancel_return' => tep_href_link('checkout_payment.php', '', 'SSL'),
+                          'return' => tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL'),
+                          'cancel_return' => tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'),
                           'bn' => 'OSCOM23_PS',
                           'paymentaction' => ((MODULE_PAYMENT_PAYPAL_STANDARD_TRANSACTION_METHOD == 'Sale') ? 'sale' : 'authorization'));
 
@@ -535,11 +533,7 @@
 
       $check_query = tep_db_query("select orders_status from " . TABLE_ORDERS . " where orders_id = '" . (int)$order_id . "' and customers_id = '" . (int)$customer_id . "'");
 
-<<<<<<< HEAD
-      if (!tep_db_num_rows($check_query) || ($order_id != $HTTP_POST_VARS['invoice']) || ($customer_id != $HTTP_POST_VARS['custom'])) {
-=======
       if (!tep_db_num_rows($check_query) || ($order_id != $_POST['invoice']) || ($customer_id != $_POST['custom'])) {
->>>>>>> 202021b86b33e6382b9bd0c01990390919a09f5b
         tep_redirect(tep_href_link('shopping_cart.php'));
       }
 
@@ -995,7 +989,7 @@
       $dialog_error = MODULE_PAYMENT_PAYPAL_STANDARD_DIALOG_CONNECTION_ERROR;
       $dialog_connection_time = MODULE_PAYMENT_PAYPAL_STANDARD_DIALOG_CONNECTION_TIME;
 
-      $test_url = tep_href_link('modules.php', 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
+      $test_url = tep_href_link(FILENAME_MODULES, 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
 
       $js = <<<EOD
 <script>
