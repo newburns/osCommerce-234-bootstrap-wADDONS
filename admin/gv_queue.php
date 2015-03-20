@@ -80,7 +80,7 @@
       $gInfo = new objectInfo($gv_list);
     }
     if ( (is_object($gInfo)) && ($gv_list['unique_id'] == $gInfo->unique_id) ) {
-      echo '              <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_GV_QUEUE, tep_get_all_get_params(array('gid', 'action')) . 'gid=' . $gInfo->unique_id . '&action=edit') . '\'">' . "\n";
+      echo '              <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link('gv_queue.php', tep_get_all_get_params(array('gid', 'action')) . 'gid=' . $gInfo->unique_id . '&action=edit') . '\'">' . "\n";
     } else {
       echo '              <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link('gv_queue.php', tep_get_all_get_params(array('gid', 'action')) . 'gid=' . $gv_list['unique_id']) . '\'">' . "\n";
     }
@@ -89,7 +89,7 @@
                 <td class="dataTableContent" align="center"><?php echo $gv_list['order_id']; ?></td>
                 <td class="dataTableContent" align="right"><?php echo $currencies->format($gv_list['amount']); ?></td>
                 <td class="dataTableContent" align="right"><?php echo tep_datetime_short($gv_list['date_created']); ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($gInfo)) && ($gv_list['unique_id'] == $gInfo->unique_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link(FILENAME_GV_QUEUE, 'page=' . $_GET['page'] . '&gid=' . $gv_list['unique_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($gInfo)) && ($gv_list['unique_id'] == $gInfo->unique_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link('gv_queue.php', 'page=' . $_GET['page'] . '&gid=' . $gv_list['unique_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
   }
@@ -109,11 +109,11 @@
   switch ($_GET['action']) {
     case 'release':
       $heading[] = array('text' => '[' . $gInfo->unique_id . '] ' . tep_datetime_short($gInfo->date_created) . ' ' . $currencies->format($gInfo->amount));
-      $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link(FILENAME_GV_QUEUE,'action=confirmrelease&gid='.$gInfo->unique_id,'NONSSL').'">'.tep_draw_button('Confirm') . '</a> <a href="' . tep_href_link(FILENAME_GV_QUEUE,'action=cancel&gid=' . $gInfo->unique_id,'NONSSL') . '">' . tep_draw_button(IMAGE_CANCEL,'cancel') . '</a>');
+      $contents[] = array('align' => 'center', 'text' => '<a href="' . tep_href_link('gv_queue.php','action=confirmrelease&gid='.$gInfo->unique_id,'NONSSL').'">'.tep_draw_button('Confirm') . '</a> <a href="' . tep_href_link('gv_queue.php','action=cancel&gid=' . $gInfo->unique_id,'NONSSL') . '">' . tep_draw_button(IMAGE_CANCEL,'cancel') . '</a>');
       break;
     default:
       $heading[] = array('text' => '[' . $gInfo->unique_id . '] ' . tep_datetime_short($gInfo->date_created) . ' ' . $currencies->format($gInfo->amount));
-      $contents[] = array('align' => 'center','text' => '<a href="' . tep_href_link(FILENAME_GV_QUEUE,'action=release&gid=' . $gInfo->unique_id,'NONSSL'). '">' . tep_draw_button('Release') . '</a>' . '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_GV_QUEUE,'action=delete&gid=' . $gInfo->unique_id,'NONSSL'). '">' . tep_draw_button('Delete','trash',null,'primary') . '</a>');
+      $contents[] = array('align' => 'center','text' => '<a href="' . tep_href_link('gv_queue.php','action=release&gid=' . $gInfo->unique_id,'NONSSL'). '">' . tep_draw_button('Release') . '</a>' . '&nbsp;&nbsp;<a href="' . tep_href_link('gv_queue.php','action=delete&gid=' . $gInfo->unique_id,'NONSSL'). '">' . tep_draw_button('Delete','trash',null,'primary') . '</a>');
       break;
    }
   if ( (tep_not_null($heading)) && (tep_not_null($contents)) ) {

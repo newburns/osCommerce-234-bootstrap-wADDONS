@@ -15,20 +15,20 @@
 
 // if the customer is not logged on, redirect them to the login page
   if (!tep_session_is_registered('customer_id')) {
-    $navigation->set_snapshot(array('mode' => 'SSL', 'page' => FILENAME_CHECKOUT_PAYMENT));
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    $navigation->set_snapshot(array('mode' => 'SSL', 'page' => 'checkout_payment.php'));
+    tep_redirect(tep_href_link('login.php', '', 'SSL'));
   }
 
   if ( isset($HTTP_GET_VARS['payment_error']) && tep_not_null($HTTP_GET_VARS['payment_error']) ) {
-    $redirect_url = tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $HTTP_GET_VARS['payment_error'] . (isset($HTTP_GET_VARS['error']) && tep_not_null($HTTP_GET_VARS['error']) ? '&error=' . $HTTP_GET_VARS['error'] : ''), 'SSL');
+    $redirect_url = tep_href_link('checkout_payment.php', 'payment_error=' . $HTTP_GET_VARS['payment_error'] . (isset($HTTP_GET_VARS['error']) && tep_not_null($HTTP_GET_VARS['error']) ? '&error=' . $HTTP_GET_VARS['error'] : ''), 'SSL');
   } else {
     $hidden_params = '';
 
     if ($payment == 'sage_pay_direct') {
-      $redirect_url = tep_href_link(FILENAME_CHECKOUT_PROCESS, 'check=3D', 'SSL');
+      $redirect_url = tep_href_link('checkout_process.php', 'check=3D', 'SSL');
       $hidden_params = tep_draw_hidden_field('MD', $HTTP_POST_VARS['MD']) . tep_draw_hidden_field('PaRes', $HTTP_POST_VARS['PaRes']);
     } else {
-      $redirect_url = tep_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL');
+      $redirect_url = tep_href_link('checkout_success.php', '', 'SSL');
     }
   }
 
