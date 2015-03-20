@@ -1505,7 +1505,7 @@ return tep_draw_password_field('configuration_value', $password);
       return is_writable($file);
     }
   }
-<<<<<<< HEAD
+
 /* ** Altered for SEO Header Tags Reloaded ** */
   function tep_get_category_description($category_id, $language_id) {
     $category_query = tep_db_query("select categories_description from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . (int)$category_id . "' and language_id = '" . (int)$language_id . "'");
