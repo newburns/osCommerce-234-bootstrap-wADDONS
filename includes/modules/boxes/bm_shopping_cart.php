@@ -38,10 +38,10 @@
     }
 
     function execute() {
-/* ** Altered for CCGV **
+/* ** Altered for CCGV ** */
       global $cart, $new_products_id_in_cart, $currencies, $oscTemplate;
-      $cart_contents_string = '';
-*/
+//      $cart_contents_string = '';
+
 	if (tep_session_is_registered('customer_id'))
 		{
 		$gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
