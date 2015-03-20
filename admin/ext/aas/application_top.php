@@ -468,7 +468,7 @@ $pagination = new Pagination(
 		'prevString'=>AAS_PAGINATION_PREVIOUS,
 		'jumpString'=>AAS_PAGINATION_JUMP,
 		'jumpToPageString'=>AAS_PAGINATION_JUMP_TO_PAGE,
-		'file'=>FILENAME_AAS
+		'file'=>'aas.php'
 
 	)
 );
@@ -477,12 +477,12 @@ $totalPages=$pagination->totalPages($totalRows);
 
 $entries=tep_db_num_rows($products_query);
 
-if($currentPage>$totalPages && $totalPages!=0 ) { header('Location: '.FILENAME_AAS.'?'.$cPathString.'&page='.(  $totalPages-1 <= 0 ? 1 : $totalPages-1 ) ); die; }
+if($currentPage>$totalPages && $totalPages!=0 ) { header('Location: '.'aas.php'.'?'.$cPathString.'&page='.(  $totalPages-1 <= 0 ? 1 : $totalPages-1 ) ); die; }
 	
 if(isset($_GET['search']) && !tep_not_null($_GET['search']) ) { header('Location: '.(isset($_SESSION['admin']['AAS']['preSearchUrl']) ? $_SESSION['admin']['AAS']['preSearchUrl'] : 'aas.php?'.$cPathString )); die; }
 			
 //in order to remember where to return after pressing the x on search
-if(!isset($_GET['search'])) $_SESSION['admin']['AAS']['preSearchUrl']= tep_href_link(FILENAME_AAS, $cPathString.'&amp;page='.$currentPage);
+if(!isset($_GET['search'])) $_SESSION['admin']['AAS']['preSearchUrl']= tep_href_link('aas.php', $cPathString.'&amp;page='.$currentPage);
 
 //currencies is need when displaying gross so display it then
 if($fieldsArray['products_price_gross']['visible']){

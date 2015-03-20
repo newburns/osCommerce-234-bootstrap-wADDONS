@@ -16,11 +16,11 @@ define('NAVBAR_TITLE', 'Gift Voucher FAQ');
 define('HEADING_TITLE', 'Gift Voucher FAQ');
 
 define('TEXT_INFORMATION', '<a name="Top"></a>
-  <a href="'.tep_href_link(FILENAME_GV_FAQ,'faq_item=1','NONSSL').'">Purchasing Gift Vouchers</a><br>
-  <a href="'.tep_href_link(FILENAME_GV_FAQ,'faq_item=2','NONSSL').'">How to send Gift vouchers</a><br>
-  <a href="'.tep_href_link(FILENAME_GV_FAQ,'faq_item=3','NONSSL').'">Buying with Gift Vouchers</a><br>
-  <a href="'.tep_href_link(FILENAME_GV_FAQ,'faq_item=4','NONSSL').'">Redeeming Gift Vouchers</a><br>
-  <a href="'.tep_href_link(FILENAME_GV_FAQ,'faq_item=5','NONSSL').'">When problems occur</a><br>
+  <a href="'.tep_href_link('gv_faq.php','faq_item=1','NONSSL').'">Purchasing Gift Vouchers</a><br>
+  <a href="'.tep_href_link('gv_faq.php','faq_item=2','NONSSL').'">How to send Gift vouchers</a><br>
+  <a href="'.tep_href_link('gv_faq.php','faq_item=3','NONSSL').'">Buying with Gift Vouchers</a><br>
+  <a href="'.tep_href_link('gv_faq.php','faq_item=4','NONSSL').'">Redeeming Gift Vouchers</a><br>
+  <a href="'.tep_href_link('gv_faq.php','faq_item=5','NONSSL').'">When problems occur</a><br>
 ');
 switch ($_GET['faq_item']) {
   case '1':

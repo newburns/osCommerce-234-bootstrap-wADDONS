@@ -16,7 +16,7 @@
 
   require('includes/application_top.php');
   require('includes/functions/password_funcs_create_account.php');
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ACCOUNT);
+  require(DIR_WS_LANGUAGES . $language . '/' . 'create_account.php');
 
 /*function tep_validate_email($email) {
     $valid_address = true;
@@ -110,7 +110,7 @@
   }  */
 
 if (!@$HTTP_POST_VARS['action']) {
-   tep_redirect(tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'NONSSL'));
+   tep_redirect(tep_href_link('create_account.php', '', 'NONSSL'));
  }
 
   $gender = tep_db_prepare_input($HTTP_POST_VARS['gender']);
@@ -305,7 +305,7 @@ require('includes/form_check.js.php'); ?>
   if (sizeof($navigation->snapshot) > 0) {
 ?>
       <tr>
-        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link(FILENAME_LOGIN, tep_get_all_get_params(), 'SSL')); ?></td>
+        <td class="smallText"><br><?php echo sprintf(TEXT_ORIGIN_LOGIN, tep_href_link('login.php', tep_get_all_get_params(), 'SSL')); ?></td>
       </tr>
 <?php
   }
@@ -417,7 +417,7 @@ $customer_default_address_id = $address_id;
     $email_text .= EMAIL_WELCOME . EMAIL_PASS_1 . $password . EMAIL_PASS_2 . EMAIL_TEXT . EMAIL_CONTACT . EMAIL_WARNING;
     tep_mail($name, $email_address, EMAIL_SUBJECT, nl2br($email_text), STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 
-    tep_redirect(tep_href_link(FILENAME_CREATE_ACCOUNT_SUCCESS, '', 'SSL'));
+    tep_redirect(tep_href_link('create_account_success.php', '', 'SSL'));
   }
 
   require(DIR_WS_INCLUDES . 'application_bottom.php');
