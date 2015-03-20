@@ -54,7 +54,7 @@
       $mimemessage->build_message();
       $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $from, $subject);
     }
-    tep_redirect(tep_href_link(FILENAME_COUPON_ADMIN, 'mail_sent_to=' . urlencode($mail_sent_to)));
+    tep_redirect(tep_href_link('coupon_admin.php', 'mail_sent_to=' . urlencode($mail_sent_to)));
   }
   if ( ($_GET['action'] == 'preview_email') && (!$_POST['customers_email_address']) ) {
     $_GET['action'] = 'email';
@@ -70,7 +70,7 @@
             tep_set_coupon_status($_GET['cid'], $_GET['flag']);
           }
         }
-        tep_redirect(tep_href_link(FILENAME_COUPON_ADMIN, '&cid=' . $_GET['cid']));
+        tep_redirect(tep_href_link('coupon_admin.php', '&cid=' . $_GET['cid']));
         break;
     case 'confirmdelete':
      $coupon_id = tep_db_prepare_input($_GET['cid']);
@@ -198,9 +198,9 @@
         $cInfo = new objectInfo($cc_list);
       }
       if ( (is_object($cInfo)) && ($cc_list['unique_id'] == $cInfo->unique_id) ) {
-        echo '          <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUPON_ADMIN, tep_get_all_get_params(array('cid', 'action', 'uid')) . 'cid=' . $cInfo->coupon_id . '&action=voucherreport&uid=' . $cinfo->unique_id) . '\'">' . "\n";
+        echo '          <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link('coupon_admin.php', tep_get_all_get_params(array('cid', 'action', 'uid')) . 'cid=' . $cInfo->coupon_id . '&action=voucherreport&uid=' . $cinfo->unique_id) . '\'">' . "\n";
       } else {
-        echo '          <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUPON_ADMIN, tep_get_all_get_params(array('cid', 'action', 'uid')) . 'cid=' . $cc_list['coupon_id'] . '&action=voucherreport&uid=' . $cc_list['unique_id']) . '\'">' . "\n";
+        echo '          <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link('coupon_admin.php', tep_get_all_get_params(array('cid', 'action', 'uid')) . 'cid=' . $cc_list['coupon_id'] . '&action=voucherreport&uid=' . $cc_list['unique_id']) . '\'">' . "\n";
       }
 $customer_query = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $cc_list['customer_id'] . "'");
 $customer = tep_db_fetch_array($customer_query);
@@ -210,7 +210,7 @@ $redeem_ip = tep_get_ip_address();
                 <td class="dataTableContent" align="center"><?php echo $customer['customers_firstname'] . ' ' . $customer['customers_lastname']; ?></td>
                 <td class="dataTableContent" align="center"><?php echo $redeem_ip; ?></td>
                 <td class="dataTableContent" align="center"><?php echo tep_date_short($cc_list['redeem_date']); ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($cc_list['unique_id'] == $cInfo->unique_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, 'page=' . $_GET['page'] . '&cid=' . $cc_list['coupon_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($cc_list['unique_id'] == $cInfo->unique_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link('coupon_admin.php', 'page=' . $_GET['page'] . '&cid=' . $cc_list['coupon_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }
@@ -266,7 +266,7 @@ $redeem_ip = tep_get_ip_address();
         </table></td>
       </tr>
       <tr>
-          <tr><?php echo tep_draw_form('mail', FILENAME_COUPON_ADMIN, 'action=send_email_to_user&cid=' . $_GET['cid']); ?>
+          <tr><?php echo tep_draw_form('mail', 'coupon_admin.php', 'action=send_email_to_user&cid=' . $_GET['cid']); ?>
             <td><table border="0" width="100%" cellpadding="0" cellspacing="2">
               <tr>
                 <td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
@@ -314,7 +314,7 @@ $redeem_ip = tep_get_ip_address();
 ?>
                 <table border="0" width="100%" cellpadding="0" cellspacing="2">
                   <tr>
-                    <td align="right"><?php echo '<a href="' . tep_href_link(FILENAME_COUPON_ADMIN) . '">' . tep_draw_button(IMAGE_CANCEL,'cancel') . '</a> ' . tep_draw_button(IMAGE_SEND_EMAIL,'check', null, 'primary'); ?></td>
+                    <td align="right"><?php echo '<a href="' . tep_href_link('coupon_admin.php') . '">' . tep_draw_button(IMAGE_CANCEL,'cancel') . '</a> ' . tep_draw_button(IMAGE_SEND_EMAIL,'check', null, 'primary'); ?></td>
                   </tr>
                 </table></td>
               </tr>
@@ -337,7 +337,7 @@ $redeem_ip = tep_get_ip_address();
           </tr>
         </table></td>
       </tr>
-      <tr><?php echo tep_draw_form('mail', FILENAME_COUPON_ADMIN, 'action=preview_email&cid='. $_GET['cid']); ?>
+      <tr><?php echo tep_draw_form('mail', 'coupon_admin.php', 'action=preview_email&cid='. $_GET['cid']); ?>
             <td><table border="0" cellpadding="0" cellspacing="2">
               <tr>
                 <td colspan="2"><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
@@ -397,7 +397,7 @@ $redeem_ip = tep_get_ip_address();
       </tr>
       <tr>
       <td>
-<?php echo tep_draw_form('coupon', FILENAME_COUPON_ADMIN, 'action=update_confirm&oldaction=' . $_GET['oldaction'] . '&cid=' . $_GET['cid']); ?>
+<?php echo tep_draw_form('coupon', 'coupon_admin.php', 'action=update_confirm&oldaction=' . $_GET['oldaction'] . '&cid=' . $_GET['cid']); ?>
       <table border="0" width="100%" cellspacing="0" cellpadding="6">
       <tr>
         <td align="left" class="main"><?php echo COUPON_NAME; ?></td>
@@ -562,7 +562,7 @@ $redeem_ip = tep_get_ip_address();
       <tr>
       <td>
 <?php
-    echo tep_draw_form('coupon', FILENAME_COUPON_ADMIN, 'action=update&oldaction='.$_GET['action'] . '&cid=' . $_GET['cid']);
+    echo tep_draw_form('coupon', 'coupon_admin.php', 'action=update&oldaction='.$_GET['action'] . '&cid=' . $_GET['cid']);
 ?>
       <table border="0" width="100%" cellspacing="0" cellpadding="6">
          <tr>
@@ -648,7 +648,7 @@ $redeem_ip = tep_get_ip_address();
       </tr>
       <tr>
         <td align="left"><?php echo tep_draw_button(COUPON_BUTTON_PREVIEW,'disk', null, 'primary'); ?></td>
-        <td align="left"><?php echo '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, ''); ?>"><?php echo tep_draw_button(IMAGE_CANCEL,'cancel'); ?></a>
+        <td align="left"><?php echo '&nbsp;&nbsp;<a href="' . tep_href_link('coupon_admin.php', ''); ?>"><?php echo tep_draw_button(IMAGE_CANCEL,'cancel'); ?></a>
       </td>
       </tr>
       </td></table>
@@ -705,9 +705,9 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
         $cInfo = new objectInfo($cc_list);
       }
       if ( (is_object($cInfo)) && ($cc_list['coupon_id'] == $cInfo->coupon_id) ) {
-        echo '          <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUPON_ADMIN, tep_get_all_get_params(array('cid', 'action')) . 'cid=' . $cInfo->coupon_id . '&action=edit') . '\'">' . "\n";
+        echo '          <tr class="dataTableRowSelected" onmouseover="this.style.cursor=\'hand\'" onclick="document.location.href=\'' . tep_href_link('coupon_admin.php', tep_get_all_get_params(array('cid', 'action')) . 'cid=' . $cInfo->coupon_id . '&action=edit') . '\'">' . "\n";
       } else {
-        echo '          <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link(FILENAME_COUPON_ADMIN, tep_get_all_get_params(array('cid', 'action')) . 'cid=' . $cc_list['coupon_id']) . '\'">' . "\n";
+        echo '          <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link('coupon_admin.php', tep_get_all_get_params(array('cid', 'action')) . 'cid=' . $cc_list['coupon_id']) . '\'">' . "\n";
       }
       $coupon_description_query = tep_db_query("select coupon_name from " . TABLE_COUPONS_DESCRIPTION . " where coupon_id = '" . $cc_list['coupon_id'] . "' and language_id = '" . $languages_id . "'");
       $coupon_desc = tep_db_fetch_array($coupon_description_query);
@@ -730,18 +730,18 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
                 <td class="dataTableContent" align="center">
 <?php
       if ($cc_list['coupon_status'] == '1') {
-        echo tep_image(DIR_WS_IMAGES . 'icon_status_green.gif', IMAGE_ICON_STATUS_GREEN, 10, 10) . '&nbsp;&nbsp;<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, 'action=setstatus&flag=0&cid=' . $cc_list['coupon_id'] . '&page=' . $_GET['page']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_red_light.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
+        echo tep_image(DIR_WS_IMAGES . 'icon_status_green.gif', IMAGE_ICON_STATUS_GREEN, 10, 10) . '&nbsp;&nbsp;<a href="' . tep_href_link('coupon_admin.php', 'action=setstatus&flag=0&cid=' . $cc_list['coupon_id'] . '&page=' . $_GET['page']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_red_light.gif', IMAGE_ICON_STATUS_RED_LIGHT, 10, 10) . '</a>';
       } else {
-        echo '<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, 'action=setstatus&flag=1&cid=' . $cc_list['coupon_id'] . '&page=' . $_GET['page']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_green_light.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>&nbsp;&nbsp;' . tep_image(DIR_WS_IMAGES . 'icon_status_red.gif', IMAGE_ICON_STATUS_RED, 10, 10);
+        echo '<a href="' . tep_href_link('coupon_admin.php', 'action=setstatus&flag=1&cid=' . $cc_list['coupon_id'] . '&page=' . $_GET['page']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_status_green_light.gif', IMAGE_ICON_STATUS_GREEN_LIGHT, 10, 10) . '</a>&nbsp;&nbsp;' . tep_image(DIR_WS_IMAGES . 'icon_status_red.gif', IMAGE_ICON_STATUS_RED, 10, 10);
       }
 ?></td>
-                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($cc_list['coupon_id'] == $cInfo->coupon_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, 'page=' . $_GET['page'] . '&cid=' . $cc_list['coupon_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
+                <td class="dataTableContent" align="right"><?php if ( (is_object($cInfo)) && ($cc_list['coupon_id'] == $cInfo->coupon_id) ) { echo tep_image(DIR_WS_IMAGES . 'icon_arrow_right.gif'); } else { echo '<a href="' . tep_href_link('coupon_admin.php', 'page=' . $_GET['page'] . '&cid=' . $cc_list['coupon_id']) . '">' . tep_image(DIR_WS_IMAGES . 'icon_info.gif', IMAGE_ICON_INFO) . '</a>'; } ?>&nbsp;</td>
               </tr>
 <?php
     }
 ?>
           <tr>
-            <td colspan="5" align="right" class="smallText"><br><br><?php echo '<a href="' . tep_href_link(FILENAME_COUPON_ADMIN, 'page=' . $_GET['page'] . '&cID=' . $cInfo->coupon_id . '&action=new') . '">' . tep_draw_button(IMAGE_INSERT,'plus') . '</a>'; ?></td>
+            <td colspan="5" align="right" class="smallText"><br><br><?php echo '<a href="' . tep_href_link('coupon_admin.php', 'page=' . $_GET['page'] . '&cID=' . $cInfo->coupon_id . '&action=new') . '">' . tep_draw_button(IMAGE_INSERT,'plus') . '</a>'; ?></td>
           </tr>
         </table></td>
 <?php
@@ -764,8 +764,8 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
       if ($_GET['action'] == 'voucherdelete') {
       	$heading[] = array('text' => '<strong>' . COUPON_DELETE . '</strong>');
         $contents[] = array('text'=> TEXT_CONFIRM_DELETE . '<br><br>' .
-                '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'action=confirmdelete&cid='.$_GET['cid'],'NONSSL').'">'.tep_draw_button('Confirm Delete Voucher','notice').'</a>' .
-                '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Cancel','cancel').'</a>'
+                '<a href="'.tep_href_link('coupon_admin.php','action=confirmdelete&cid='.$_GET['cid'],'NONSSL').'">'.tep_draw_button('Confirm Delete Voucher','notice').'</a>' .
+                '<a href="'.tep_href_link('coupon_admin.php','cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Cancel','cancel').'</a>'
                 );
       } else {
         $prod_details = NONE;
@@ -792,10 +792,10 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
         $contents[] = array('text'=>DATE_CREATED . ':&nbsp;' . tep_date_short($cInfo->date_created) . '<br>');
         $contents[] = array('text'=>DATE_MODIFIED . ':&nbsp;' . tep_date_short($cInfo->date_modified) . '<br><br>');
         $contents[] = array('text'=>
-        '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'action=voucheredit&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Edit','pencil').'</a>&nbsp;&nbsp;' .
-        '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'action=voucherdelete&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Delete','trash').'</a><br><br>' .
-        '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'action=email&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Email Coupon','mail-closed').'</a>&nbsp;&nbsp;' .
-        '<a href="'.tep_href_link(FILENAME_COUPON_ADMIN,'action=voucherreport&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Redemption Report','document').'</a>');
+        '<a href="'.tep_href_link('coupon_admin.php','action=voucheredit&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Edit','pencil').'</a>&nbsp;&nbsp;' .
+        '<a href="'.tep_href_link('coupon_admin.php','action=voucherdelete&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Delete','trash').'</a><br><br>' .
+        '<a href="'.tep_href_link('coupon_admin.php','action=email&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Email Coupon','mail-closed').'</a>&nbsp;&nbsp;' .
+        '<a href="'.tep_href_link('coupon_admin.php','action=voucherreport&cid='.$cInfo->coupon_id,'NONSSL').'">'.tep_draw_button('Redemption Report','document').'</a>');
         }
         break;
       }

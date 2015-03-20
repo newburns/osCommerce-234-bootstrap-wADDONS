@@ -19,7 +19,7 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_LOGOFF);
+  require(DIR_WS_LANGUAGES . $language . '/' . 'logoff.php');
 
   $breadcrumb->add(NAVBAR_TITLE);
 
@@ -74,7 +74,7 @@ if ( tep_session_is_registered('cc_id') ) {
   </div>
 
   <div class="buttonSet">
-    <div class="text-right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link(FILENAME_DEFAULT), null, null, 'btn-danger'); ?></div>
+    <div class="text-right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link('index.php'), null, null, 'btn-danger'); ?></div>
   </div>
 </div>
 
