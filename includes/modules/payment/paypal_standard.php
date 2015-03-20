@@ -134,8 +134,10 @@
       $order->info['payment_method'] = '<img src="https://www.paypalobjects.com/webstatic/mktg/Logo/pp-logo-100px.png" border="0" alt="PayPal Logo" style="padding: 3px;" />';
     }
 
+/* ** Altered for CCGV ** */	
     function confirmation() {
       global $cartID, $cart_PayPal_Standard_ID, $customer_id, $languages_id, $order, $order_total_modules;
+/* ** EOF alterations for CCGV ** */ 
 
       if (tep_session_is_registered('cartID')) {
         $insert_order = false;
@@ -334,8 +336,8 @@
                           'no_note' => '1',
                           'notify_url' => tep_href_link('ext/modules/payment/paypal/standard_ipn.php', '', 'SSL', false, false),
                           'rm' => '2',
-                          'return' => tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL'),
-                          'cancel_return' => tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'),
+                          'return' => tep_href_link('checkout_process.php', '', 'SSL'),
+                          'cancel_return' => tep_href_link('checkout_payment.php', '', 'SSL'),
                           'bn' => 'OSCOM23_PS',
                           'paymentaction' => ((MODULE_PAYMENT_PAYPAL_STANDARD_TRANSACTION_METHOD == 'Sale') ? 'sale' : 'authorization'));
 
