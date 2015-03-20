@@ -63,11 +63,9 @@
         }
       }
 
-<<<<<<< HEAD
       if ( defined(''modules.php'') && ($PHP_SELF == 'modules.php') && isset($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'install') && isset($HTTP_GET_VARS['subaction']) && ($HTTP_GET_VARS['subaction'] == 'conntest') ) {
-=======
+
       if ( defined('FILENAME_MODULES') && ($PHP_SELF == FILENAME_MODULES) && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
->>>>>>> 202021b86b33e6382b9bd0c01990390919a09f5b
         echo $this->getTestConnectionResult();
         exit;
       }
