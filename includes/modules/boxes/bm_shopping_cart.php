@@ -39,7 +39,7 @@
 
     function execute() {
 /* ** Altered for CCGV ** */
-      global $cart, $new_products_id_in_cart, $currencies, $oscTemplate;
+      global $customer_id, $cart, $new_products_id_in_cart, $currencies, $oscTemplate;
 //      $cart_contents_string = '';
 
 	if (tep_session_is_registered('customer_id'))
