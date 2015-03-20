@@ -27,6 +27,7 @@ Alternative Administration System added - http://addons.oscommerce.com/info/9135
 Gergely SMTP Email Addition - http://forums.oscommerce.com/topic/94340-smtp-authentication-and-oscommerce/page-2#entry1697522  
 Security Pro R11 -- http://addons.oscommerce.com/info/7708  
 MailBEEZ Customer Relations Manager added -- http://www.mailbeez.com/quickstart/?id=1  
+Credit Class, Gift Vouchers & Discount Coupons osC2.3.3.4 (CCGV) added -- http://addons.oscommerce.com/info/9020
   
 This is an attempt to get a strong working osc with some addons. This is NOT an independent project. Without the help of MANY coders that have contributed to osCommerce, this would not be possible. I did not code any of the modules, addons, or base software that you see here. Much of the effort has been completed by Gary Burton from osCommerce.  
   
