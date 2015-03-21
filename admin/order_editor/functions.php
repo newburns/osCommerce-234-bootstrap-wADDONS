@@ -240,7 +240,7 @@
     $new_keywords_array = array();
 
     foreach($keywords_array as $keyword) {
-      $keyword = ereg_replace("(,)|('s)", "", $keyword);
+      $keyword = preg_replace("/(,)|('s)/", "", $keyword);
       $new_keywords_array[] = $keyword;
     }
     
