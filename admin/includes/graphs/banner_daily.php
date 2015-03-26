@@ -12,8 +12,8 @@
 
   include(DIR_WS_CLASSES . 'phplot.php');
 
-  $year = (($$_GET['year']) ? $$_GET['year'] : date('Y'));
-  $month = (($$_GET['month']) ? $$_GET['month'] : date('n'));
+  $year = (($_GET['year']) ? $_GET['year'] : date('Y'));
+  $month = (($_GET['month']) ? $_GET['month'] : date('n'));
 
   $days = (date('t', mktime(0,0,0,$month))+1);
   $stats = array();

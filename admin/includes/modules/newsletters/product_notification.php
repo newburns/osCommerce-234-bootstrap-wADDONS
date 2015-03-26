@@ -20,7 +20,7 @@
     }
 
     function choose_audience() {
-      global $$_GET, $languages_id;
+      global $_GET, $languages_id;
 
       $products_array = array();
       $products_query = tep_db_query("select pd.products_id, pd.products_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where pd.language_id = '" . $languages_id . "' and pd.products_id = p.products_id and p.products_status = '1' order by pd.products_name");
@@ -73,11 +73,11 @@ function selectAll(FormName, SelectBox) {
 }
 //--></script>';
 
-      $global_button = tep_draw_button(BUTTON_GLOBAL, 'circle-triangle-n', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm&global=true'), 'primary');
+      $global_button = tep_draw_button(BUTTON_GLOBAL, 'circle-triangle-n', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID'] . '&action=confirm&global=true'), 'primary');
 
-      $cancel_button = tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID']));
+      $cancel_button = tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']));
 
-      $choose_audience_string .= '<form name="notifications" action="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm') . '" method="post" onsubmit="return selectAll(\'notifications\', \'chosen[]\')"><table border="0" width="100%" cellspacing="0" cellpadding="2">' . "\n" .
+      $choose_audience_string .= '<form name="notifications" action="' . tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID'] . '&action=confirm') . '" method="post" onsubmit="return selectAll(\'notifications\', \'chosen[]\')"><table border="0" width="100%" cellspacing="0" cellpadding="2">' . "\n" .
                                  '  <tr>' . "\n" .
                                  '    <td align="center" class="smallText"><strong>' . TEXT_PRODUCTS . '</strong><br />' . tep_draw_pull_down_menu('products', $products_array, '', 'size="20" style="width: 20em;" multiple') . '</td>' . "\n" .
                                  '    <td align="center" class="smallText">&nbsp;<br />' . $global_button . '<br /><br /><br /><input type="button" value="' . BUTTON_SELECT . '" style="width: 8em;" onClick="mover(\'remove\');"><br /><br /><input type="button" value="' . BUTTON_UNSELECT . '" style="width: 8em;" onClick="mover(\'add\');"><br /><br /><br />' . tep_draw_button(IMAGE_SEND, 'mail-closed', null, 'primary') . '<br /><br />' . $cancel_button . '</td>' . "\n" .
@@ -89,11 +89,11 @@ function selectAll(FormName, SelectBox) {
     }
 
     function confirm() {
-      global $$_GET, $_POST;
+      global $_GET, $_POST;
 
       $audience = array();
 
-      if (isset($$_GET['global']) && ($$_GET['global'] == 'true')) {
+      if (isset($_GET['global']) && ($_GET['global'] == 'true')) {
         $products_query = tep_db_query("select distinct customers_id from " . TABLE_PRODUCTS_NOTIFICATIONS);
         while ($products = tep_db_fetch_array($products_query)) {
           $audience[$products['customers_id']] = '1';
@@ -138,10 +138,10 @@ function selectAll(FormName, SelectBox) {
                         '  <tr>' . "\n" .
                         '    <td>' . tep_draw_separator('pixel_trans.gif', '1', '10') . '</td>' . "\n" .
                         '  </tr>' . "\n" .
-                        '  <tr>' . tep_draw_form('confirm', FILENAME_NEWSLETTERS, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm_send') . "\n" .
+                        '  <tr>' . tep_draw_form('confirm', FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID'] . '&action=confirm_send') . "\n" .
                         '    <td class="smallText" align="right">';
       if (sizeof($audience) > 0) {
-        if (isset($$_GET['global']) && ($$_GET['global'] == 'true')) {
+        if (isset($_GET['global']) && ($_GET['global'] == 'true')) {
           $confirm_string .= tep_draw_hidden_field('global', 'true');
         } else {
           for ($i = 0, $n = sizeof($chosen); $i < $n; $i++) {
@@ -150,7 +150,7 @@ function selectAll(FormName, SelectBox) {
         }
         $confirm_string .= tep_draw_button(IMAGE_SEND, 'mail-closed', null, 'primary');
       }
-      $confirm_string .= tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=send')) . '</td>' . "\n" .
+      $confirm_string .= tep_draw_button(IMAGE_CANCEL, 'close', tep_href_link(FILENAME_NEWSLETTERS, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID'] . '&action=send')) . '</td>' . "\n" .
                          '  </tr>' . "\n" .
                          '</table>';
 

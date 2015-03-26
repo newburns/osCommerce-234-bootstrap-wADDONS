@@ -316,7 +316,7 @@ require('includes/form_check.js.php'); ?>
       <tr>
         <td>
 <?php
-  //$email_address = tep_db_prepare_input($$_GET['email_address']);
+  //$email_address = tep_db_prepare_input($_GET['email_address']);
   $account['entry_country_id'] = STORE_COUNTRY;
 
   require(DIR_WS_MODULES . 'account_details.php');

@@ -11,8 +11,8 @@
 */
 
  require('includes/application_top.php');
-  $search = (isset($$_GET['search_customers']) ? $$_GET['search_customers'] : '');
-  $action = (isset($$_GET['action']) ? $$_GET['action'] : '');
+  $search = (isset($_GET['search_customers']) ? $_GET['search_customers'] : '');
+  $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
   if ( ($action == 'send_email_to_user') && isset($_POST['customers_email_address']) && !isset($_POST['back_x']) ) {
        
@@ -38,8 +38,8 @@
     $messageStack->add(ERROR_NO_CUSTOMER_SELECTED, 'error');
   }
 
-  if (isset($$_GET['mail_sent_to'])) {
-    $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $$_GET['mail_sent_to']), 'success');
+  if (isset($_GET['mail_sent_to'])) {
+    $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $_GET['mail_sent_to']), 'success');
   }
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -74,20 +74,20 @@
 			</td>
     		<td bgcolor="#F2F2F2">
 <?php
-		    if ($$_GET['search_email']) {
-		    	$search_email = tep_db_prepare_input($$_GET['search_email']);
+		    if ($_GET['search_email']) {
+		    	$search_email = tep_db_prepare_input($_GET['search_email']);
 		    	$where_clause = "customers_email_address RLIKE '".tep_db_input($search_email)."'";
 		    
 		    }
 
-		    if ($$_GET['search_phone']) {
-		    	$search_phone = tep_db_prepare_input($$_GET['search_phone']);
+		    if ($_GET['search_phone']) {
+		    	$search_phone = tep_db_prepare_input($_GET['search_phone']);
 		    	$where_clause .= ($where_clause ? ' or ' : '')."customers_telephone RLIKE '".tep_db_input($search_phone)."'";
 		    }
 
 
-		    if ($$_GET['search_lastname']) {
-		    	$search_lastname = tep_db_prepare_input($$_GET['search_lastname']);
+		    if ($_GET['search_lastname']) {
+		    	$search_lastname = tep_db_prepare_input($_GET['search_lastname']);
 		    	$where_clause .= ($where_clause ? ' or ' : '')." customers_lastname RLIKE '".tep_db_input($search_lastname)."'";
 		    }
 		 
@@ -234,7 +234,7 @@
               
               <tr>
                 <td>
-				<?php echo '<a href="' . tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?>
+				<?php echo '<a href="' . tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $_GET['page'] . '&nID=' . $_GET['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?>
                 </td>
                 <td align="right"><?php echo tep_image_submit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
               </tr>

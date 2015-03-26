@@ -130,14 +130,14 @@
   }
 
   function tep_get_all_get_params($exclude_array = '') {
-    global $$_GET;
+    global $_GET;
 
     if ($exclude_array == '') $exclude_array = array();
 
     $get_url = '';
 
-    reset($$_GET);
-    while (list($key, $value) = each($$_GET)) {
+    reset($_GET);
+    while (list($key, $value) = each($_GET)) {
       if (($key != tep_session_name()) && ($key != 'error') && (!in_array($key, $exclude_array))) $get_url .= $key . '=' . $value . '&';
     }
 

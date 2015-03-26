@@ -88,12 +88,12 @@
     tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . implode(';', $_installed) . "' where configuration_key = 'MODULE_CONTENT_INSTALLED'");
   }
 
-  $action = (isset($$_GET['action']) ? $$_GET['action'] : '');
+  $action = (isset($_GET['action']) ? $_GET['action'] : '');
 
   if (tep_not_null($action)) {
     switch ($action) {
       case 'save':
-        $class = basename($$_GET['module']);
+        $class = basename($_GET['module']);
 
         foreach ( $modules['installed'] as $m ) {
           if ( $m['code'] == $class ) {
@@ -113,7 +113,7 @@
         break;
 
       case 'install':
-        $class = basename($$_GET['module']);
+        $class = basename($_GET['module']);
 
         foreach ( $modules['new'] as $m ) {
           if ( $m['code'] == $class ) {
@@ -134,7 +134,7 @@
         break;
 
       case 'remove':
-        $class = basename($$_GET['module']);
+        $class = basename($_GET['module']);
 
         foreach ( $modules['installed'] as $m ) {
           if ( $m['code'] == $class ) {
@@ -196,7 +196,7 @@
     foreach ( $modules['new'] as $m ) {
       $module = new $m['code']();
 
-      if ((!isset($$_GET['module']) || (isset($$_GET['module']) && ($$_GET['module'] == $module->code))) && !isset($mInfo)) {
+      if ((!isset($_GET['module']) || (isset($_GET['module']) && ($_GET['module'] == $module->code))) && !isset($mInfo)) {
         $module_info = array('code' => $module->code,
                              'title' => $module->title,
                              'description' => $module->description,
@@ -234,7 +234,7 @@
     foreach ( $modules['installed'] as $m ) {
       $module = new $m['code']();
 
-      if ((!isset($$_GET['module']) || (isset($$_GET['module']) && ($$_GET['module'] == $module->code))) && !isset($mInfo)) {
+      if ((!isset($_GET['module']) || (isset($_GET['module']) && ($_GET['module'] == $module->code))) && !isset($mInfo)) {
         $module_info = array('code' => $module->code,
                              'title' => $module->title,
                              'description' => $module->description,
