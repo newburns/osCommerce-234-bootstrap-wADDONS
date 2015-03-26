@@ -673,7 +673,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )    // wenn "Versendet"
 {
         //require(DIR_WS_LANGUAGES . $language . '/report_googlemap.php');
 
-        $oID = tep_db_prepare_input($$_GET['oID']);
+        $oID = tep_db_prepare_input($_GET['oID']);
 
         $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '" . (int)$oID . "'");
         $order_exists = true;
@@ -1156,7 +1156,7 @@ if (tep_db_num_rows($orders_history_query)) {
     if (FILENAME_PDF_INVOICE    !== 'FILENAME_PDF_INVOICE'    ) {
     	 if ( ORDER_EDITOR_ADD_PDF_INVOICE_EMAIL == 'true' ) {
         // All we do is set the order_id for pdfinvoice.php to pick up
-        //$$_GET['order_id'] = $insert_id;
+        //$_GET['order_id'] = $insert_id;
         // set stream mode
         $stream = true;
         $oID= $_GET['oID'] ;

@@ -26,7 +26,7 @@
 
       $SelectCustomerBox .= "<option value=\"" . $db_Row['customers_id'] . "\"";
 
-      if(isSet($$_GET['Customer']) and $db_Row['customers_id']==$$_GET['Customer']){
+      if(isSet($_GET['Customer']) and $db_Row['customers_id']==$_GET['Customer']){
         $SelectCustomerBox .= " SELECTED ";
         $SelectCustomerBox .= ">" . (empty($db_Row['entry_company']) ? "": strtoupper($db_Row['entry_company']) . " - " ) . $db_Row['customers_lastname'] . " , " . $db_Row['customers_firstname'] . " - " . $db_Row['entry_city'] . ", " . $db_Row['zone_code'] . "</option>\n";
       }else{
@@ -57,17 +57,17 @@
 
     
 
-	if(isset($$_GET['Customer'])){
- 	  $account_query = tep_db_query("select * from " . TABLE_CUSTOMERS . " where customers_id = '" . $$_GET['Customer'] . "'");
+	if(isset($_GET['Customer'])){
+ 	  $account_query = tep_db_query("select * from " . TABLE_CUSTOMERS . " where customers_id = '" . $_GET['Customer'] . "'");
  	  $account = tep_db_fetch_array($account_query);
  	  $customer = $account['customers_id'];
- 	  $address_query = tep_db_query("select * from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . $$_GET['Customer'] . "'");
+ 	  $address_query = tep_db_query("select * from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . $_GET['Customer'] . "'");
  	  $address = tep_db_fetch_array($address_query);
-	}elseif (isset($$_GET['Customer_nr'])){
- 	  $account_query = tep_db_query("select * from " . TABLE_CUSTOMERS . " where customers_id = '" . $$_GET['Customer_nr'] . "'");
+	}elseif (isset($_GET['Customer_nr'])){
+ 	  $account_query = tep_db_query("select * from " . TABLE_CUSTOMERS . " where customers_id = '" . $_GET['Customer_nr'] . "'");
  	  $account = tep_db_fetch_array($account_query);
  	  $customer = $account['customers_id'];
- 	  $address_query = tep_db_query("select * from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . $$_GET['Customer_nr'] . "'");
+ 	  $address_query = tep_db_query("select * from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . $_GET['Customer_nr'] . "'");
  	  $address = tep_db_fetch_array($address_query);
 	}
 

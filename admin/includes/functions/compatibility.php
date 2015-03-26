@@ -31,7 +31,7 @@
 
 // handle magic_quotes_gpc turned off.
   if (!get_magic_quotes_gpc()) {
-    do_magic_quotes_gpc($$_GET);
+    do_magic_quotes_gpc($_GET);
     do_magic_quotes_gpc($_POST);
     do_magic_quotes_gpc($_COOKIE);
   }

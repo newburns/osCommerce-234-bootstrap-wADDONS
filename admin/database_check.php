@@ -15,8 +15,8 @@
   include('includes/functions/dbcheck.php');
 
   //  Get $action and $ref to direct to proper case
-  $action = (isset($$_GET['action']) ? $$_GET['action'] : '');
-  $ref = (isset($$_GET['ref']) ? $$_GET['ref'] : '');
+  $action = (isset($_GET['action']) ? $_GET['action'] : '');
+  $ref = (isset($_GET['ref']) ? $_GET['ref'] : '');
 
   //  If action has value, go to that action
   if (tep_not_null($action)){
@@ -24,25 +24,25 @@
 
 // Begin duplicate products delete.
 case 'delete_products':
-        tep_db_query("delete from " . TABLE_PRODUCTS . " where products_id = '" . $$_GET['products_id'] . "'");
-        tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $$_GET['products_id'] . "'");
-        tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " where products_id = '" . $$_GET['products_id'] . "'");
+        tep_db_query("delete from " . TABLE_PRODUCTS . " where products_id = '" . $_GET['products_id'] . "'");
+        tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $_GET['products_id'] . "'");
+        tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " where products_id = '" . $_GET['products_id'] . "'");
         $action = $ref;
         break;
 //  End duplicate products delete
 
 // Begin categories delete.
 case 'delete_categories':
-        tep_db_query("delete from " . TABLE_CATEGORIES . " where categories_id = '" . $$_GET['categories_id'] . "'");
-        tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . $$_GET['categories_id'] . "'");
+        tep_db_query("delete from " . TABLE_CATEGORIES . " where categories_id = '" . $_GET['categories_id'] . "'");
+        tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . $_GET['categories_id'] . "'");
         $action = $ref;
         break;
 //  End categories delete
 
 // Begin manufacturers delete.
 case 'delete_manufacturers':
-        tep_db_query("delete from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . $$_GET['manufacturers_id'] . "'");
-        tep_db_query("delete from " . TABLE_MANUFACTURERS_INFO . " where manufacturers_id = '" . $$_GET['manufacturers_id'] . "'");
+        tep_db_query("delete from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . $_GET['manufacturers_id'] . "'");
+        tep_db_query("delete from " . TABLE_MANUFACTURERS_INFO . " where manufacturers_id = '" . $_GET['manufacturers_id'] . "'");
         $action = $ref;
         break;
 //  End categories delete
@@ -60,12 +60,12 @@ case 'delete_all_categories_size': // Category size
         break;
 
 case 'delete_categories_desc': // specific category descriptions and no categories
-        tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . $$_GET['categories_id'] . "'");
+        tep_db_query("delete from " . TABLE_CATEGORIES_DESCRIPTION . " where categories_id = '" . $_GET['categories_id'] . "'");
         $action = $ref;
         break;
 
 case 'delete_products_desc': // specific product description and no product
-        tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $$_GET['products_id'] . "'");
+        tep_db_query("delete from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . $_GET['products_id'] . "'");
         $action = $ref;
         break;
 
@@ -91,7 +91,7 @@ case 'delete_all_products_only': // Products with no description
 
 // Begin products to categories delete.
 case 'delete_prodtocat':
-        tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " WHERE products_id = '" . $$_GET['products_id'] . "' AND categories_id = '" . $$_GET['categories_id'] . "' LIMIT 1");
+        tep_db_query("delete from " . TABLE_PRODUCTS_TO_CATEGORIES . " WHERE products_id = '" . $_GET['products_id'] . "' AND categories_id = '" . $_GET['categories_id'] . "' LIMIT 1");
         $action = $ref;
         break;
 
@@ -116,13 +116,13 @@ case 'delete_all_prod':
 
 // Begin setting default wt on products.
 case 'set_default_wt':
-        tep_db_query("update " . TABLE_PRODUCTS . " SET products_weight = 1 WHERE products_id = '" . $$_GET['products_id'] . "'");
+        tep_db_query("update " . TABLE_PRODUCTS . " SET products_weight = 1 WHERE products_id = '" . $_GET['products_id'] . "'");
         $action = $ref;
         break;
 
 // Begin setting default image on category.
 case 'set_default_image':
-        tep_db_query("update " . TABLE_CATEGORIES . " SET categories_image = 'no_image.jpg' WHERE categories_id = '" . $$_GET['categories_id'] . "'");
+        tep_db_query("update " . TABLE_CATEGORIES . " SET categories_image = 'no_image.jpg' WHERE categories_id = '" . $_GET['categories_id'] . "'");
         $action = $ref;
         break;
 
@@ -134,7 +134,7 @@ case 'set_all_default_image':
 
 // Begin setting products cat to top level.
 case 'set_default_cat':
-        tep_db_query("insert into " . TABLE_PRODUCTS_TO_CATEGORIES . " (products_id, categories_id) values ('" . $$_GET['products_id'] . "', '0')");
+        tep_db_query("insert into " . TABLE_PRODUCTS_TO_CATEGORIES . " (products_id, categories_id) values ('" . $_GET['products_id'] . "', '0')");
         $action = $ref;
         break;
 //  End setting products cat to top level.
