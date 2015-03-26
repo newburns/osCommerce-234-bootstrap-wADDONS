@@ -74,7 +74,7 @@
     * @uses function_exists()
     * @uses ini_get()
     * @see Fwr_Media_Security_Pro::cleanGlobals()
-    * @param array $HTTP_GET_VARS - long array
+    * @param array $_GET - long array
     * @param string $PHP_SELF - base filename from osCommerce application_top.php
     * 
     * @access public
