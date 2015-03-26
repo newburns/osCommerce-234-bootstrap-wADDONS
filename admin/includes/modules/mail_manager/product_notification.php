@@ -66,14 +66,14 @@ function selectAll(FormName, SelectBox) {
                                   'text' => $products['products_name']);
       }
 	 $global_button = '<script language="javascript"><!--' . "\n" .
-                       'document.write(\'<input type="button" value="' . BUTTON_GLOBAL . '" style="width: 8em;" onclick="document.location=\\\'' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'] . '&action=confirm&global=true') . '\\\'">\');' . "\n" .
-                       '//--></script><noscript><a href="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'] . '&action=confirm&global=true') . '">[ ' . BUTTON_GLOBAL . ' ]</a></noscript>';
+                       'document.write(\'<input type="button" value="' . BUTTON_GLOBAL . '" style="width: 8em;" onclick="document.location=\\\'' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm&global=true') . '\\\'">\');' . "\n" .
+                       '//--></script><noscript><a href="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm&global=true') . '">[ ' . BUTTON_GLOBAL . ' ]</a></noscript>';
 
       $cancel_button = '<script language="javascript"><!--' . "\n" .
-                       'document.write(\'<input type="button" value="' . BUTTON_CANCEL . '" style="width: 8em;" onclick="document.location=\\\'' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '\\\'">\');' . "\n" .
-                       '//--></script><noscript><a href="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">[ ' . BUTTON_CANCEL . ' ]</a></noscript>';
+                       'document.write(\'<input type="button" value="' . BUTTON_CANCEL . '" style="width: 8em;" onclick="document.location=\\\'' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID']) . '\\\'">\');' . "\n" .
+                       '//--></script><noscript><a href="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID']) . '">[ ' . BUTTON_CANCEL . ' ]</a></noscript>';
 
-      echo '<tr><td><form name="notifications" action="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID'] . '&action=confirm') . '" method="post" onSubmit="return selectAll(\'notifications\', \'chosen[]\')"><table border="0" width="100%" cellspacing="0" cellpadding="2">' . "\n" .
+      echo '<tr><td><form name="notifications" action="' . tep_href_link(FILENAME_MM_BULKMAIL, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID'] . '&action=confirm') . '" method="post" onSubmit="return selectAll(\'notifications\', \'chosen[]\')"><table border="0" width="100%" cellspacing="0" cellpadding="2">' . "\n" .
                                  '  <tr>' . "\n" .
                                  '    <td align="center" class="main"><b>' . TEXT_PRODUCTS . '</b><br>' . tep_draw_pull_down_menu('products', $products_array, '', 'size="20" style="width: 20em;" multiple') . '</td>' . "\n" .
                                  '    <td align="center" class="main">&nbsp;<br>' . $global_button . '<br><br><br><input type="button" value="' . BUTTON_SELECT . '" style="width: 8em;" onClick="mover(\'remove\');"><br><br><input type="button" value="' . BUTTON_UNSELECT . '" style="width: 8em;" onClick="mover(\'add\');"><br><br><br><input type="submit" value="' . BUTTON_SUBMIT . '" style="width: 8em;"><br><br>' . $cancel_button . '</td>' . "\n" .
@@ -84,7 +84,7 @@ function selectAll(FormName, SelectBox) {
 	break;
 	
 	case 'confirm':
-		if (isset($HTTP_GET_VARS['global']) && ($HTTP_GET_VARS['global'] == 'true')) {
+		if (isset($$_GET['global']) && ($$_GET['global'] == 'true')) {
 		  $count_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
 			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
@@ -99,7 +99,7 @@ function selectAll(FormName, SelectBox) {
 		  $count = tep_db_fetch_array($count_query);
 		  
 		} else {
-		  $chosen = $HTTP_POST_VARS['chosen'];
+		  $chosen = $_POST['chosen'];
   
 		  $ids = implode(',', $chosen);
 		  
@@ -121,7 +121,7 @@ function selectAll(FormName, SelectBox) {
 	break;
 	
 	case 'confirm_send';
-	    if (isset($HTTP_GET_VARS['global']) && ($HTTP_GET_VARS['global'] == 'true')) {
+	    if (isset($$_GET['global']) && ($$_GET['global'] == 'true')) {
 			
 		  //get the target group
 		  $queue_query = tep_db_query("SELECT (
@@ -165,8 +165,8 @@ function selectAll(FormName, SelectBox) {
 		  $mail = tep_db_fetch_array($mail_query);
 		  
 		} else {
-			if (isset($HTTP_GET_VARS['chosen'])) {
-		  		$chosen = $HTTP_GET_VARS['chosen'];
+			if (isset($$_GET['chosen'])) {
+		  		$chosen = $$_GET['chosen'];
 			}
 			else {
 				$chosen = "0";
