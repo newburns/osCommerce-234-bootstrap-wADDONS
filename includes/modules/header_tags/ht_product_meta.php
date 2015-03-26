@@ -29,12 +29,12 @@
     }
 
     function execute() {
-      global $PHP_SELF, $oscTemplate, $HTTP_GET_VARS, $languages_id, $product_check;
+      global $PHP_SELF, $oscTemplate, $_GET, $languages_id, $product_check;
       $meta_show = '';
       if (basename($PHP_SELF) == FILENAME_PRODUCT_INFO) {
-        if (isset($HTTP_GET_VARS['products_id'])) {
+        if (isset($_GET['products_id'])) {
           if ($product_check['total'] > 0) {
-            $meta_info_query = tep_db_query("select pd.products_seo_description, pd.products_seo_keywords from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$HTTP_GET_VARS['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "'");
+            $meta_info_query = tep_db_query("select pd.products_seo_description, pd.products_seo_keywords from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "'");
             $meta_info = tep_db_fetch_array($meta_info_query);
             
             if (tep_not_null($meta_info['products_seo_description'])) {

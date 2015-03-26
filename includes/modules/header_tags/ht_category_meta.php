@@ -31,7 +31,7 @@
     function execute() {
        global $PHP_SELF, $oscTemplate, $categories, $current_category_id, $languages_id;
 
-      if (basename($PHP_SELF) == FILENAME_DEFAULT) {
+      if (basename($PHP_SELF) == 'index.php') {
         if ($current_category_id > 0) {
           $meta_info_query = tep_db_query("select cd.categories_seo_description, cd.categories_seo_keywords from " . TABLE_CATEGORIES_DESCRIPTION . " cd where cd.categories_id = '" . (int)$current_category_id  . "' and cd.language_id = '" . (int)$languages_id . "'");
           $meta_info = tep_db_fetch_array($meta_info_query);

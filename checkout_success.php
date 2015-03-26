@@ -37,8 +37,8 @@
 
   $page_content = $oscTemplate->getContent('checkout_success');
 
-  if ( isset($HTTP_GET_VARS['action']) && ($HTTP_GET_VARS['action'] == 'update') ) {
-    tep_redirect(tep_href_link(FILENAME_DEFAULT));
+  if ( isset($_GET['action']) && ($_GET['action'] == 'update') ) {
+    tep_redirect(tep_href_link('index.php'));
   }
 
   require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CHECKOUT_SUCCESS);
