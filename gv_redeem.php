@@ -36,7 +36,7 @@ tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
       }
     }
   } else {
-    tep_redirect(FILENAME_DEFAULT);
+    tep_redirect('index.php');
   }
   if ((!$error) && (tep_session_is_registered('customer_id'))) {
 // Update redeem status
@@ -75,7 +75,7 @@ tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
 
 
   <div class="buttonSet">
-    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link(FILENAME_DEFAULT)); ?></span>
+    <span class="buttonAction"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', tep_href_link('index.php')); ?></span>
   </div>
 </div>
 
