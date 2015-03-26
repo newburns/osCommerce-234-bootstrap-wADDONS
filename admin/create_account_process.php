@@ -109,28 +109,28 @@
     return $valid_address;
   }  */
 
-if (!@$HTTP_POST_VARS['action']) {
+if (!@$_POST['action']) {
    tep_redirect(tep_href_link(FILENAME_CREATE_ACCOUNT, '', 'NONSSL'));
  }
 
-  $gender = tep_db_prepare_input($HTTP_POST_VARS['gender']);
-  $firstname = tep_db_prepare_input($HTTP_POST_VARS['firstname']);
-  $lastname = tep_db_prepare_input($HTTP_POST_VARS['lastname']);
-  $dob = tep_db_prepare_input($HTTP_POST_VARS['dob']);
-  $email_address = tep_db_prepare_input($HTTP_POST_VARS['email_address']);
-  $telephone = tep_db_prepare_input($HTTP_POST_VARS['telephone']);
-  $fax = tep_db_prepare_input($HTTP_POST_VARS['fax']);
-  $newsletter = tep_db_prepare_input($HTTP_POST_VARS['newsletter']);
-  //$password = tep_db_prepare_input($HTTP_POST_VARS['password']);
-  $confirmation = tep_db_prepare_input($HTTP_POST_VARS['confirmation']);
-  $street_address = tep_db_prepare_input($HTTP_POST_VARS['street_address']);
-  $company = tep_db_prepare_input($HTTP_POST_VARS['company']);
-  $suburb = tep_db_prepare_input($HTTP_POST_VARS['suburb']);
-  $postcode = tep_db_prepare_input($HTTP_POST_VARS['postcode']);
-  $city = tep_db_prepare_input($HTTP_POST_VARS['city']);
-  $zone_id = tep_db_prepare_input($HTTP_POST_VARS['zone_id']);
-  $state = tep_db_prepare_input($HTTP_POST_VARS['state']);
-  $country = tep_db_prepare_input($HTTP_POST_VARS['country']);
+  $gender = tep_db_prepare_input($_POST['gender']);
+  $firstname = tep_db_prepare_input($_POST['firstname']);
+  $lastname = tep_db_prepare_input($_POST['lastname']);
+  $dob = tep_db_prepare_input($_POST['dob']);
+  $email_address = tep_db_prepare_input($_POST['email_address']);
+  $telephone = tep_db_prepare_input($_POST['telephone']);
+  $fax = tep_db_prepare_input($_POST['fax']);
+  $newsletter = tep_db_prepare_input($_POST['newsletter']);
+  //$password = tep_db_prepare_input($_POST['password']);
+  $confirmation = tep_db_prepare_input($_POST['confirmation']);
+  $street_address = tep_db_prepare_input($_POST['street_address']);
+  $company = tep_db_prepare_input($_POST['company']);
+  $suburb = tep_db_prepare_input($_POST['suburb']);
+  $postcode = tep_db_prepare_input($_POST['postcode']);
+  $city = tep_db_prepare_input($_POST['city']);
+  $zone_id = tep_db_prepare_input($_POST['zone_id']);
+  $state = tep_db_prepare_input($_POST['state']);
+  $country = tep_db_prepare_input($_POST['country']);
 
     
   /////////////////      RAMDOMIZING SCRIPT BY PATRIC VEVERKA       \\\\\\\\\\\\\\\\\\
@@ -316,7 +316,7 @@ require('includes/form_check.js.php'); ?>
       <tr>
         <td>
 <?php
-  //$email_address = tep_db_prepare_input($HTTP_GET_VARS['email_address']);
+  //$email_address = tep_db_prepare_input($$_GET['email_address']);
   $account['entry_country_id'] = STORE_COUNTRY;
 
   require(DIR_WS_MODULES . 'account_details.php');
@@ -405,7 +405,7 @@ $customer_default_address_id = $address_id;
     $name = $firstname . " " . $lastname;
 
     if (ACCOUNT_GENDER == 'true') {
-       if ($HTTP_POST_VARS['gender'] == 'm') {
+       if ($_POST['gender'] == 'm') {
          $email_text = EMAIL_GREET_MR;
        } else {
          $email_text = EMAIL_GREET_MS;

@@ -234,7 +234,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
 {
         //require(DIR_WS_LANGUAGES . $language . '/report_googlemap.php');
 
-        $oID = tep_db_prepare_input($HTTP_GET_VARS['oID']);
+        $oID = tep_db_prepare_input($$_GET['oID']);
 
         $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '" . (int)$oID . "'");
         $order_exists = true;
@@ -864,7 +864,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
     if (FILENAME_PDF_INVOICE    !== 'FILENAME_PDF_INVOICE'    ) {
     	 if ( ORDER_EDITOR_ADD_PDF_INVOICE_EMAIL == 'true' ) {
         // All we do is set the order_id for pdfinvoice.php to pick up
-        //$HTTP_GET_VARS['order_id'] = $insert_id;
+        //$$_GET['order_id'] = $insert_id;
         // set stream mode
         $stream = true;
         $oID= $_GET['oID'] ;
@@ -1098,7 +1098,7 @@ document.onmousemove=positiontip
        			 <li><?php echo '<a href="' . tep_href_link(FILENAME_ORDERS_LABEL,       'oID=' . $_GET['oID']) . '" TARGET="_blank">' . tep_image_button('button_label.gif', IMAGE_ORDERS_LABEL) . '</a>'; ?></li>  
 			<?php } ?>		 				    
 		    <?php if (FILENAME_GOOGLE_MAP     !== 'FILENAME_GOOGLE_MAP'     ) { ?>        			   
-       			 <li><?php echo '<a href="' . tep_href_link(FILENAME_GOOGLE_MAP,         'oID=' . $HTTP_GET_VARS['oID']) . '" TARGET="_blank">' . tep_image_button('button_google_directions.gif', IMAGE_GOOGLE_DIRECTIONS) . '</a>'; ?></li>  
+       			 <li><?php echo '<a href="' . tep_href_link(FILENAME_GOOGLE_MAP,         'oID=' . $$_GET['oID']) . '" TARGET="_blank">' . tep_image_button('button_google_directions.gif', IMAGE_GOOGLE_DIRECTIONS) . '</a>'; ?></li>  
 			<?php } ?>	
 <!- eof 5.0.8 -->							
 

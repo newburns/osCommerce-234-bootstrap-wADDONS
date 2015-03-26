@@ -11,22 +11,22 @@
 */
 
  require('includes/application_top.php');
-  $search = (isset($HTTP_GET_VARS['search_customers']) ? $HTTP_GET_VARS['search_customers'] : '');
-  $action = (isset($HTTP_GET_VARS['action']) ? $HTTP_GET_VARS['action'] : '');
+  $search = (isset($$_GET['search_customers']) ? $$_GET['search_customers'] : '');
+  $action = (isset($$_GET['action']) ? $$_GET['action'] : '');
 
-  if ( ($action == 'send_email_to_user') && isset($HTTP_POST_VARS['customers_email_address']) && !isset($HTTP_POST_VARS['back_x']) ) {
+  if ( ($action == 'send_email_to_user') && isset($_POST['customers_email_address']) && !isset($_POST['back_x']) ) {
        
-    $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_email_address = '".$HTTP_POST_VARS['customers_email_address']."'");
+    $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_email_address = '".$_POST['customers_email_address']."'");
     $mail = tep_db_fetch_array($mail_query);    
 
-    $template_name = tep_db_prepare_input($HTTP_POST_VARS['template']);
+    $template_name = tep_db_prepare_input($_POST['template']);
     $template_query = tep_db_query("select title, htmlheader, htmlfooter, txtheader, txtfooter from " . TABLE_MM_TEMPLATES . " where title = '" . $template_name . "'");
     $template = tep_db_fetch_array($template_query);
     
-    $from = tep_db_prepare_input($HTTP_POST_VARS['from']);
-    $output_subject = tep_db_prepare_input($HTTP_POST_VARS['subject']);
-    $output_content_html = $template['htmlheader'].tep_db_prepare_input($HTTP_POST_VARS['message'].$template['htmlfooter']);
-    $output_content_txt = $template['txtheader'].tep_db_prepare_input($HTTP_POST_VARS['message'].$template['txtfooter']);
+    $from = tep_db_prepare_input($_POST['from']);
+    $output_subject = tep_db_prepare_input($_POST['subject']);
+    $output_content_html = $template['htmlheader'].tep_db_prepare_input($_POST['message'].$template['htmlfooter']);
+    $output_content_txt = $template['txtheader'].tep_db_prepare_input($_POST['message'].$template['txtfooter']);
 
     tep_mm_sendmail($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], STORE_OWNER, $from, $output_subject, $output_content_html, $output_content_txt);	
 
@@ -34,12 +34,12 @@
 
   }
 
-  if ( ($action == 'preview') && !isset($HTTP_POST_VARS['customers_email_address']) ) {
+  if ( ($action == 'preview') && !isset($_POST['customers_email_address']) ) {
     $messageStack->add(ERROR_NO_CUSTOMER_SELECTED, 'error');
   }
 
-  if (isset($HTTP_GET_VARS['mail_sent_to'])) {
-    $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $HTTP_GET_VARS['mail_sent_to']), 'success');
+  if (isset($$_GET['mail_sent_to'])) {
+    $messageStack->add(sprintf(NOTICE_EMAIL_SENT_TO, $$_GET['mail_sent_to']), 'success');
   }
   require(DIR_WS_INCLUDES . 'template_top.php');
 ?>
@@ -74,20 +74,20 @@
 			</td>
     		<td bgcolor="#F2F2F2">
 <?php
-		    if ($HTTP_GET_VARS['search_email']) {
-		    	$search_email = tep_db_prepare_input($HTTP_GET_VARS['search_email']);
+		    if ($$_GET['search_email']) {
+		    	$search_email = tep_db_prepare_input($$_GET['search_email']);
 		    	$where_clause = "customers_email_address RLIKE '".tep_db_input($search_email)."'";
 		    
 		    }
 
-		    if ($HTTP_GET_VARS['search_phone']) {
-		    	$search_phone = tep_db_prepare_input($HTTP_GET_VARS['search_phone']);
+		    if ($$_GET['search_phone']) {
+		    	$search_phone = tep_db_prepare_input($$_GET['search_phone']);
 		    	$where_clause .= ($where_clause ? ' or ' : '')."customers_telephone RLIKE '".tep_db_input($search_phone)."'";
 		    }
 
 
-		    if ($HTTP_GET_VARS['search_lastname']) {
-		    	$search_lastname = tep_db_prepare_input($HTTP_GET_VARS['search_lastname']);
+		    if ($$_GET['search_lastname']) {
+		    	$search_lastname = tep_db_prepare_input($$_GET['search_lastname']);
 		    	$where_clause .= ($where_clause ? ' or ' : '')." customers_lastname RLIKE '".tep_db_input($search_lastname)."'";
 		    }
 		 
@@ -125,9 +125,9 @@
         	<td>
             	<table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  if ( ($action == 'preview') && isset($HTTP_POST_VARS['customers_email_address']) ) {
+  if ( ($action == 'preview') && isset($_POST['customers_email_address']) ) {
     
-        $mail_sent_to = $HTTP_POST_VARS['customers_email_address'];
+        $mail_sent_to = $_POST['customers_email_address'];
 
 ?>
           	<tr><?php echo tep_draw_form('mail', FILENAME_MM_EMAIL, 'action=send_email_to_user'); ?>
@@ -135,7 +135,7 @@
                 	<table border="0" width="100%" cellpadding="0" cellspacing="2">
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
-                			<td class="smallText"><b><?php echo TEXT_TEMPLATE; ?></b><br><?php echo htmlspecialchars(stripslashes($HTTP_POST_VARS['template'])); ?></td>
+                			<td class="smallText"><b><?php echo TEXT_TEMPLATE; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['template'])); ?></td>
               			</tr>
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
@@ -143,24 +143,24 @@
               			</tr>
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
-                			<td class="smallText"><b><?php echo TEXT_FROM; ?></b><br><?php echo htmlspecialchars(stripslashes($HTTP_POST_VARS['from'])); ?></td>
+                			<td class="smallText"><b><?php echo TEXT_FROM; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['from'])); ?></td>
               			</tr>
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
-                			<td class="smallText"><b><?php echo TEXT_SUBJECT; ?></b><br><?php echo htmlspecialchars(stripslashes($HTTP_POST_VARS['subject'])); ?></td>
+                			<td class="smallText"><b><?php echo TEXT_SUBJECT; ?></b><br><?php echo htmlspecialchars(stripslashes($_POST['subject'])); ?></td>
               			</tr>
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
-                			<td class="smallText"><b><?php echo TEXT_MESSAGE; ?></b><br><?php echo nl2br(htmlspecialchars(stripslashes($HTTP_POST_VARS['message']))); ?></td>
+                			<td class="smallText"><b><?php echo TEXT_MESSAGE; ?></b><br><?php echo nl2br(htmlspecialchars(stripslashes($_POST['message']))); ?></td>
               			</tr>
               			<tr><td><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td></tr>
               			<tr>
                 				<td>
 <?php
 /* Re-Post all POST'ed variables */
-    reset($HTTP_POST_VARS);
-    while (list($key, $value) = each($HTTP_POST_VARS)) {
-      if (!is_array($HTTP_POST_VARS[$key])) {
+    reset($_POST);
+    while (list($key, $value) = each($_POST)) {
+      if (!is_array($_POST[$key])) {
         echo tep_draw_hidden_field($key, htmlspecialchars(stripslashes($value)));
       }
     }
@@ -234,7 +234,7 @@
               
               <tr>
                 <td>
-				<?php echo '<a href="' . tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $HTTP_GET_VARS['page'] . '&nID=' . $HTTP_GET_VARS['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?>
+				<?php echo '<a href="' . tep_href_link(FILENAME_MM_MAIL_MANAGER, 'page=' . $$_GET['page'] . '&nID=' . $$_GET['nID']) . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?>
                 </td>
                 <td align="right"><?php echo tep_image_submit('button_send_mail.gif', IMAGE_SEND_EMAIL); ?></td>
               </tr>
