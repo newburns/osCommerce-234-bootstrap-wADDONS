@@ -250,7 +250,7 @@ function selectorsExtras(status) {
     <tr>
       <td><table border="0" width="100%" cellspacing="0" cellpadding="2">
         <tr>
-          <td class="main"><?php echo '<a href="' . tep_href_link(FILENAME_DEFAULT, '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
+          <td class="main"><?php echo '<a href="' . tep_href_link('index.php', '', 'SSL') . '">' . tep_image_button('button_back.gif', IMAGE_BACK) . '</a>'; ?></td>
           <td class="main" align="right"><?php echo tep_image_submit('button_save.gif', IMAGE_SAVE); ?></td>
         </tr>
       </table></td>

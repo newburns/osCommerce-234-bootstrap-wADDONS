@@ -31,7 +31,7 @@
     function execute() {
        global $PHP_SELF, $_GET, $oscTemplate, $manufacturers, $languages_id;
 
-      if (basename($PHP_SELF) == FILENAME_DEFAULT) {
+      if (basename($PHP_SELF) == 'index.php') {
         if (isset($_GET['manufacturers_id']) && is_numeric($_GET['manufacturers_id'])) {
           $meta_info_query = tep_db_query("select manufacturers_seo_description, manufacturers_seo_keywords from " . TABLE_MANUFACTURERS_INFO . " where manufacturers_id = '" . (int)$_GET['manufacturers_id']  . "' and languages_id = '" . (int)$languages_id . "'");
           $meta_info = tep_db_fetch_array($meta_info_query);

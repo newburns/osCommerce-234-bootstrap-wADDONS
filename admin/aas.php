@@ -35,7 +35,7 @@ else{ ?>
 <h1>Alternative Administration System</h1>
 Error: cannot find language file: <strong>ext/aas/languages/<?php echo $language; ?>.php</strong>
 <br><br>
-<a href="<?php echo tep_href_link(FILENAME_DEFAULT, ''); ?>" >Back to default admin panel <img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a>
+<a href="<?php echo tep_href_link('index.php', ''); ?>" >Back to default admin panel <img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a>
 </div>
 <?php
 exit;
@@ -184,7 +184,7 @@ modules_installed['<?php echo $module["code"]; ?>']=<?php echo $module["version"
   <div class="koumpakia_spacer"></div>
   <?php if($defaults['displaySettingsButton']){ ?><div id="trigger_settings_dialog" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_DISPLAY_SETTINGS; ?>" ><img src="ext/aas/images/glyphicons_280_settings.png" alt=""></div><?php } ?>
 
-  <?php if($defaults['displayGoToDefaultAdministrationPanel']){ ?><div class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_DEFAULT_ADMIN; ?>" ><a href="<?php echo tep_href_link(FILENAME_DEFAULT, ''); ?>" ><img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a></div><?php } ?>
+  <?php if($defaults['displayGoToDefaultAdministrationPanel']){ ?><div class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_BACK_TO_DEFAULT_ADMIN; ?>" ><a href="<?php echo tep_href_link('index.php', ''); ?>" ><img src="ext/aas/images/glyphicons_020_home.png" alt="" style="width:24px;"></a></div><?php } ?>
 
   <?php if($defaults['displayLogoffButton']){ ?><div id="logoffbutton" class="koumpakia buttonakia" data-title="<?php echo AAS_HEADING_TITLE_LOGOFF; ?>" ><a href="<?php echo tep_href_link(FILENAME_LOGIN, 'action=logoff'); ?>" ><img src="ext/aas/images/glyphicons_026_road.png" alt="" style="height:23px;"></a></div><?php } ?>
 

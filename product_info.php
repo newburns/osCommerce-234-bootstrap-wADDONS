@@ -21,7 +21,7 @@
   require('includes/application_top.php');
 
   if (!isset($_GET['products_id'])) {
-    tep_redirect(tep_href_link(FILENAME_DEFAULT));
+    tep_redirect(tep_href_link('index.php'));
   }
 
   require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_PRODUCT_INFO);
@@ -40,7 +40,7 @@
   </div>
 
   <div class="pull-right">
-    <?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link(FILENAME_DEFAULT)); ?>
+    <?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link('index.php')); ?>
   </div>
 </div>
 
