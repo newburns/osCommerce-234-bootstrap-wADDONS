@@ -255,5 +255,5 @@
 */
   tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, 'oID=' . $insert_id, 'SSL'));
 
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

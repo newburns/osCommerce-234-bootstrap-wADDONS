@@ -68,10 +68,10 @@
   }
 
 // include the list of project filenames
-  require(DIR_WS_INCLUDES . 'filenames.php');
+  require(includes . 'filenames.php');
 
 // include the list of project database tables
-  require(DIR_WS_INCLUDES . 'database_tables.php');
+  require(includes . 'database_tables.php');
 
 // include the database functions
   require(DIR_WS_FUNCTIONS . 'database.php');
@@ -185,7 +185,7 @@
     $spider_flag = false;
 
     if (tep_not_null($user_agent)) {
-      $spiders = file(DIR_WS_INCLUDES . 'spiders.txt');
+      $spiders = file(includes . 'spiders.txt');
 
       $n=sizeof($spiders);
       for ($i=0; $i<$n; $i++) {

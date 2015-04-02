@@ -180,7 +180,7 @@
     }
   }
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
 
 <script type="text/javascript"><!--
@@ -395,7 +395,7 @@ $('#expires_date').datepicker({
         if ( (function_exists('imagecreate')) && ($dir_ok) && ($banner_extension) ) {
           $banner_id = $bInfo->banners_id;
           $days = '3';
-          include(DIR_WS_INCLUDES . 'graphs/banner_infobox.php');
+          include(includes . 'graphs/banner_infobox.php');
           $contents[] = array('align' => 'center', 'text' => '<br />' . tep_image(DIR_WS_IMAGES . 'graphs/banner_infobox-' . $banner_id . '.' . $banner_extension));
         } else {
           include(DIR_WS_FUNCTIONS . 'html_graphs.php');
@@ -435,6 +435,6 @@ $('#expires_date').datepicker({
     </table>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

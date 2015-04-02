@@ -23,7 +23,7 @@ require('includes/form_check.js.php'); ?>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
 <!-- header //-->
 <?php
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
 <!-- header_eof //-->
 
@@ -78,10 +78,10 @@ require('includes/form_check.js.php'); ?>
 
 <!-- footer //-->
 <?php
-    require(DIR_WS_INCLUDES . 'template_bottom.php');
+    require(includes . 'template_bottom.php');
 ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(includes . 'application_bottom.php'); ?>

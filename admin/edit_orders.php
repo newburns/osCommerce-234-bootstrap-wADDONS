@@ -955,7 +955,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
     $currency_array[] = array('id' => $currency['code'],
                               'text' => $currency['code'] . ' - ' . $currency['title']);
   }
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
  
   <?php include('order_editor/css.php');  
@@ -1981,7 +1981,7 @@ document.onmousemove=positiontip
   <!-- body_eof //-->
 
   <!-- footer //-->
-  <?php require(DIR_WS_INCLUDES . 'footer.php'); ?>
+  <?php require(includes . 'footer.php'); ?>
   <!-- footer_eof //-->
   <br>
-  <?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+  <?php require(includes . 'application_bottom.php'); ?>

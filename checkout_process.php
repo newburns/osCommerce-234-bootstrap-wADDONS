@@ -343,5 +343,5 @@ $order_total_modules->apply_credit(); // CCGV
 
   tep_redirect(tep_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
 
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>
