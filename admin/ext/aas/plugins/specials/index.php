@@ -33,7 +33,7 @@ defined('AAS') or die;
   translate.AAS_SPECIALS_DIALOG_TEXT_SOMETHING_WENT_WRONG_TRY_AGAIN="<?php echo AAS_SPECIALS_DIALOG_TEXT_SOMETHING_WENT_WRONG_TRY_AGAIN; ?>";
   translate.AAS_SPECIALS_TEXT_NOT_A_SPECIAL_YET="<?php echo AAS_SPECIALS_TEXT_NOT_A_SPECIAL_YET; ?>";
   </script>
-  <script src="ext/aas/plugins/specials/js/specials.js" ></script>
+  <script src="ext/aas/plugins/specials/js/specials.js" type="text/javascript"></script>
   <div class="container">
     <div class="top-loriza">
       <span style="font-size:20px;"><?php echo AAS_SPECIALS_TITLE; ?></span>

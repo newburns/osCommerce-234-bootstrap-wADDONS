@@ -146,7 +146,7 @@
   require(includes . 'template_top.php');
 ?>
 
-<script >
+<script type="text/javascript">
 var currency_select = new Array();
 <?php
   foreach ($currency_select_array as $cs) {

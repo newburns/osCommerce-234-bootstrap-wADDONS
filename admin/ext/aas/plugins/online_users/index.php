@@ -29,8 +29,8 @@ defined('AAS') or die;
     </div>
   </div>
 </div>
-<script  src="ext/aas/js/highcharts/highcharts.js"></script>
-<script >
+<script type="text/javascript" src="ext/aas/js/highcharts/highcharts.js"></script>
+<script type="text/javascript">
 
 //Add to main aas object
 aas.online_users={

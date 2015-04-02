@@ -80,7 +80,7 @@
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="https://www.sofortueberweisung.de/cms/modul/style.css">
-<script >
+<script type="text/javascript">
 function init() {
 	if(false) {
 		document.getElementById('table1').style.display = '';

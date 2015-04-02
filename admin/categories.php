@@ -459,7 +459,7 @@
 
     $form_action = (isset($_GET['pID'])) ? 'update_product' : 'insert_product';
 ?>
-<script ><!--
+<script type="text/javascript"><!--
 var tax_rates = new Array();
 <?php
     for ($i=0, $n=sizeof($tax_class_array); $i<$n; $i++) {
@@ -583,7 +583,7 @@ function updateNet() {
           <tr>
             <td colspan="2"><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
-<script ><!--
+<script type="text/javascript"><!--
 updateGross();
 //--></script>
 <?php
@@ -664,7 +664,7 @@ updateGross();
 #piList li { margin: 5px 0; padding: 2px; }
 </style>
 
-<script >
+<script type="text/javascript">
 $('#piList').sortable({
   containment: 'parent'
 });
@@ -770,7 +770,7 @@ function showPiDelConfirm(piId) {
       </tr>
     </table>
 
-<script >
+<script type="text/javascript">
 $('#products_date_available').datepicker({
   dateFormat: 'yy-mm-dd'
 });

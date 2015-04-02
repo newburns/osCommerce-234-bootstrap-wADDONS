@@ -245,7 +245,7 @@
 
 </form>
 
-<script >
+<script type="text/javascript">
 $(function() {
   if ( $('form[name="sql"] input[type="checkbox"][name="masterblaster"]').length > 0 ) {
     $('form[name="sql"] input[type="checkbox"][name="masterblaster"]').click(function() {

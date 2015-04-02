@@ -972,7 +972,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
 <body>
 <div id="dhtmltooltip"></div>
 
-<script >
+<script type="text/javascript">
 
 /***********************************************
 * Cool DHTML tooltip script- © Dynamic Drive DHTML code library (www.dynamicdrive.com)
@@ -1077,7 +1077,7 @@ document.onmousemove=positiontip
           <ul>
 			  
 			 <?php if (ORDER_EDITOR_USE_AJAX == 'true') { ?>
-			  <script language="JavaScript" ><!--
+			  <script language="JavaScript" type="text/javascript"><!--
 			  //this button only works with javascript and is therefore only displayed on browsers with javascript enabled
               document.write("<li><span class=\"tdbLink\"><a id=\"tdb0\" href=\"javascript:newOrderEmail()\" class=\"ui-button ui-widget ui-state-default ui-corner-all ui-button-text-icon-primary ui-priority-secondary\" role=\"button\" aria-disabled=\"false\"><span class=\"ui-button-icon-primary ui-icon ui-icon-mail-closed\"></span><span class=\"ui-button-text\">Send confirmation Email</span></a></span></li>");
 	           //--></script>
@@ -1196,7 +1196,7 @@ document.onmousemove=positiontip
                 <table width="100%" cellspacing="0" cellpadding="2">
                   <tr class="dataTableHeadingRow"> 
 				   <td class="dataTableHeadingContent" valign="top" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_SHIPPING_ADDRESS); ?>')"; onMouseout="hideddrivetip()"><?php echo ENTRY_SHIPPING_ADDRESS; ?> 
-				   	<script language="JavaScript" >
+				   	<script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
@@ -1341,7 +1341,7 @@ document.onmousemove=positiontip
         <tr class="dataTableHeadingRow"> 
           <td colspan="2" class="dataTableHeadingContent" valign="bottom" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_UPDATE_TO_CC); ?>')" onMouseout="hideddrivetip()"><?php echo ENTRY_PAYMENT_METHOD; ?>
 		  		
-				  <script language="JavaScript" >
+				  <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
@@ -1352,7 +1352,7 @@ document.onmousemove=positiontip
 		     <td></td>
 	         <td class="dataTableHeadingContent" valign="bottom" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_UPDATE_CURRENCY); ?>')" onMouseout="hideddrivetip()"><?php echo ENTRY_CURRENCY_TYPE; ?> 
 		  
-		  		  <script language="JavaScript" >
+		  		  <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
@@ -1503,27 +1503,27 @@ document.onmousemove=positiontip
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_PRODUCTS; ?></td>
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_PRODUCTS_MODEL; ?></td>
                 <td class="dataTableHeadingContent"><?php echo TABLE_HEADING_TAX; ?></td>
-	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_BASE_PRICE); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_BASE_PRICE; ?> <script language="JavaScript" >
+	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_BASE_PRICE); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_BASE_PRICE; ?> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
                   </script></td>
-	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_PRICE_EXCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_UNIT_PRICE; ?> <script language="JavaScript" >
+	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_PRICE_EXCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_UNIT_PRICE; ?> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
                   </script></td>
-	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_PRICE_INCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_UNIT_PRICE_TAXED; ?> <script language="JavaScript" >
+	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_PRICE_INCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_UNIT_PRICE_TAXED; ?> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
                   </script></td>
-	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTAL_EXCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_TOTAL_PRICE; ?> <script language="JavaScript" >
+	  <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTAL_EXCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_TOTAL_PRICE; ?> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
                   </script></td>
-      <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTAL_INCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_TOTAL_PRICE_TAXED; ?> <script language="JavaScript" >
+      <td class="dataTableHeadingContent" onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTAL_INCL); ?>')"; onMouseout="hideddrivetip()"><?php  echo TABLE_HEADING_TOTAL_PRICE_TAXED; ?> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
@@ -1668,7 +1668,7 @@ document.onmousemove=positiontip
                 <td align="right" rowspan="2" valign="top" nowrap class="dataTableRow" style="border: 1px solid #C9C9C9;">
                   <table border="0" cellspacing="0" cellpadding="2">
                     <tr class="dataTableHeadingRow">
-                      <td class="dataTableHeadingContent" width="15" nowrap onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTALS); ?>')"; onMouseout="hideddrivetip()"> <script language="JavaScript" >
+                      <td class="dataTableHeadingContent" width="15" nowrap onMouseover="ddrivetip('<?php echo oe_html_no_quote(HINT_TOTALS); ?>')"; onMouseout="hideddrivetip()"> <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<img src=\"images/icon_info.gif\" border= \"0\" width=\"13\" height=\"13\">");
 	               //-->
@@ -1697,7 +1697,7 @@ document.onmousemove=positiontip
       echo '                  <tr class="' . $rowStyle . '">' . "\n";
       if ($order->totals[$i]['class'] != 'ot_total') {
         echo '                    <td class="dataTableContent" valign="middle" height="15">
-		<script language="JavaScript" >
+		<script language="JavaScript" type="text/javascript">
 		<!--
 		document.write("<span id=\"update_totals['.$i.']\"><a href=\"javascript:setCustomOTVisibility(\'update_totals['.($i+1).']\', \'visible\', \'update_totals['.$i.']\');\"><img src=\"order_editor/images/plus.gif\" border=\"0\" alt=\"' . IMAGE_ADD_NEW_OT . '\" title=\"' . IMAGE_ADD_NEW_OT . '\"></a></span>");
 		//-->
@@ -1713,7 +1713,7 @@ document.onmousemove=positiontip
            '                  </tr>' . "\n";
     } else {
       if ($i % 2) {
-        echo '                  	    <script language="JavaScript" >
+        echo '                  	    <script language="JavaScript" type="text/javascript">
 		<!--
 		document.write("<tr class=\"' . $rowStyle . '\" id=\"update_totals['.$i.']\" style=\"visibility: hidden; display: none;\"><td class=\"dataTableContent\" valign=\"middle\" height=\"15\"><a href=\"javascript:setCustomOTVisibility(\'update_totals['.($i).']\', \'hidden\', \'update_totals['.($i-1).']\');\"><img src=\"order_editor/images/minus.gif\" border=\"0\" alt=\"' . IMAGE_REMOVE_NEW_OT . '\" title=\"' . IMAGE_REMOVE_NEW_OT . '\"></a></td>");
 			 //-->
@@ -1724,7 +1724,7 @@ document.onmousemove=positiontip
       } else {
         echo '                  <tr class="' . $rowStyle . '">' . "\n" .
              '                    <td class="dataTableContent" valign="middle" height="15">
-	    <script language="JavaScript" >
+	    <script language="JavaScript" type="text/javascript">
 		<!--
 		document.write("<span id=\"update_totals['.$i.']\"><a href=\"javascript:setCustomOTVisibility(\'update_totals['.($i+1).']\', \'visible\', \'update_totals['.$i.']\');\"><img src=\"order_editor/images/plus.gif\" border=\"0\" alt=\"' . IMAGE_ADD_NEW_OT . '\" title=\"' . IMAGE_ADD_NEW_OT . '\"></a></span>");
 		//-->
@@ -1770,7 +1770,7 @@ document.onmousemove=positiontip
         $rowClass = ((($r/2) == (floor($r/2))) ? 'dataTableRowOver' : 'dataTableRow');
         echo '                  <tr class="' . $rowClass . '" onmouseover="rowOverEffect(this)" onmouseout="rowOutEffect(this, \'' . $rowClass . '\')" onClick="selectRowEffect(this, ' . $r . '); setShipping(' . $r . ');">' .
              '                    <td class="dataTableContent" valign="top" align="left">
-			 <script language="JavaScript" >
+			 <script language="JavaScript" type="text/javascript">
                    <!--
                     document.write("<input type=\"radio\" name=\"shipping\" id=\"shipping_radio_' . $r . '\" value=\"' . $shipping_quotes[$i]['id'] . '_' . $shipping_quotes[$i]['methods'][$j]['id'].'\">");
 	               //-->
@@ -1938,7 +1938,7 @@ document.onmousemove=positiontip
        </tr>
 <!-- Comment Toolbar 4.0 eof //-->    
 	<?php if (ORDER_EDITOR_USE_AJAX == 'true') { ?> 
-	<script language="JavaScript" >
+	<script language="JavaScript" type="text/javascript">
      <!--
 	     document.write("<tr>");
          document.write("<td colspan=\"3\" align=\"right\">");

@@ -18,7 +18,7 @@ defined('AAS') or die;
   translate.AAS_PRODUCT_IMAGES_COULD_NOT_DELETE_LARGE_IMAGE="<?php echo AAS_PRODUCT_IMAGES_COULD_NOT_DELETE_LARGE_IMAGE; ?>";
   translate.AAS_PRODUCT_IMAGES_SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN="<?php echo AAS_PRODUCT_IMAGES_SOMETHING_WENT_WRONG_PLEASE_TRY_AGAIN; ?>";
   </script>
-  <script src="ext/aas/plugins/product_images/js/product_images.js" ></script>
+  <script src="ext/aas/plugins/product_images/js/product_images.js" type="text/javascript"></script>
   <div class="container">
     <div class="top-loriza">
       <span style="font-size:20px;"><?php echo AAS_PRODUCT_IMAGES_TITLE; ?></span>

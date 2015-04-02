@@ -27,6 +27,6 @@ defined('AAS') or die;
   translate.AAS_CALENDAR_EDIT_EVENT="<php echo AAS_CALENDAR_EDIT_EVENT; ?>";
   translate.AAS_CALENDAR_NEW_EVENT="<?php echo AAS_CALENDAR_NEW_EVENT; ?>";
   </script>
-  <script  src="ext/aas/plugins/calendar/js/calendar.js"></script>
-  <script  src='ext/aas/plugins/calendar/js/fullcalendar.min.js'></script>
+  <script type="text/javascript" src="ext/aas/plugins/calendar/js/calendar.js"></script>
+  <script type="text/javascript" src='ext/aas/plugins/calendar/js/fullcalendar.min.js'></script>
 </div>

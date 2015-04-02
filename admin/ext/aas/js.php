@@ -10,7 +10,7 @@
 
 defined('AAS') or die;
 ?>
-<script >
+<script type="text/javascript">
 //translation needed by js files
 var translate={
 

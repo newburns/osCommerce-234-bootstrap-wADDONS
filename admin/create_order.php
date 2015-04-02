@@ -76,7 +76,7 @@
   // #### Generate Page
 
  require('includes/form_check.js.php'); ?>
-<script language="javascript" ><!--
+<script language="javascript" type="text/javascript"><!--
 function selectExisting() {
   document.create_order.customers_create_type.value = 'existing';
   selectorsStatus(false);
@@ -265,7 +265,7 @@ function selectorsExtras(status) {
 <?php require(includes . 'template_bottom.php'); ?>
 <!-- footer_eof //-->
 <br>
-<script language="javascript" ><!--
+<script language="javascript" type="text/javascript"><!--
 selectorsExtras(true);
 //--></script>
 
