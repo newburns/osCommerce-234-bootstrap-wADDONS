@@ -62,28 +62,28 @@ require 'ext/aas/application_top.php';
 
 <?php if(tep_not_null($module['css']['print'])){ foreach($module['css']['print'] as $ext_css){ if(tep_not_null($ext_css)){ ?><link href="ext/aas_modules/<?php echo $key; ?>/css/<?php echo $ext_css; ?>" rel="stylesheet" media="print" /><?php }}} ?>
 <?php } } ?>
-<script type="text/javascript" src="ext/aas/js/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery-ui-1.10.4.custom.min.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery.ui.resizable_extend.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery.ui.touch-punch.min.js"></script>
-<script type="text/javascript" src="ext/aas/editors/ckeditor/ckeditor.js"></script>
-<script type="text/javascript" src="ext/aas/editors/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
-<script type="text/javascript" src="ext/aas/editors/tinymce/js/tinymce/tinymce.min.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery.jeditable.js"></script>
+<script  src="ext/aas/js/jquery-1.11.1.min.js"></script>
+<script  src="ext/aas/js/jquery-ui-1.10.4.custom.min.js"></script>
+<script  src="ext/aas/js/jquery.ui.resizable_extend.js"></script>
+<script  src="ext/aas/js/jquery.ui.touch-punch.min.js"></script>
+<script  src="ext/aas/editors/ckeditor/ckeditor.js"></script>
+<script  src="ext/aas/editors/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+<script  src="ext/aas/editors/tinymce/js/tinymce/tinymce.min.js"></script>
+<script  src="ext/aas/js/jquery.jeditable.js"></script>
 <?php if(isset($enableColumnSorting) && $enableColumnSorting){ ?>
-<script type="text/javascript" src="ext/aas/js/jquery.tablesorter.min.js"></script>
-<script type="text/javascript">$(function(){
+<script  src="ext/aas/js/jquery.tablesorter.min.js"></script>
+<script >$(function(){
  $("table#tbl").tablesorter({headers: { <?php echo $sorting; ?> }  });
 });</script>
 <?php } ?>
 <?php include 'ext/aas/js.php'; ?>
-<script type="text/javascript" src="ext/aas/js/dialogs.js"></script>
-<script type="text/javascript" src="ext/aas/js/functions.js"></script>
-<script type="text/javascript" src="ext/aas/js/aas.js"></script>
-<script type="text/javascript" src="ext/aas/js/filedrop/jquery.filedrop.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery.dragtable.js"></script>
-<script type="text/javascript" src="ext/aas/js/jquery.jOrgChart.js"></script>
-<script type="text/javascript" src="ext/aas/js/moment.min.js"></script>
+<script  src="ext/aas/js/dialogs.js"></script>
+<script  src="ext/aas/js/functions.js"></script>
+<script  src="ext/aas/js/aas.js"></script>
+<script  src="ext/aas/js/filedrop/jquery.filedrop.js"></script>
+<script  src="ext/aas/js/jquery.dragtable.js"></script>
+<script  src="ext/aas/js/jquery.jOrgChart.js"></script>
+<script  src="ext/aas/js/moment.min.js"></script>
 <script>
 <?php if($modules_count>0){
 $modules_counter=1; foreach($modules as $key => $module){ ?>
@@ -839,7 +839,7 @@ if(isset($specials_products[$products['products_id']])){
 <?php if($defaults['displayDatetime-info']){ ?>
 <div id="datetime-information">
   <span id="toolbox-datetime"><?php echo tep_formatDate(time()); ?></span><?php echo AAS_TEXT_STAYED_IN_THIS_PAGE; ?><span id="toolbox-time-stated"></span>
-  <script type="text/javascript" src="ext/aas/js/timer.js"></script>
+  <script  src="ext/aas/js/timer.js"></script>
   <script>
     date_time('toolbox-datetime','local');
     timerUp('<?php echo $time; ?>','<?php echo $time; ?>',function(tm){ document.getElementById('toolbox-time-stated').innerHTML=tm;});
@@ -1076,7 +1076,7 @@ if($modules_count>0){ foreach($modules as $key => $module) include 'ext/aas_modu
   <iframe src="about:blank" id="previewPageVelaki"></iframe>
 </div>
 <?php include 'ext/aas/dialogs.php'; ?>
-<script type="text/javascript" src="ext/aas/js/jquery.touchwipe.1.1.1.js"></script>
+<script  src="ext/aas/js/jquery.touchwipe.1.1.1.js"></script>
 <script>
 $(function(){
   $("#toolBox").touchwipe({

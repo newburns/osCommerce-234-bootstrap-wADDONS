@@ -652,7 +652,7 @@ $redeem_ip = tep_get_ip_address();
       </td>
       </tr>
       </td></table>
-<script type="text/javascript">
+<script >
 $('#coupon_start_date,#coupon_expire_date').datepicker({
   dateFormat: 'yy-mm-dd',
   changeMonth: true,

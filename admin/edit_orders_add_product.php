@@ -282,7 +282,7 @@
 <title><?php echo TITLE; ?></title>
 <link rel="stylesheet" type="text/css" href="includes/stylesheet.css">
 <?php if ( (isset($_GET['submitForm'])) && ($_GET['submitForm'] == 'yes') ) {
-        echo '<script language="javascript" type="text/javascript"><!--' . "\n" .
+        echo '<script language="javascript" ><!--' . "\n" .
              '  window.opener.document.edit_order.subaction.value = "add_product";' . "\n" . 
              '  window.opener.document.edit_order.submit();' . "\n" .
              '//--></script>';
@@ -439,7 +439,7 @@
  
            <div align="center" class="dataTableContent">
                    
-				   <script language="JavaScript" type="text/javascript">
+				   <script language="JavaScript" >
                    <!--
                     document.write("<a href=\"javascript:self.close();\"><?php echo TEXT_CLOSE_POPUP; ?></a>");
 	               //-->

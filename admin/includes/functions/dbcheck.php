@@ -1359,7 +1359,7 @@ echo '</table>';
 ?>
 
 <!--  Begin function confirm delete //-->
-<script type="text/javascript">
+<script >
 function confirmDelete(){
 return confirm("Do you really want to Delete??");
 }
