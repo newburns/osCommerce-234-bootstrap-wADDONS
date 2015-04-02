@@ -5,8 +5,15 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2015 osCommerce
-
+  Copyright (c) 2003 osCommerce
+  
+  Edited by 2014 Newburns Design and Technology
+  *************************************************
+  ************ New addon definitions **************
+  ************        Below          **************
+  *************************************************
+  SEO Header Tags Reloaded added -- http://addons.oscommerce.com/info/8864
+  
   Released under the GNU General Public License
 */
 
@@ -26,19 +33,16 @@
     }
 
     function trail($separator = NULL) {
-      $breadcrumb_count = 1;
-
-      $trail_string = '<ol class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">';
+      $trail_string = '<ol class="breadcrumb">';
 
       for ($i=0, $n=sizeof($this->_trail); $i<$n; $i++) {
         if (isset($this->_trail[$i]['link']) && tep_not_null($this->_trail[$i]['link'])) {
-          $trail_string .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="' . $this->_trail[$i]['link'] . '" itemprop="item"><span itemprop="name">' . $this->_trail[$i]['title'] . '</span></a><meta itemprop="position" content="' . $breadcrumb_count . '" /></li>' . "\n";
+          $trail_string .= '<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><a href="' . $this->_trail[$i]['link'] . '" itemprop="url"><span itemprop="title">' . $this->_trail[$i]['title'] . '</span></a></li>' . "\n";
         } else {
-          $trail_string .= '<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">' . $this->_trail[$i]['title'] . '</span><meta itemprop="position" content="' . $breadcrumb_count . '" /></li>';
+          $trail_string .= '<li itemscope itemtype="http://data-vocabulary.org/Breadcrumb"><span itemprop="title">' . $this->_trail[$i]['title'] . '</span></li>';
         }
-        $breadcrumb_count++;
       }
-
+      
       $trail_string .= '</ol>';
 
       return $trail_string;
