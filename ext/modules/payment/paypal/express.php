@@ -872,5 +872,5 @@ EOD;
 
   tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, '', 'SSL'));
 
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

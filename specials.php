@@ -16,7 +16,7 @@
 
   $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_SPECIALS));
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
 
 <div class="page-header">
@@ -108,6 +108,6 @@
 
   include(DIR_WS_MODULES . FILENAME_PRODUCT_LISTING);
 
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

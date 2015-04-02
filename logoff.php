@@ -59,7 +59,7 @@ if ( tep_session_is_registered('cc_id') ) {
 
   $cart->reset();
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
 
 <div class="page-header">
@@ -79,6 +79,6 @@ if ( tep_session_is_registered('cc_id') ) {
 </div>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

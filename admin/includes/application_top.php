@@ -52,10 +52,10 @@
   define('LOCAL_EXE_UNZIP', 'unzip');
 
 // include the list of project filenames
-  require(DIR_WS_INCLUDES . 'filenames.php');
+  require(includes . 'filenames.php');
 
 // include the list of project database tables
-  require(DIR_WS_INCLUDES . 'database_tables.php');
+  require(includes . 'database_tables.php');
 
 // Define how do we update currency exchange rates
 // Possible values are 'oanda' 'xe' or ''

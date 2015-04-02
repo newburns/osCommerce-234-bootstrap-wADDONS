@@ -118,4 +118,4 @@
 <br />
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(includes . 'application_bottom.php'); ?>
