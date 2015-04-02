@@ -11,7 +11,7 @@
 */   
 ?>
 
-<script language="javascript" type="text/javascript"><!--
+<script language="javascript" ><!--
 
 var xmlHttp = false;
 
