@@ -29,7 +29,7 @@
                                   'text' => $products['products_name']);
       }
 
-$choose_audience_string = '<script type="text/javascript"><!--
+$choose_audience_string = '<script ><!--
 function mover(move) {
   if (move == \'remove\') {
     for (x=0; x<(document.notifications.products.length); x++) {
