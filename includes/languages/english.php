@@ -262,7 +262,6 @@ define('TEXT_SORT_BY', 'Sort By ');
 */
 // SEO Header Tags Reloaded
   define('TEXT_DISPLAY_NUMBER_OF_TESTIMONIALS', 'Displaying <strong>%d</strong> to <strong>%d</strong> (of <strong>%d</strong> testimonials)');
-  define('FORM_REQUIRED_INFORMATION', '<span class="glyphicon glyphicon-asterisk form-control-feedback inputRequirement"></span> Required information');
 // CCGV
   define('VOUCHER_BALANCE', 'Voucher Balance');
   define('BOX_HEADING_GIFT_VOUCHER', 'Gift Voucher Account');
