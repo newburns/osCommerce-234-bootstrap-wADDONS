@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
     
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -19,17 +19,17 @@
 
   require('includes/application_top.php');
 
-  if (!tep_session_is_registered('customer_id') && (ALLOW_GUEST_TO_TELL_A_FRIEND == 'false')) {
+  if (!isset($_SESSION['customer_id']) && (ALLOW_GUEST_TO_TELL_A_FRIEND == 'false')) {
     $navigation->set_snapshot();
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    tep_redirect(tep_href_link('login.php', '', 'SSL'));
   }
 
   $valid_product = false;
   if (isset($_GET['products_id'])) {
 /* ** Altered for Mail Manager **  
-    $product_info_query = tep_db_query("select pd.products_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$languages_id . "'");
+    $product_info_query = tep_db_query("select pd.products_name from products p, products_description pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
 */
-	$product_info_query = tep_db_query("select p.products_image, pd.products_name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$languages_id . "'");
+	$product_info_query = tep_db_query("select p.products_image, pd.products_name from products p, products_description pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
 /* ** EOF alteration for Mail Manager ** */
     if (tep_db_num_rows($product_info_query)) {
       $valid_product = true;
@@ -39,12 +39,12 @@
   }
 
   if ($valid_product == false) {
-    tep_redirect(tep_href_link('product_info', 'products_id=' . (int)$_GET['products_id']));
+    tep_redirect(tep_href_link('product_info.php', 'products_id=' . (int)$_GET['products_id']));
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_TELL_A_FRIEND);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/tell_a_friend.php');
 
-  if (isset($_GET['action']) && ($_GET['action'] == 'process') && isset($_POST['formid']) && ($_POST['formid'] == $sessiontoken)) {
+  if (isset($_GET['action']) && ($_GET['action'] == 'process') && isset($_POST['formid']) && ($_POST['formid'] == $_SESSION['sessiontoken'])) {
     $error = false;
 
     $to_email_address = tep_db_prepare_input($_POST['to_email_address']);
@@ -77,7 +77,7 @@
       $messageStack->add('friend', ERROR_TO_ADDRESS);
     }
 
-    $actionRecorder = new actionRecorder('ar_tell_a_friend', (tep_session_is_registered('customer_id') ? $customer_id : null), $from_name);
+    $actionRecorder = new actionRecorder('ar_tell_a_friend', (isset($_SESSION['customer_id']) ? $customer_id : null), $from_name);
     if (!$actionRecorder->canPerform()) {
       $error = true;
 
@@ -100,8 +100,8 @@
 /* ** Altered for Mail Manager **
       tep_mail($to_name, $to_email_address, $email_subject, $email_body, $from_name, $from_email_address);
 */
-	  if (file_exists(DIR_WS_MODULES.'mail_manager/tell_a_friend.php')){
-		include(DIR_WS_MODULES.'mail_manager/tell_a_friend.php'); 
+	  if (file_exists('includes/modules/mail_manager/tell_a_friend.php')){
+		include('includes/modules/mail_manager/tell_a_friend.php'); 
 		}else{ 
 	  tep_mail($to_name, $to_email_address, $email_subject, $email_body, $from_name, $from_email_address);
 	  }
@@ -111,19 +111,19 @@
 
       $messageStack->add_session('header', sprintf(TEXT_EMAIL_SUCCESSFUL_SENT, $product_info['products_name'], tep_output_string_protected($to_name)), 'success');
 
-      tep_redirect(tep_href_link('product_info', 'products_id=' . (int)$_GET['products_id']));
+      tep_redirect(tep_href_link('product_info.php', 'products_id=' . (int)$_GET['products_id']));
     }
-  } elseif (tep_session_is_registered('customer_id')) {
-    $account_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_id = '" . (int)$customer_id . "'");
+  } elseif (isset($_SESSION['customer_id'])) {
+    $account_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from customers where customers_id = '" . (int)$customer_id . "'");
     $account = tep_db_fetch_array($account_query);
 
     $from_name = $account['customers_firstname'] . ' ' . $account['customers_lastname'];
     $from_email_address = $account['customers_email_address'];
   }
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_TELL_A_FRIEND, 'products_id=' . (int)$_GET['products_id']));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('tell_a_friend.php', 'products_id=' . (int)$_GET['products_id']));
 
-  require(includes . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <div class="page-header">
@@ -136,20 +136,22 @@
   }
 ?>
 
-<?php echo tep_draw_form('email_friend', tep_href_link(FILENAME_TELL_A_FRIEND, 'action=process&products_id=' . (int)$_GET['products_id']), 'post', 'class="form-horizontal"', true); ?>
+<?php echo tep_draw_form('email_friend', tep_href_link('tell_a_friend.php', 'action=process&products_id=' . (int)$_GET['products_id']), 'post', 'class="form-horizontal" role="form"', true); ?>
 
 <div class="contentContainer">
 
-  <div class="inputRequirement text-right"><?php echo FORM_REQUIRED_INFORMATION; ?></div>
+  <p class="inputRequirement text-right"><?php echo FORM_REQUIRED_INFORMATION; ?></p>
 
-  <h2><?php echo FORM_TITLE_CUSTOMER_DETAILS; ?></h2>
+  <div class="page-header">
+    <h4><?php echo FORM_TITLE_CUSTOMER_DETAILS; ?></h4>
+  </div>
 
   <div class="contentText">
     <div class="form-group has-feedback">
       <label for="inputFromName" class="control-label col-sm-3"><?php echo FORM_FIELD_CUSTOMER_NAME; ?></label>
       <div class="col-sm-9">
         <?php
-        echo tep_draw_input_field('from_name', NULL, 'required aria-required="true" id="inputFromName" placeholder="' . FORM_FIELD_CUSTOMER_NAME . '"');
+        echo tep_draw_input_field('from_name', NULL, 'required aria-required="true" id="inputFromName" placeholder="' . ENTRY_FORM_FIELD_CUSTOMER_NAME_TEXT . '"');
         echo FORM_REQUIRED_INPUT;
         ?>
       </div>
@@ -158,21 +160,23 @@
       <label for="inputFromEmail" class="control-label col-sm-3"><?php echo FORM_FIELD_CUSTOMER_EMAIL; ?></label>
       <div class="col-sm-9">
         <?php
-        echo tep_draw_input_field('from_email_address', NULL, 'required aria-required="true" id="inputFromEmail" placeholder="' . FORM_FIELD_CUSTOMER_EMAIL . '"', 'email');
+        echo tep_draw_input_field('from_email_address', NULL, 'required aria-required="true" id="inputFromEmail" placeholder="' . ENTRY_FORM_FIELD_CUSTOMER_EMAIL_TEXT . '"', 'email');
         echo FORM_REQUIRED_INPUT;
         ?>
       </div>
     </div>
   </div>
 
-  <h2><?php echo FORM_TITLE_FRIEND_DETAILS; ?></h2>
+  <div class="page-header">
+    <h4><?php echo FORM_TITLE_FRIEND_DETAILS; ?></h4>
+  </div>
 
   <div class="contentText">
     <div class="form-group has-feedback">
       <label for="inputToName" class="control-label col-sm-3"><?php echo FORM_FIELD_FRIEND_NAME; ?></label>
       <div class="col-sm-9">
         <?php
-        echo tep_draw_input_field('to_name', NULL, 'required aria-required="true" id="inputToName" placeholder="' . FORM_FIELD_FRIEND_NAME . '"');
+        echo tep_draw_input_field('to_name', NULL, 'required aria-required="true" id="inputToName" placeholder="' . ENTRY_FORM_FIELD_FRIEND_NAME_TEXT . '"');
         echo FORM_REQUIRED_INPUT;
         ?>
       </div>
@@ -181,7 +185,7 @@
       <label for="inputToEmail" class="control-label col-sm-3"><?php echo FORM_FIELD_FRIEND_EMAIL; ?></label>
       <div class="col-sm-9">
         <?php
-        echo tep_draw_input_field('to_email_address', NULL, 'required aria-required="true" id="inputToEmail" placeholder="' . FORM_FIELD_FRIEND_EMAIL . '"', 'email');
+        echo tep_draw_input_field('to_email_address', NULL, 'required aria-required="true" id="inputToEmail" placeholder="' . ENTRY_FORM_FIELD_FRIEND_EMAIL_TEXT . '"', 'email');
         echo FORM_REQUIRED_INPUT;
         ?>
       </div>
@@ -195,22 +199,24 @@
       <label for="inputMessage" class="control-label col-sm-3"><?php echo FORM_TITLE_FRIEND_MESSAGE; ?></label>
       <div class="col-sm-9">
         <?php
-        echo tep_draw_textarea_field('message', 'soft', 40, 8, NULL, 'required aria-required="true" id="inputMessage" placeholder="' . FORM_TITLE_FRIEND_MESSAGE . '"');
+        echo tep_draw_textarea_field('message', 'soft', 40, 8, NULL, 'required aria-required="true" id="inputMessage" placeholder="' . ENTRY_FORM_TITLE_FRIEND_MESSAGE_TEXT . '"');
         echo FORM_REQUIRED_INPUT;
         ?>
       </div>
     </div>
   </div>
 
-  <div class="buttonSet row">
-    <div class="col-xs-6"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'glyphicon glyphicon-chevron-left', tep_href_link('product_info', 'products_id=' . (int)$_GET['products_id'])); ?></div>
-    <div class="col-xs-6 text-right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-send', null, 'primary', null, 'btn-success'); ?></div>
+  <div class="clearfix"></div>
+
+  <div class="row">
+    <div class="col-sm-6 text-right pull-right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', null, 'primary', null, 'btn-success'); ?></div>
+    <div class="col-sm-6"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'glyphicon glyphicon-chevron-left', tep_href_link('product_info.php', 'products_id=' . (int)$_GET['products_id'])); ?></div>
   </div>
 </div>
 
 </form>
 
 <?php
-  require(includes . 'template_bottom.php');
-  require(includes . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

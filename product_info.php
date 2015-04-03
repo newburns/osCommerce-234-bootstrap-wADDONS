@@ -12,7 +12,7 @@
   ************ New addon definitions **************
   ************        Below          **************
   *************************************************
-  SEO Header Tags Reloaded added -- http://addons.oscommerce.com/info/8864
+  
   Custom change for product attribute sort ordering added -- http://forums.oscommerce.com/topic/123629-sorting-attributes/
   
   Released under the GNU General Public License
@@ -53,10 +53,7 @@
 </div>
 
 <?php
-/* ** Altered for SEO Header Tags RELOADED **
   } else {
-    $product_info_query = tep_db_query("select p.products_id, pd.products_name, pd.products_description, p.products_model, p.products_quantity, p.products_image, pd.products_url, p.products_price, p.products_tax_class_id, p.products_date_added, p.products_date_available, p.manufacturers_id from " . TABLE_PRODUCTS . " p, products_description pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
-    $product_info = tep_db_fetch_array($product_info_query);
 
     tep_db_query("update products_description set products_viewed = products_viewed+1 where products_id = '" . (int)$_GET['products_id'] . "' and language_id = '" . (int)$_SESSION['languages_id'] . "'");
 
@@ -79,37 +76,10 @@
     $products_name = '<a href="' . tep_href_link('product_info.php', 'products_id=' . $product_info['products_id']) . '" itemprop="url"><span itemprop="name">' . $product_info['products_name'] . '</span></a>';
 
     if (tep_not_null($product_info['products_model'])) {
-      $products_name .= '<br /><small>[<span itemprop="model">' . $product_info['products_model'] . '</span>]</small>';
+      $products_name .= ' <small>[<span itemprop="model">' . $product_info['products_model'] . '</span>]</small>';
     }
-*/
-  } else {
-    $product_info_query = tep_db_query("select p.products_id, pd.products_name, pd.products_description, p.products_model, p.products_quantity, p.products_image, pd.products_url, p.products_price, p.products_tax_class_id, p.products_date_added, p.products_date_available, p.manufacturers_id from " . TABLE_PRODUCTS . " p, products_description pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
-    $product_info = tep_db_fetch_array($product_info_query);
-
-    tep_db_query("update products_description set products_viewed = products_viewed+1 where products_id = '" . (int)$_GET['products_id'] . "' and language_id = '" . (int)$_SESSION['languages_id'] . "'");
-
-    if ($new_price = tep_get_products_special_price($product_info['products_id'])) {
-      $products_price = '<del>' . $currencies->display_price($product_info['products_price'], tep_get_tax_rate($product_info['products_tax_class_id'])) . '</del> <span class="productSpecialPrice" itemprop="price">' . $currencies->display_price($new_price, tep_get_tax_rate($product_info['products_tax_class_id'])) . '</span>';
-    } else {
-      $products_price = '<span itemprop="price">' . $currencies->display_price($product_info['products_price'], tep_get_tax_rate($product_info['products_tax_class_id'])) . '</span>';
-    }
-
-    if ($product_info['products_date_available'] > date('Y-m-d H:i:s')) {
-      $products_price .= '<link itemprop="availability" href="http://schema.org/PreOrder" />';
-    } elseif ((STOCK_CHECK == 'true') && ($product_info['products_quantity'] < 1)) {
-      $products_price .= '<link itemprop="availability" href="http://schema.org/OutOfStock" />';
-    } else {
-      $products_price .= '<link itemprop="availability" href="http://schema.org/InStock" />';
-    }
-    $products_price .= '<meta itemprop="priceCurrency" content="' . tep_output_string($currency) . '" />';
-    $products_name = '<a href="' . tep_href_link('product_info', 'products_id=' . $product_info['products_id']) . '" itemprop="url"><span itemprop="name">' . $product_info['products_name'] . '</span></a>';
-
-    if (tep_not_null($product_info['products_model'])) {
-      $products_name .= '<br /><small>[<span itemprop="model">' . $product_info['products_model'] . '</span>]</small>';
-    }
-/* ** EOF alteration for SEO Header Tags RELOADED ** */
 ?>
-<?php echo tep_draw_form('cart_quantity', tep_href_link('product_info', tep_get_all_get_params(array('action')) . 'action=add_product', 'NONSSL', 'class="form-horizontal"')); ?>
+
 <div itemscope itemtype="http://schema.org/Product">
 
 <div class="page-header">
@@ -123,7 +93,6 @@
   <div class="contentText">
 
 <?php
-/* ** Altered for SEO Header Tags RELOADED **
     if (tep_not_null($product_info['products_image'])) {
 
       echo tep_image(DIR_WS_IMAGES . $product_info['products_image'], NULL, NULL, NULL, 'itemprop="image" style="display:none;"');
@@ -144,14 +113,8 @@
         if ($pi_sub > 0) {
           $photoset_layout .= ($pi_total > 5) ? 5 : $pi_sub;
         }
-*/
-    if (tep_not_null($product_info['products_image'])) {
-      $photoset_layout = '1';
-      $pi_query = tep_db_query("select image, htmlcontent from products_images where products_id = '" . (int)$product_info['products_id'] . "' order by sort_order");
-      if (tep_db_num_rows($pi_query) > 0) {
-        $photoset_layout = '1' . (tep_db_num_rows($pi_query) > 1 ? tep_db_num_rows($pi_query) - 1 : '');
-/* ** EOF alteration for SEO Header Tags RELOADED ** */
 ?>
+
     <div class="piGal pull-right" data-imgcount="<?php echo $photoset_layout; ?>">
 
 <?php
@@ -178,14 +141,6 @@
       } else {
 ?>
 
-<<<<<<< HEAD
-<?php /* ** Altered for SEO Header Tags RELOADED **
-    <div id="piGal">
-*/ ?>
-    <div id="piGal" class="pull-right">
-<?php /* ** EOF alteration for SEO Header Tags RELOADED ** */ ?>
-
-=======
     <div class="piGal pull-right">
       <?php echo tep_image(DIR_WS_IMAGES . $product_info['products_image'], addslashes($product_info['products_name'])); ?>
     </div>
