@@ -31,7 +31,7 @@
     function execute() {
       global $PHP_SELF, $oscTemplate, $_GET, $languages_id, $product_check;
 
-      if (basename($PHP_SELF) == FILENAME_PRODUCT_INFO) {
+      if (basename($PHP_SELF) == 'product_info') {
         if (isset($_GET['products_id'])) {
           if ($product_check['total'] > 0) {
             $product_info_query = tep_db_query("select pd.products_name, pd.products_seo_title from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "'");

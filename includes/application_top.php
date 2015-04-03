@@ -67,11 +67,6 @@
   $security_pro->cleanse( $PHP_SELF );
 /* ** EOF alteration for Security Pro 11 ** */
   
-// include the list of project filenames
-  require('includes/filenames.php');
-
-// include the list of project database tables
-  require('includes/database_tables.php');
 
 // include the database functions
   require('includes/functions/database.php');

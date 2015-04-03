@@ -24,7 +24,7 @@
     tep_redirect(tep_href_link('index.php'));
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_PRODUCT_INFO);
+  require(DIR_WS_LANGUAGES . $language . '/' . 'product_info');
 
   $product_check_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_DESCRIPTION . " pd where p.products_status = '1' and p.products_id = '" . (int)$_GET['products_id'] . "' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "'");
   $product_check = tep_db_fetch_array($product_check_query);
@@ -94,14 +94,14 @@
       $products_price .= '<link itemprop="availability" href="http://schema.org/InStock" />';
     }
     $products_price .= '<meta itemprop="priceCurrency" content="' . tep_output_string($currency) . '" />';
-    $products_name = '<a href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $product_info['products_id']) . '" itemprop="url"><span itemprop="name">' . $product_info['products_name'] . '</span></a>';
+    $products_name = '<a href="' . tep_href_link('product_info', 'products_id=' . $product_info['products_id']) . '" itemprop="url"><span itemprop="name">' . $product_info['products_name'] . '</span></a>';
 
     if (tep_not_null($product_info['products_model'])) {
       $products_name .= '<br /><small>[<span itemprop="model">' . $product_info['products_model'] . '</span>]</small>';
     }
 /* ** EOF alteration for SEO Header Tags RELOADED ** */
 ?>
-<?php echo tep_draw_form('cart_quantity', tep_href_link(FILENAME_PRODUCT_INFO, tep_get_all_get_params(array('action')) . 'action=add_product', 'NONSSL', 'class="form-horizontal"')); ?>
+<?php echo tep_draw_form('cart_quantity', tep_href_link('product_info', tep_get_all_get_params(array('action')) . 'action=add_product', 'NONSSL', 'class="form-horizontal"')); ?>
 <div itemscope itemtype="http://schema.org/Product">
 
 <div class="page-header">

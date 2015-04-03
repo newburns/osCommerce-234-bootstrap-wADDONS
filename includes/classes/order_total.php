@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2015 osCommerce
   
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -22,14 +22,11 @@
 
 // class constructor
     function order_total() {
-      global $language;
-
       if (defined('MODULE_ORDER_TOTAL_INSTALLED') && tep_not_null(MODULE_ORDER_TOTAL_INSTALLED)) {
         $this->modules = explode(';', MODULE_ORDER_TOTAL_INSTALLED);
 
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
-          include(DIR_WS_LANGUAGES . $language . '/modules/order_total/' . $value);
+        foreach($this->modules as $value) {
+          include(DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/order_total/' . $value);
           include(DIR_WS_MODULES . 'order_total/' . $value);
 
           $class = substr($value, 0, strrpos($value, '.'));
@@ -41,8 +38,7 @@
     function process() {
       $order_total_array = array();
       if (is_array($this->modules)) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ($GLOBALS[$class]->enabled) {
             $GLOBALS[$class]->output = array();
@@ -67,8 +63,7 @@
     function output() {
       $output_string = '';
       if (is_array($this->modules)) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ($GLOBALS[$class]->enabled) {
             $size = sizeof($GLOBALS[$class]->output);
