@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -25,12 +25,14 @@
 <head>
 <meta charset="<?php echo CHARSET; ?>">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
- <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title><?php echo tep_output_string_protected($oscTemplate->getTitle()); ?></title>
 <base href="<?php echo (($request_type == 'SSL') ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>">
 
 <link href="ext/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-<link href="custom.css" rel="stylesheet">
+<link href="stylesheet.css" rel="stylesheet">
+
+<!-- User  -->
 <link href="user.css" rel="stylesheet">
 
 <!--[if lt IE 9]>
@@ -49,10 +51,11 @@
 <body>
 
   <?php echo $oscTemplate->getContent('navigation'); ?>
-  
+
   <div id="bodyWrapper" class="<?php echo BOOTSTRAP_CONTAINER; ?>">
+
     <div class="row">
 
-      <?php require(includes . 'header.php'); ?>
+      <?php require('includes/header.php'); ?>
 
       <div id="bodyContent" class="col-md-<?php echo $oscTemplate->getGridContentWidth(); ?> <?php echo ($oscTemplate->hasBlocks('boxes_column_left') ? 'col-md-push-' . $oscTemplate->getGridColumnWidth() : ''); ?>">
