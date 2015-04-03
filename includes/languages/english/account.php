@@ -29,12 +29,15 @@ define('MY_ACCOUNT_INFORMATION', 'View or change my account information.');
 define('MY_ACCOUNT_ADDRESS_BOOK', 'View or change entries in my address book.');
 define('MY_ACCOUNT_PASSWORD', 'Change my account password.');
 
+
 define('MY_ORDERS_TITLE', 'My Orders');
 define('MY_ORDERS_VIEW', 'View the orders I have made.');
 
 define('EMAIL_NOTIFICATIONS_TITLE', 'E-Mail Notifications');
 define('EMAIL_NOTIFICATIONS_NEWSLETTERS', 'Subscribe or unsubscribe from newsletters.');
 define('EMAIL_NOTIFICATIONS_PRODUCTS', 'View or change my product notification list.');
+
+define('MY_ACCOUNT_LOGOFF', 'Securely Log Out');
 /*
 ************************************************************************
 ************** Custom Filenames can be defined below here **************
@@ -42,8 +45,7 @@ define('EMAIL_NOTIFICATIONS_PRODUCTS', 'View or change my product notification l
 ************************************************************************
 */
 // CCGV
-define('GIFT_VOUCHER_COUPON', 'Gift Voucher/Coupon:');
+define('MY_ACCOUNT_VOUCHER', 'Send Gift Voucher');
 define('CCGV_BALANCE', '<FONT COLOR="#ff0000">Gift Voucher Balance:</FONT> ');
-define('CCGV_SENDVOUCHER', 'Send Gift Voucher.');
 define('CCGV_FAQ', 'Gift Voucher FAQ.');
 ?>
