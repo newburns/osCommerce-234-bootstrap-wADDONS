@@ -698,7 +698,7 @@
       unset($_SESSION['payment']);
       unset($_SESSION['comments']);
 /* ** Altered for CCGV ** */    	  
-  if (!isset($_SESSION['credit_covers'])) unset ($_SESSION['credit_covers']);
+  if (!isset($_SESSION['credit_covers'])) unset($_SESSION['credit_covers']);
    $order_total_modules->clear_posts();
 /* **EOF alteration for CCGV ** */
 
