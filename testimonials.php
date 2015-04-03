@@ -5,18 +5,18 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/testimonials.php');
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/testimonials.php');
 
   $breadcrumb->add(NAVBAR_TITLE, tep_href_link('testimonials.php'));
 
-  require(includes . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <div class="page-header">
@@ -26,7 +26,7 @@
 <div class="contentContainer">
 
 <?php
-  $reviews_query_raw = "select r.reviews_id, rd.reviews_text, r.date_added, r.customers_name from reviews r, reviews_description rd WHERE r.reviews_id = rd.reviews_id and rd.languages_id = '" . (int)$languages_id . "' and reviews_status = 1 and is_testimonial = 1 order by r.reviews_id DESC";
+  $reviews_query_raw = "select r.reviews_id, rd.reviews_text, r.date_added, r.customers_name from reviews r, reviews_description rd WHERE r.reviews_id = rd.reviews_id and rd.languages_id = '" . (int)$_SESSION['languages_id'] . "' and reviews_status = 1 and is_testimonial = 1 order by r.reviews_id DESC";
   $reviews_split = new splitPageResults($reviews_query_raw, MAX_DISPLAY_NEW_REVIEWS);
 
   if ($reviews_split->number_of_rows > 0) {
@@ -89,6 +89,6 @@
 </div>
 
 <?php
-  require(includes . 'template_bottom.php');
-  require(includes . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>
