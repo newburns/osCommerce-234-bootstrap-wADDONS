@@ -12,9 +12,9 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_FAQ);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/gv_faq.php');
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_FAQ));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_faq.php'));
 
   require('includes/template_top.php');
 ?>

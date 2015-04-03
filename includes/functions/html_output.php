@@ -56,7 +56,7 @@
         $_sid = $SID;
       } elseif ( ( ($request_type == 'NONSSL') && ($connection == 'SSL') && (ENABLE_SSL == true) ) || ( ($request_type == 'SSL') && ($connection == 'NONSSL') ) ) {
         if (HTTP_COOKIE_DOMAIN != HTTPS_COOKIE_DOMAIN) {
-          $_sid = tep_session_name() . '=' . tep_session_id();
+          $_sid = session_name() . '=' . session_id();
         }
       }
     }
@@ -87,7 +87,7 @@
   function tep_image($src, $alt = '', $width = '', $height = '', $parameters = '', $responsive = true, $bootstrap_css = '') {
     // If width and height are not numeric then we can't do anything with it
     if ( !is_numeric ( $width ) || !is_numeric ( $height ) ) return tep_image_legacy( $src, $alt, $width, $height, $parameters, $responsive, $bootstrap_css );
-    require_once DIR_WS_MODULES . 'kiss_image_thumbnailer/classes/Image_Helper.php';
+    require_once('includes/modules/kiss_image_thumbnailer/classes/Image_Helper.php');
     $attributes = array( 'alt' => $alt, 'width' => $width, 'height' => $height );
     $image = new Image_Helper( array( 'src'                   => $src,
                                       'attributes'            => $attributes,
@@ -140,7 +140,7 @@
     if (tep_not_null($width) && tep_not_null($height)) {
       $image .= ' width="' . tep_output_string($width) . '" height="' . tep_output_string($height) . '"';
     }
-
+    
     $image .= ' class="';
 
     if (tep_not_null($responsive) && ($responsive === true)) {
@@ -161,10 +161,9 @@
 ////
 // The HTML form submit button wrapper function
 // Outputs a button in the selected language
+// 2.4 DEPRECATED
   function tep_image_submit($image, $alt = '', $parameters = '') {
-    global $language;
-
-    $image_submit = '<input type="image" src="' . tep_output_string(DIR_WS_LANGUAGES . $language . '/images/buttons/' . $image) . '" alt="' . tep_output_string($alt) . '"';
+    $image_submit = '<input type="image" src="' . tep_output_string(DIR_WS_LANGUAGES . $_SESSION['language'] . '/images/buttons/' . $image) . '" alt="' . tep_output_string($alt) . '"';
 
     if (tep_not_null($alt)) $image_submit .= ' title=" ' . tep_output_string($alt) . ' "';
 
@@ -178,9 +177,7 @@
 ////
 // Output a function button in the selected language
   function tep_image_button($image, $alt = '', $parameters = '') {
-    global $language;
-
-    return tep_image(DIR_WS_LANGUAGES . $language . '/images/buttons/' . $image, $alt, '', '', $parameters);
+    return tep_image(DIR_WS_LANGUAGES . $_SESSION['language'] . '/images/buttons/' . $image, $alt, '', '', $parameters);
   }
 
 ////
@@ -191,17 +188,19 @@
 
 ////
 // Output a form
+// 2.4 - user must explicitly pass
+// class="form-horizontal" role="form"
+// into the parameters on each form
+// as not all forms are horizontal
   function tep_draw_form($name, $action, $method = 'post', $parameters = '', $tokenize = false) {
-    global $sessiontoken;
-
     $form = '<form name="' . tep_output_string($name) . '" action="' . tep_output_string($action) . '" method="' . tep_output_string($method) . '"';
 
     if (tep_not_null($parameters)) $form .= ' ' . $parameters;
 
     $form .= '>';
 
-    if ( ($tokenize == true) && isset($sessiontoken) ) {
-      $form .= '<input type="hidden" name="formid" value="' . tep_output_string($sessiontoken) . '" />';
+    if ( ($tokenize == true) && isset($_SESSION['sessiontoken']) ) {
+      $form .= '<input type="hidden" name="formid" value="' . tep_output_string($_SESSION['sessiontoken']) . '" />';
     }
 
     return $form;
@@ -209,9 +208,8 @@
 
 ////
 // Output a form input field
-  function tep_draw_input_field($name, $value = '', $parameters = '', $type = 'text', $reinsert_value = true, $class = 'class="form-control"') {
-    global $_GET, $_POST;
-
+// 2.4 - automatically pass form-control css class
+  function tep_draw_input_field($name, $value = '', $parameters = '', $type = 'text', $reinsert_value = true, $class = 'form-control') {
     $field = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
 
     if ( ($reinsert_value == true) && ( (isset($_GET[$name]) && is_string($_GET[$name])) || (isset($_POST[$name]) && is_string($_POST[$name])) ) ) {
@@ -228,7 +226,7 @@
 
     if (tep_not_null($parameters)) $field .= ' ' . $parameters;
 
-    if (tep_not_null($class)) $field .= ' ' . $class;
+    if (tep_not_null($class)) $field .= ' class="' . $class . '"';
 
     $field .= ' />';
 
@@ -237,15 +235,13 @@
 
 ////
 // Output a form password field
-  function tep_draw_password_field($name, $value = '', $parameters = '') {
+  function tep_draw_password_field($name, $value = '', $parameters = 'maxlength="40"') {
     return tep_draw_input_field($name, $value, $parameters, 'password', false);
   }
 
 ////
 // Output a selection field - alias function for tep_draw_checkbox_field() and tep_draw_radio_field()
   function tep_draw_selection_field($name, $type, $value = '', $checked = false, $parameters = '') {
-    global $_GET, $_POST;
-
     $selection = '<input type="' . tep_output_string($type) . '" name="' . tep_output_string($name) . '"';
 
     if (tep_not_null($value)) $selection .= ' value="' . tep_output_string($value) . '"';
@@ -276,12 +272,13 @@
 ////
 // Output a form textarea field
 // The $wrap parameter is no longer used in the core xhtml template
-  function tep_draw_textarea_field($name, $wrap, $width, $height, $text = '', $parameters = '', $reinsert_value = true) {
-    global $_GET, $_POST;
-
-    $field = '<textarea class="form-control" name="' . tep_output_string($name) . '" cols="' . tep_output_string($width) . '" rows="' . tep_output_string($height) . '"';
+// 2.4 - automatically pass form-control css class
+  function tep_draw_textarea_field($name, $wrap, $width, $height, $text = '', $parameters = '', $reinsert_value = true, $class = 'form-control') {
+    $field = '<textarea name="' . tep_output_string($name) . '" cols="' . tep_output_string($width) . '" rows="' . tep_output_string($height) . '"';
 
     if (tep_not_null($parameters)) $field .= ' ' . $parameters;
+
+    if (tep_not_null($class)) $field .= ' class="' . $class . '"';
 
     $field .= '>';
 
@@ -303,8 +300,6 @@
 ////
 // Output a form hidden field
   function tep_draw_hidden_field($name, $value = '', $parameters = '') {
-    global $_GET, $_POST;
-
     $field = '<input type="hidden" name="' . tep_output_string($name) . '"';
 
     if (tep_not_null($value)) {
@@ -330,20 +325,27 @@
     global $session_started, $SID;
 
     if (($session_started == true) && tep_not_null($SID)) {
-      return tep_draw_hidden_field(tep_session_name(), tep_session_id());
+      return tep_draw_hidden_field(session_name(), session_id());
     }
   }
 
 ////
 // Output a form pull down menu
-  function tep_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false) {
-    global $_GET, $_POST;
+// 2.4 - automatically pass form-control css class
+  function tep_draw_pull_down_menu($name, $values, $default = '', $parameters = '', $required = false, $class = 'form-control') {
+    $field = '<select ';
 
-    $field = '<select name="' . tep_output_string($name) . '"';
+    if ($required == true) $field .= 'required aria-required="true" ';
+
+    $field .= 'name="' . tep_output_string($name) . '"';
 
     if (tep_not_null($parameters)) $field .= ' ' . $parameters;
 
-    $field .= ' class="form-control">';
+    if (tep_not_null($class)) $field .= ' class="' . $class . '"';
+
+    $field .= '>';
+    
+    if ($required == true) $field .= '<option value="">' . PULL_DOWN_DEFAULT . '</option>';
 
     if (empty($default) && ( (isset($_GET[$name]) && is_string($_GET[$name])) || (isset($_POST[$name]) && is_string($_POST[$name])) ) ) {
       if (isset($_GET[$name]) && is_string($_GET[$name])) {
@@ -363,8 +365,6 @@
     }
     $field .= '</select>';
 
-    if ($required == true) $field .= TEXT_FIELD_REQUIRED;
-
     return $field;
   }
 
@@ -383,7 +383,7 @@
 
 ////
 // Output a jQuery UI Button
-  function tep_draw_button($title = null, $icon = null, $link = null, $priority = null, $params = null, $style = null) {
+  function tep_draw_button($title = null, $icon = null, $link = null, $priority = null, $params = null, $class = null) {
     static $button_counter = 1;
 
     $types = array('submit', 'button', 'reset');
@@ -400,21 +400,16 @@
       $params['type'] = 'button';
     }
 
-    if (!isset($priority)) {
-      $priority = 'secondary';
-    }
-
     $button = NULL;
 
     if ( ($params['type'] == 'button') && isset($link) ) {
-      $button .= '<a id="btn' . $button_counter . '" href="' . $link . '"';
+      $button .= '<a id="tdb' . $button_counter . '" href="' . $link . '"';
 
       if ( isset($params['newwindow']) ) {
         $button .= ' target="_blank"';
       }
     } else {
-      $button .= '<button ';
-      $button .= ' type="' . tep_output_string($params['type']) . '"';
+      $button .= '<button id="tdb' . $button_counter . '" type="' . tep_output_string($params['type']) . '"';
     }
 
     if ( isset($params['params']) ) {
@@ -422,10 +417,10 @@
     }
 
     $button .= ' class="btn ';
+    $button .= (isset($class)) ? $class : 'btn-default';
+    $button .= '"';
 
-    $button .= (isset($style)) ? $style : 'btn-default';
-
-    $button .= '">';
+    $button .= '>';
 
     if (isset($icon) && tep_not_null($icon)) {
       $button .= ' <span class="' . $icon . '"></span> ';
@@ -452,23 +447,3 @@
 
     return $stars;
   }
-
-  function tep_navbar_search($btnclass ='btn-default', $description = true) {
-    global $request_type;
-
-    $search_link = '<div class="searchbox-margin">';
-    $search_link .= tep_draw_form('quick_find', tep_href_link(FILENAME_ADVANCED_SEARCH_RESULT, '', $request_type, false), 'get', 'class="form-horizontal"');
-    $search_link .= '    <div class="input-group">' .
-                            tep_draw_input_field('keywords', '', 'required placeholder="' . TEXT_SEARCH_PLACEHOLDER . '"', 'search') .
-                     '        <span class="input-group-btn"><button type="submit" class="btn ' . $btnclass .'"><i class="glyphicon glyphicon-search"></i></button></span>' .
-                     '    </div>';
-    $search_link .= '</div>';
-    if (tep_not_null($description) && ($description === true)) {
-      $search_link .= tep_draw_hidden_field('search_in_description', '1');
-    }
-    $search_link .=  tep_hide_session_id() . '</form>';
-
-	  return $search_link;
-  }
-  
-  

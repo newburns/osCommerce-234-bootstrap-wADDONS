@@ -1367,7 +1367,7 @@
   function tep_convert_linefeeds($from, $to, $string) {    
       return str_replace($from, $to, $string);
   }
- }
+ 
 /* ** Altered for CCGV ** */
 //create a coupon coupon length set in admin
   function create_coupon_code($salt="secret", $length = CCGV_SECURITY_CODE_LENGTH) {
@@ -1396,13 +1396,12 @@
       $new_gv_amount = $customer_gv['amount'] + $coupon_gv['coupon_amount'];
       $gv_query = tep_db_query("update coupon_gv_customer set amount = '" . $new_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
     } else {
-      $gv_query = tep_db_query("insert into " . TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('" . $customer_id . "', '" . $coupon_gv['coupon_amount'] . "')");
+      $gv_query = tep_db_query("insert into coupon_gv_customer (customer_id, amount) values ('" . $customer_id . "', '" . $coupon_gv['coupon_amount'] . "')");
     }
   }
 ////
 // Get tax rate from tax description
-  function tep_get_tax_rate_from_desc($tax_desc) {
-    $tax_query = tep_db_query("select tax_rate from tax_rates where tax_description = '" . $tax_desc . "'");
+  function tep_get_tax_rate_from_desc($tax_desc) {    $tax_query = tep_db_query("select tax_rate from tax_rates where tax_description = '" . $tax_desc . "'");
     $tax = tep_db_fetch_array($tax_query);
     return $tax['tax_rate'];
   }
