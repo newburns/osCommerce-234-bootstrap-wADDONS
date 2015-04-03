@@ -35,16 +35,13 @@
 ?>
 
 <div class="contentContainer">
-  <div class="row">
 
     <?php
     echo $oscTemplate->getContent('account');
     ?>
 <?php /* ** Altered for CCGV ** */ ?>
-    <h2><?php echo GIFT_VOUCHER_COUPON; ?></h2>
-	<div class="contentText">
-        <?php
-  if (tep_session_is_registered('customer_id')) {
+<?php
+  if (!isset($_SESSION['customer_id'])) {
     $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
     $gv_result = tep_db_fetch_array($gv_query);
     if ($gv_result['amount'] > 0 ) {
@@ -53,13 +50,7 @@
 <?php
 }
   }
-?>    <ul class="accountLinkList">
-      <li><span class="ui-icon ui-icon-mail-closed accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link(FILENAME_GV_SEND, '', 'SSL') . '">' . CCGV_SENDVOUCHER . '</a>'; ?></li>
-      <li><span class="ui-icon ui-icon-heart accountLinkListEntry"></span><?php echo '<a href="' . tep_href_link(FILENAME_GV_FAQ, '', 'SSL') . '">' . CCGV_FAQ . '</a>'; ?></li>  
-    </ul>
-<?php /* ** EOF alteration for CCGV ** */ ?>
-	</div>
-  </div>
+?>    
 </div>
 
 <?php
