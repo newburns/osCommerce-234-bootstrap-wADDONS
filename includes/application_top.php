@@ -12,7 +12,6 @@
   ************ New addon definitions **************
   ************        Below          **************
   *************************************************
-  SEO Header Tags Reloaded added -- http://addons.oscommerce.com/info/8864
   Security Pro R11 added -- http://addons.oscommerce.com/info/7708
 
   Released under the GNU General Public License
@@ -68,12 +67,6 @@
   $security_pro->cleanse( $PHP_SELF );
 /* ** EOF alteration for Security Pro 11 ** */
   
-//  if ($request_type == 'NONSSL') {
-//    define('DIR_WS_CATALOG', DIR_WS_HTTP_CATALOG);
-//  } else {
-//    define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
-//  }
-
 // include the list of project filenames
   require('includes/filenames.php');
 

@@ -14,17 +14,18 @@
   require('includes/classes/http_client.php');
 
 // if the customer is not logged on, redirect them to the login page
-  if (!tep_session_is_registered('customer_id')) {
+  if (!isset($_SESSION['customer_id'])) {
     $navigation->set_snapshot();
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    tep_redirect(tep_href_link('login.php', '', 'SSL'));
   }
 
   require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_SEND);
 
-  if (($_POST['back_x']) || ($_POST['back_y'])) {
-    $_GET['action'] = '';
+  if (isset($_POST['back_x']) || isset($_POST['back_y'])) {
+  $_GET['action'] = '';
   }
-  if ($_GET['action'] == 'send') {
+  
+  if (isset($_GET['action']) && $_GET['action']=='send' ) {
     $error = false;
     if (!tep_validate_email(trim($_POST['email']))) {
       $error = true;
@@ -43,7 +44,7 @@
       $error_amount = ERROR_ENTRY_AMOUNT_CHECK;
     }
   }
-  if ($_GET['action'] == 'process') {
+  if (isset($_GET['action']) && $_GET['action']=='process' ) {
     $id1 = create_coupon_code($mail['customers_email_address']);
     $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id='".$customer_id."'");
     $gv_result = tep_db_fetch_array($gv_query);
@@ -82,9 +83,9 @@
     }
   }
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_SEND));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_send.php'));
 
-  require(includes . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <h1><?php echo HEADING_TITLE; ?></h1>
@@ -92,7 +93,7 @@
 <div class="contentContainer">
    <table border="0" width="100%" cellspacing="0" cellpadding="2">
 <?php
-  if ($_GET['action'] == 'process') {
+  if (isset($_GET['action']) && $_GET['action']=='process' ) {
 ?>
 
 
@@ -107,7 +108,7 @@
 <?php
   }
 
-  if ($_GET['action'] == 'send' && !$error) {
+  if (isset($_GET['action']) && $_GET['action']=='send' && !$error ) {
     // validate entries
       $gv_amount = (double) $gv_amount;
       $gv_query = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customer_id . "'");
@@ -141,7 +142,7 @@
         </table></form></td>
       </tr>
 <?php
-  } elseif ($_GET['action']=='' || $error) {
+  } elseif (isset($_GET['action']) && $GET['action']=='' || isset($error)) {
 ?>
       <tr>
         <td class="main"><?php echo HEADING_TEXT; ?></td>
@@ -180,6 +181,6 @@
 </div>
 
 <?php
-  require(includes . 'template_bottom.php');
-  require(includes . 'application_bottom.php');
+  require(DIR_WS_INCLUDES . 'template_bottom.php');
+  require(DIR_WS_INCLUDES . 'application_bottom.php');
 ?>

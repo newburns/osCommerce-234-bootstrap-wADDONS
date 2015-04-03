@@ -16,7 +16,7 @@
 
   $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_FAQ));
 
-  require(includes . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <h1><?php echo HEADING_TITLE; ?></h1>
@@ -39,6 +39,6 @@
 </div>
 
 <?php
-  require(includes . 'template_bottom.php');
-  require(includes . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

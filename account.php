@@ -41,12 +41,12 @@
     ?>
 <?php /* ** Altered for CCGV ** */ ?>
 <?php
-  if (!isset($_SESSION['customer_id'])) {
-    $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
+  if (tep_session_is_registered('customer_id')) {
+    $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
     $gv_result = tep_db_fetch_array($gv_query);
     if ($gv_result['amount'] > 0 ) {
 ?>
-	<p><?php echo CCGV_BALANCE .':' . $currencies->format($gv_result['amount']); ?></p>
+	<p><?php echo CCGV_BALANCE . $currencies->format($gv_result['amount']); ?></p>
 <?php
 }
   }
