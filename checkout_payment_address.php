@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2012 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,22 +13,22 @@
   require('includes/application_top.php');
 
 // if the customer is not logged on, redirect them to the login page
-  if (!tep_session_is_registered('customer_id')) {
+  if (!isset($_SESSION['customer_id'])) {
     $navigation->set_snapshot();
-    tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
+    tep_redirect(tep_href_link('login.php', '', 'SSL'));
   }
 
 // if there is nothing in the customers cart, redirect them to the shopping cart page
-  if ($cart->count_contents() < 1) {
-    tep_redirect(tep_href_link(FILENAME_SHOPPING_CART));
+  if ($_SESSION['cart']->count_contents() < 1) {
+    tep_redirect(tep_href_link('shopping_cart.php'));
   }
 
 // needs to be included earlier to set the success message in the messageStack
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CHECKOUT_PAYMENT_ADDRESS);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/checkout_payment_address.php');
 
   $error = false;
   $process = false;
-  if (isset($_POST['action']) && ($_POST['action'] == 'submit') && isset($_POST['formid']) && ($_POST['formid'] == $sessiontoken)) {
+  if (isset($_POST['action']) && ($_POST['action'] == 'submit') && isset($_POST['formid']) && ($_POST['formid'] == $_SESSION['sessiontoken'])) {
 // process a new billing address
     if (tep_not_null($_POST['firstname']) && tep_not_null($_POST['lastname']) && tep_not_null($_POST['street_address'])) {
       $process = true;
@@ -91,11 +91,11 @@
 
       if (ACCOUNT_STATE == 'true') {
         $zone_id = 0;
-        $check_query = tep_db_query("select count(*) as total from " . TABLE_ZONES . " where zone_country_id = '" . (int)$country . "'");
+        $check_query = tep_db_query("select count(*) as total from zones where zone_country_id = '" . (int)$country . "'");
         $check = tep_db_fetch_array($check_query);
         $entry_state_has_zones = ($check['total'] > 0);
         if ($entry_state_has_zones == true) {
-          $zone_query = tep_db_query("select distinct zone_id from " . TABLE_ZONES . " where zone_country_id = '" . (int)$country . "' and (zone_name = '" . tep_db_input($state) . "' or zone_code = '" . tep_db_input($state) . "')");
+          $zone_query = tep_db_query("select distinct zone_id from zones where zone_country_id = '" . (int)$country . "' and (zone_name = '" . tep_db_input($state) . "' or zone_code = '" . tep_db_input($state) . "')");
           if (tep_db_num_rows($zone_query) == 1) {
             $zone = tep_db_fetch_array($zone_query);
             $zone_id = $zone['zone_id'];
@@ -141,22 +141,22 @@
           }
         }
 
-        if (!tep_session_is_registered('billto')) tep_session_register('billto');
+        if (!isset($_SESSION['billto'])) tep_session_register('billto');
 
-        tep_db_perform(TABLE_ADDRESS_BOOK, $sql_data_array);
+        tep_db_perform('address_book', $sql_data_array);
 
         $billto = tep_db_insert_id();
 
-        if (tep_session_is_registered('payment')) tep_session_unregister('payment');
+        if (isset($_SESSION['payment'])) unset($_SESSION['payment']);
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+        tep_redirect(tep_href_link('checkout_payment.php', '', 'SSL'));
       }
 // process the selected billing destination
     } elseif (isset($_POST['address'])) {
       $reset_payment = false;
-      if (tep_session_is_registered('billto')) {
+      if (isset($_SESSION['billto'])) {
         if ($billto != $_POST['address']) {
-          if (tep_session_is_registered('payment')) {
+          if (isset($_SESSION['payment'])) {
             $reset_payment = true;
           }
         }
@@ -166,35 +166,35 @@
 
       $billto = $_POST['address'];
 
-      $check_address_query = tep_db_query("select count(*) as total from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$customer_id . "' and address_book_id = '" . (int)$billto . "'");
+      $check_address_query = tep_db_query("select count(*) as total from address_book where customers_id = '" . (int)$customer_id . "' and address_book_id = '" . (int)$billto . "'");
       $check_address = tep_db_fetch_array($check_address_query);
 
       if ($check_address['total'] == '1') {
-        if ($reset_payment == true) tep_session_unregister('payment');
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+        if ($reset_payment == true) unset($_SESSION['payment']);
+        tep_redirect(tep_href_link('checkout_payment.php', '', 'SSL'));
       } else {
-        tep_session_unregister('billto');
+        unset($_SESSION['billto']);
       }
 // no addresses to select from - customer decided to keep the current assigned address
     } else {
-      if (!tep_session_is_registered('billto')) tep_session_register('billto');
+      if (!isset($_SESSION['billto'])) tep_session_register('billto');
       $billto = $customer_default_address_id;
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
+      tep_redirect(tep_href_link('checkout_payment.php', '', 'SSL'));
     }
   }
 
 // if no billing destination address was selected, use their own address as default
-  if (!tep_session_is_registered('billto')) {
+  if (!isset($_SESSION['billto'])) {
     $billto = $customer_default_address_id;
   }
 
-  $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link(FILENAME_CHECKOUT_PAYMENT, '', 'SSL'));
-  $breadcrumb->add(NAVBAR_TITLE_2, tep_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE_1, tep_href_link('checkout_payment.php', '', 'SSL'));
+  $breadcrumb->add(NAVBAR_TITLE_2, tep_href_link('checkout_payment_address.php', '', 'SSL'));
 
   $addresses_count = tep_count_customer_address_book_entries();
 
-  require(includes . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <div class="page-header">
@@ -207,7 +207,7 @@
   }
 ?>
 
-<?php echo tep_draw_form('checkout_address', tep_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL'), 'post', 'class="form-horizontal"', true); ?>
+<?php echo tep_draw_form('checkout_address', tep_href_link('checkout_payment_address.php', '', 'SSL'), 'post', 'class="form-horizontal" role="form"', true); ?>
 
 <div class="contentContainer">
 
@@ -215,11 +215,15 @@
   if ($process == false) {
 ?>
 
-  <h2><?php echo TABLE_HEADING_PAYMENT_ADDRESS; ?></h2>
+  <div class="page-header">
+    <h4><?php echo TABLE_HEADING_PAYMENT_ADDRESS; ?></h4>
+  </div>
 
   <div class="contentText row">
     <div class="col-sm-8">
-      <div class="alert alert-warning"><?php echo TEXT_SELECTED_PAYMENT_DESTINATION; ?></div>
+      <div class="alert alert-warning">
+        <?php echo TEXT_SELECTED_PAYMENT_DESTINATION; ?>
+      </div>
     </div>
     <div class="col-sm-4">
       <div class="panel panel-primary">
@@ -233,42 +237,57 @@
   </div>
 
   <div class="clearfix"></div>
-  
 
 <?php
     if ($addresses_count > 1) {
 ?>
 
-  <h2><?php echo TABLE_HEADING_ADDRESS_BOOK_ENTRIES; ?></h2>
-  
-  <div class="alert alert-info"><?php echo TEXT_SELECT_OTHER_PAYMENT_DESTINATION; ?></div>
+  <div class="page-header">
+    <h4><?php echo TABLE_HEADING_ADDRESS_BOOK_ENTRIES; ?></h4>
+  </div>
 
-  <div class="contentText row">
+  <div class="contentText">
+    <div class="alert alert-warning">
+      <div class="pull-right">
+        <?php echo '<strong>' . TITLE_PLEASE_SELECT . '</strong>'; ?>
+      </div>
+
+      <?php echo TEXT_SELECT_OTHER_PAYMENT_DESTINATION; ?>
+    </div>
+  </div>
+
+  <div class="contentText">
+    <table class="table table-striped table-condensed table-hover">
+      <tbody>
 
 <?php
       $radio_buttons = 0;
 
-      $addresses_query = tep_db_query("select address_book_id, entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from " . TABLE_ADDRESS_BOOK . " where customers_id = '" . (int)$customer_id . "'");
+      $addresses_query = tep_db_query("select address_book_id, entry_firstname as firstname, entry_lastname as lastname, entry_company as company, entry_street_address as street_address, entry_suburb as suburb, entry_city as city, entry_postcode as postcode, entry_state as state, entry_zone_id as zone_id, entry_country_id as country_id from address_book where customers_id = '" . (int)$customer_id . "'");
       while ($addresses = tep_db_fetch_array($addresses_query)) {
         $format_id = tep_get_address_format_id($addresses['country_id']);
 
-
+       if ($addresses['address_book_id'] == $billto) {
+          echo '      <tr id="defaultSelected" class="moduleRowSelected">' . "\n";
+        } else {
+          echo '      <tr class="moduleRow">' . "\n";
+        }
 ?>
-      <div class="col-sm-4">
-        <div class="panel panel-<?php echo ($addresses['address_book_id'] == $billto) ? 'primary' : 'default'; ?>">
-          <div class="panel-heading"><?php echo tep_output_string_protected($addresses['firstname'] . ' ' . $addresses['lastname']); ?></strong></div>
-          <div class="panel-body">
-            <?php echo tep_address_format($format_id, $addresses, true, ' ', '<br />'); ?>
-          </div>
-          <div class="panel-footer text-center"><?php echo tep_draw_radio_field('address', $addresses['address_book_id'], ($addresses['address_book_id'] == $billto)); ?></div>
-        </div>
-      </div>
+
+        <td>
+          <strong><?php echo $addresses['firstname'] . ' ' . $addresses['lastname']; ?></strong>
+          <div class="help-block"><?php echo tep_address_format($format_id, $addresses, true, ' ', ', '); ?></div>
+        </td>
+        <td align="right"><?php echo tep_draw_radio_field('address', $addresses['address_book_id'], ($addresses['address_book_id'] == $billto)); ?></td>
+      </tr>
 
 <?php
         $radio_buttons++;
       }
 ?>
 
+      </tbody>
+    </table>
   </div>
 
 <?php
@@ -278,48 +297,32 @@
   if ($addresses_count < MAX_ADDRESS_BOOK_ENTRIES) {
 ?>
 
-  <h2><?php echo TABLE_HEADING_NEW_PAYMENT_ADDRESS; ?></h2>
-  
-  <div class="alert alert-info"><?php echo TEXT_CREATE_NEW_PAYMENT_ADDRESS; ?></div>
+  <div class="page-header">
+    <h4><?php echo TABLE_HEADING_NEW_PAYMENT_ADDRESS; ?></h4>
+  </div>
 
-  <?php require(DIR_WS_MODULES . 'checkout_new_address.php'); ?>
+  <div class="contentText">
+    <div class="alert alert-info">
+      <?php echo TEXT_CREATE_NEW_PAYMENT_ADDRESS; ?>
+    </div>
+  </div>
+
+  <?php require('includes/modules/checkout_new_address.php'); ?>
 
 <?php
   }
 ?>
 
-  <div class="buttonSet">
-    <div class="text-right"><?php echo tep_draw_hidden_field('action', 'submit') . tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', null, 'primary', null, 'btn-success'); ?></div>
-  </div>
-
-  <div class="clearfix"></div>
-
   <div class="contentText">
-    <div class="stepwizard">
-      <div class="stepwizard-row">
-        <div class="stepwizard-step">
-          <button type="button" class="btn btn-default btn-circle" disabled="disabled">1</button>
-          <p><?php echo CHECKOUT_BAR_DELIVERY; ?></p>
-        </div>
-        <div class="stepwizard-step">
-          <button type="button" class="btn btn-primary btn-circle">2</button>
-          <p><?php echo CHECKOUT_BAR_PAYMENT; ?></p>
-        </div>
-        <div class="stepwizard-step">
-          <button type="button" class="btn btn-default btn-circle" disabled="disabled">3</button>
-          <p><?php echo CHECKOUT_BAR_CONFIRMATION; ?></p>
-        </div>
-      </div>
-    </div>
+    <div><?php echo tep_draw_hidden_field('action', 'submit') . tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', null, 'primary', null, 'btn-success btn-block'); ?></div>
   </div>
-
 
 <?php
   if ($process == true) {
 ?>
 
-  <div class="buttonSet">
-    <?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'glyphicon glyphicon-chevron-left', tep_href_link(FILENAME_CHECKOUT_PAYMENT_ADDRESS, '', 'SSL')); ?>
+  <div>
+    <?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'glyphicon glyphicon-chevron-left', tep_href_link('checkout_payment_address.php', '', 'SSL')); ?>
   </div>
 
 <?php
@@ -331,6 +334,6 @@
 </form>
 
 <?php
-  require(includes . 'template_bottom.php');
-  require(includes . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

@@ -19,7 +19,7 @@
     tep_redirect(tep_href_link('login.php', '', 'SSL'));
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_SEND);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/gv_send.php');
 
   if (isset($_POST['back_x']) || isset($_POST['back_y'])) {
   $_GET['action'] = '';
@@ -31,7 +31,7 @@
       $error = true;
       $error_email = ERROR_ENTRY_EMAIL_ADDRESS_CHECK;
     }
-    $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . $customer_id . "'");
+    $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . $customer_id . "'");
     $gv_result = tep_db_fetch_array($gv_query);
     $customer_amount = $gv_result['amount'];
     $gv_amount = trim($_POST['amount']);
@@ -46,7 +46,7 @@
   }
   if (isset($_GET['action']) && $_GET['action']=='process' ) {
     $id1 = create_coupon_code($mail['customers_email_address']);
-    $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id='".$customer_id."'");
+    $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id='".$customer_id."'");
     $gv_result = tep_db_fetch_array($gv_query);
     $new_amount = $gv_result['amount'] - $_POST['amount'];
     if ($new_amount < 0) {
@@ -54,12 +54,12 @@
       $error_amount = ERROR_ENTRY_AMOUNT_CHECK;
       $_GET['action'] = 'send';
     } else {
-      $gv_query=tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount = '" . $new_amount . "' where customer_id = '" . $customer_id . "'");
-      $gv_query=tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customer_id . "'");
+      $gv_query=tep_db_query("update coupon_gv_customer set amount = '" . $new_amount . "' where customer_id = '" . $customer_id . "'");
+      $gv_query=tep_db_query("select customers_firstname, customers_lastname from customers " where customers_id = '" . $customer_id . "'");
       $gv_customer=tep_db_fetch_array($gv_query);
-      $gv_query=tep_db_query("insert into " . TABLE_COUPONS . " (coupon_type, coupon_code, date_created, coupon_amount) values ('G', '" . $id1 . "', NOW(), '" . $_POST['amount'] . "')");
+      $gv_query=tep_db_query("insert into coupons (coupon_type, coupon_code, date_created, coupon_amount) values ('G', '" . $id1 . "', NOW(), '" . $_POST['amount'] . "')");
       $insert_id = tep_db_insert_id();
-      $gv_query=tep_db_query("insert into " . TABLE_COUPON_EMAIL_TRACK . " (coupon_id, customer_id_sent, sent_firstname, sent_lastname, emailed_to, date_sent) values ('" . $insert_id . "' ,'" . $customer_id . "', '" . addslashes($gv_customer['customers_firstname']) . "', '" . addslashes($gv_customer['customers_lastname']) . "', '" . $_POST['email'] . "', now())");
+      $gv_query=tep_db_query("insert into coupon_email_track (coupon_id, customer_id_sent, sent_firstname, sent_lastname, emailed_to, date_sent) values ('" . $insert_id . "' ,'" . $customer_id . "', '" . addslashes($gv_customer['customers_firstname']) . "', '" . addslashes($gv_customer['customers_lastname']) . "', '" . $_POST['email'] . "', now())");
 
       $gv_email = STORE_NAME . "\n" .
               EMAIL_SEPARATOR . "\n" .
@@ -74,7 +74,7 @@
         $gv_email .= stripslashes($_POST['message']) . "\n\n";
       }
       $gv_email .= sprintf(EMAIL_GV_REDEEM, $id1) . "\n\n";
-      $gv_email .= EMAIL_GV_LINK . tep_href_link(FILENAME_GV_REDEEM, 'gv_no=' . $id1,'NONSSL',false);;
+      $gv_email .= EMAIL_GV_LINK . tep_href_link('gv_redeem.php', 'gv_no=' . $id1,'NONSSL',false);;
       $gv_email .= "\n\n";
       $gv_email .= EMAIL_GV_FIXED_FOOTER . "\n\n";
       $gv_email .= EMAIL_GV_SHOP_FOOTER . "\n\n";;
@@ -111,7 +111,7 @@
   if (isset($_GET['action']) && $_GET['action']=='send' && !$error ) {
     // validate entries
       $gv_amount = (double) $gv_amount;
-      $gv_query = tep_db_query("select customers_firstname, customers_lastname from " . TABLE_CUSTOMERS . " where customers_id = '" . $customer_id . "'");
+      $gv_query = tep_db_query("select customers_firstname, customers_lastname from customers where customers_id = '" . $customer_id . "'");
       $gv_result = tep_db_fetch_array($gv_query);
       $send_name = $gv_result['customers_firstname'] . ' ' . $gv_result['customers_lastname'];
 ?>
@@ -167,7 +167,7 @@
 <?php
     $back = sizeof($navigation->path)-2;
 ?>
-            <td class="main"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'triangle-1-w', tep_href_link(FILENAME_ACCOUNT, '', 'SSL')); ?></td>
+            <td class="main"><?php echo tep_draw_button(IMAGE_BUTTON_BACK, 'triangle-1-w', tep_href_link('account.php', '', 'SSL')); ?></td>
             <td class="main" align="right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'triangle-1-e', null, 'primary'); ?></td>
           </tr>
         </table></form></td>
@@ -181,6 +181,6 @@
 </div>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>
