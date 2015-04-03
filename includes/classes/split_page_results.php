@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -15,8 +15,6 @@
 
 /* class constructor */
     function splitPageResults($query, $max_rows, $count_key = '*', $page_holder = 'page') {
-      global $_GET, $_POST;
-
       $this->sql_query = $query;
       $this->page_name = $page_holder;
 
@@ -73,9 +71,7 @@
     function display_links($max_page_links, $parameters = '') {
       global $PHP_SELF, $request_type;
 
-      $display_links_string = '';
-
-      $class = 'class="pageResults"';
+      $display_links_string = '<ul class="pagination">';
 
       if (tep_not_null($parameters) && (substr($parameters, -1) != '&')) $parameters .= '&';
 
@@ -85,6 +81,7 @@
       } else {
         $display_links_string .= '<li class="disabled"><span>&laquo;</span></li>';
       }
+
 // check if number_of_pages > $max_page_links
       $cur_window_num = (int)($this->current_page_number / $max_page_links);
       if ($this->current_page_number % $max_page_links) $cur_window_num++;
@@ -105,14 +102,16 @@
       }
 
 // next window of pages
-      if ($cur_window_num < $max_window_num) $display_links_string .= '<li><a href="' . tep_href_link($PHP_SELF, $parameters . $this->page_name . '=' . (($cur_window_num) * $max_page_links + 1), $request_type) . '" title=" ' . sprintf(PREVNEXT_TITLE_NEXT_SET_OF_NO_PAGE, $max_page_links) . ' ">...</a></li>';
+      if ($cur_window_num < $max_window_num) $display_links_string .= '<a href="' . tep_href_link($PHP_SELF, $parameters . $this->page_name . '=' . (($cur_window_num) * $max_page_links + 1), $request_type) . '" class="pageResults" title=" ' . sprintf(PREVNEXT_TITLE_NEXT_SET_OF_NO_PAGE, $max_page_links) . ' ">...</a>&nbsp;';
 
 // next button
-      if (($this->current_page_number < $this->number_of_pages) && ($this->number_of_pages != 1)) { 
+      if (($this->current_page_number < $this->number_of_pages) && ($this->number_of_pages != 1)) {
         $display_links_string .= '<li><a href="' . tep_href_link($PHP_SELF, $parameters . 'page=' . ($this->current_page_number + 1), $request_type) . '" title=" ' . PREVNEXT_TITLE_NEXT_PAGE . ' ">&raquo;</a></li>';
       } else {
         $display_links_string .= '<li class="disabled"><span>&raquo;</span></li>';
       }
+
+      $display_links_string .= '</ul>';
 
       return $display_links_string;
     }
