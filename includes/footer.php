@@ -5,11 +5,10 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
-
 ?>
 
 </div>
@@ -30,4 +29,3 @@
     </div>
   </div>
 </footer>
-

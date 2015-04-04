@@ -1,95 +1,54 @@
 $Id$
 almaden.ibm.com
-abachobot
-accoona-ai-agent
-addsugarspiderbot
-arachmo
+appie 1.1
+architext
+ask jeeves
+asterias2.0
+augurfind
 baiduspider
-becomebot
-beslistbot
-bimbot
-bingbot
-dataparksearch
-dotbot
-envolk[its]spider
-exabot
-fast enterprise crawler
+bannana_bot
+bdcindexer
+crawler
+crawler@fast
+docomo
 fast-webcrawler
-furlbot
-fyberspider
-galaxybot
-gigabot
-girafabot
+fluffy the spider
+frooglebot
+geobot
 googlebot
-googlebot-image
-holmes
+gulliver
+henrythemiragorobot
 ia_archiver
-ichiro
-igdespyder
-irlbot
-l.webis
-larbin
-ldspider
-lexxebot
-linguee bot
-linkwalker
-lmspider
-lwp-trivial
-mabontland
-magpie-crawler
-mediapartners-google
-mj12bot
-mnogosearch
-mojeekbot
-moreoverbot
-morning paper
-msnbot
-mxbot
+infoseek
+kit_fireball
+lachesis
+lycos_spider
+mantraagent
+mercator
+moget/1.0
+muscatferret
+nationaldirectory-webspider
+naverrobot
+ncsa beta
 netresearchserver
-netseer crawler
-newsgator
-ng-search
-nicebot
-noxtrumbot
-nutchcvs
-obot
-oozbot
-orangebot
+ng/1.0
+osis-project
 polybot
-psbot
-pycurl
-scoutjet
-scrubby
-seekbot
-seochat::bot
-seznambot
-shim-crawler
-shopwiki
-shoula robot
-silk
-snappy
-sogou spider
-sosospider
-speedy spider
-stackrambler
-suggybot
-synoobot
+pompos
+scooter
+seventwentyfour
+sidewinder
+sleek spider
+slurp/si
+slurp@inktomi.com
+steeler/1.3
+szukacz
+t-h-u-n-d-e-r-s-t-o-n-e
 teoma
-thumbnail.cz robot
-tineye
 turnitinbot
-twengabot
-urlfilebot
+ultraseek
 vagabondo
-voltron
-websquash.com
-yacy
-yahoo! slurp
-yahooseeker
-yandexbot
-yandeximages
-yeti
-yodaobot
-youdaobot
-zealbot
-zyborg
+voilabot
+w3c_validator
+zao/0
+zyborg/1.0
