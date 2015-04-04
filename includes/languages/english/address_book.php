@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -22,5 +22,5 @@ define('ADDRESS_BOOK_TITLE', 'Address Book Entries');
 
 define('PRIMARY_ADDRESS', '(primary address)');
 
-define('TEXT_MAXIMUM_ENTRIES', '<span class="inputRequirement">NOTE:</span> A maximum of %s address book entries allowed.');
+define('TEXT_MAXIMUM_ENTRIES', '<font color="#ff0000"><strong>NOTE:</strong></font> A maximum of %s address book entries allowed.');
 ?>
