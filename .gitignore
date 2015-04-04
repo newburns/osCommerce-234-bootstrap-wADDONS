@@ -6,3 +6,6 @@ configure.php
 
 
 account.php.bak
+
+# Ignore all testing files
+/*.bak
