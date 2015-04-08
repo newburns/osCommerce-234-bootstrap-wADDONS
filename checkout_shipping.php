@@ -63,6 +63,9 @@
 
 // if the order contains only virtual products, forward the customer to the billing page as
 // a shipping address is not needed
+/* ** Altered for CCGV **
+  if ($order->content_type == 'virtual') {
+*/ 
     if (($order->content_type == 'virtual') || ($order->content_type == 'virtual_weight') ) { // Edited for CCGV
 /* ** EOF alteration for CCGV ** */ 
     if (!isset($_SESSION['shipping'])) tep_session_register('shipping');

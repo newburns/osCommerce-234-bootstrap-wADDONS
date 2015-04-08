@@ -10,10 +10,11 @@
   ************ New addon definitions **************
   ************        Below          **************
   *************************************************
+  SEO Header Tags Reloaded added -- http://addons.oscommerce.com/info/8864
   Credit Class, Gift Vouchers & Discount Coupons osC2.3.3.4 (CCGV) added -- http://addons.oscommerce.com/info/9020
   Mail Manager added -- http://addons.oscommerce.com/info/9133/v,23
   
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -1366,10 +1367,28 @@
 // Convert linefeeds 
   function tep_convert_linefeeds($from, $to, $string) {    
       return str_replace($from, $to, $string);
+}
+/* ** Altered for SEO Header Tags Reloaded ** */
+    function osc_split_mini_description($products_precis) {
+    $content = strip_tags($products_precis);
+
+    if (strlen($content) > 156 ) {
+      $content = substr($content, 0, strpos($content, ' ', 156));
+    }
+    return $content;
   }
- 
+
+  function osc_get_mini_description($products_id) {
+    global $languages_id;
+
+    $product_query = tep_db_query("select coalesce(NULLIF(products_mini_description, ''), NULLIF(products_seo_description, ''), LEFT(products_description, 300)) as products_precis from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . (int)$products_id . "' and language_id = '" . (int)$languages_id . "'");
+    $product = tep_db_fetch_array($product_query);
+
+    return osc_split_mini_description($product['products_precis']);
+  }
+/* ** EOF alterations for SEO Header Tags Reloaded ** */
 /* ** Altered for CCGV ** */
-//create a coupon coupon length set in admin
+///create a coupon coupon length set in admin
   function create_coupon_code($salt="secret", $length = CCGV_SECURITY_CODE_LENGTH) {
     $ccid = md5(uniqid("","salt"));
     $ccid .= md5(uniqid("","salt"));
@@ -1401,7 +1420,8 @@
   }
 ////
 // Get tax rate from tax description
-  function tep_get_tax_rate_from_desc($tax_desc) {    $tax_query = tep_db_query("select tax_rate from tax_rates where tax_description = '" . $tax_desc . "'");
+  function tep_get_tax_rate_from_desc($tax_desc) {
+    $tax_query = tep_db_query("select tax_rate from tax_rates where tax_description = '" . $tax_desc . "'");
     $tax = tep_db_fetch_array($tax_query);
     return $tax['tax_rate'];
   }

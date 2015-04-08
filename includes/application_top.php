@@ -12,16 +12,23 @@
   ************ New addon definitions **************
   ************        Below          **************
   *************************************************
+  SEO Header Tags Reloaded added -- http://addons.oscommerce.com/info/8864
   Security Pro R11 added -- http://addons.oscommerce.com/info/7708
 
   Released under the GNU General Public License
 */
 
+  use OSC\OM\Cache;
+  use OSC\OM\Db;
+  use OSC\OM\Registry;
+
 // start the timer for the page parse time log
   define('PAGE_PARSE_START_TIME', microtime());
+  define('OSCOM_BASE_DIR', __DIR__ . '/');
 
 // set the level of error reporting
-  error_reporting(E_ALL | E_STRICT);
+  error_reporting(E_ALL & ~E_NOTICE);
+
   ini_set('display_errors', true); // TODO remove on release
 
 // load server configuration parameters
@@ -40,6 +47,8 @@
 
 // set default timezone if none exists (PHP 5.3 throws an E_WARNING)
   date_default_timezone_set(defined('CFG_TIME_ZONE') ? CFG_TIME_ZONE : date_default_timezone_get());
+
+  require('includes/autoload.php');
 
 // set the type of request (secure or not)
   if ( (isset($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) || (isset($_SERVER['SERVER_PORT']) && ($_SERVER['SERVER_PORT'] == 443)) ) {
@@ -67,6 +76,11 @@
   $security_pro->cleanse( $PHP_SELF );
 /* ** EOF alteration for Security Pro 11 ** */
   
+  if ($request_type == 'NONSSL') {
+    define('DIR_WS_CATALOG', DIR_WS_HTTP_CATALOG);
+  } else {
+    define('DIR_WS_CATALOG', DIR_WS_HTTPS_CATALOG);
+  }
 
 // include the database functions
   require('includes/functions/database.php');
@@ -74,10 +88,17 @@
 // make a connection to the database... now
   tep_db_connect() or die('Unable to connect to database server!');
 
+  Registry::set('Cache', new Cache());
+  Registry::set('Db', Db::initialize());
+  $OSCOM_Db = Registry::get('Db');
+
 // set the application parameters
-  $configuration_query = tep_db_query('select configuration_key as cfgKey, configuration_value as cfgValue from configuration');
-  while ($configuration = tep_db_fetch_array($configuration_query)) {
-    define($configuration['cfgKey'], $configuration['cfgValue']);
+  $Qcfg = $OSCOM_Db->prepare('select configuration_key as k, configuration_value as v from :table_configuration');
+  $Qcfg->setCache('configuration');
+  $Qcfg->execute();
+
+  foreach ($Qcfg->fetchAll() as $param) {
+    define($param['k'], $param['v']);
   }
 
 // if gzip_compression is enabled, start to buffer the output
@@ -138,9 +159,9 @@
       $session_started = true;
     }
   } elseif ( SESSION_BLOCK_SPIDERS == 'True' ) {
-    
+
     $user_agent = '';
-    
+
     if (isset($_SERVER['HTTP_USER_AGENT'])) {
       $user_agent = strtolower($_SERVER['HTTP_USER_AGENT']);
     }
@@ -434,28 +455,59 @@
   $breadcrumb->add(HEADER_TITLE_CATALOG, tep_href_link('index.php'));
 
 // add category names or the manufacturer name to the breadcrumb trail
-  if ( isset($cPath_array) ) {
-    for ( $i=0, $n=sizeof($cPath_array); $i<$n; $i++ ) {
+/* ** Altered for SEO Header Tags RELOADED **
+  if (isset($cPath_array)) {
+    $n=sizeof($cPath_array);
+    for ($i=0; $i<$n; $i++) {
       $categories_query = tep_db_query("select categories_name from categories_description where categories_id = '" . (int)$cPath_array[$i] . "' and language_id = '" . (int)$_SESSION['languages_id'] . "'");
-
-      if ( tep_db_num_rows($categories_query) > 0 ) {
+      if (tep_db_num_rows($categories_query) > 0) {
         $categories = tep_db_fetch_array($categories_query);
-
         $breadcrumb->add($categories['categories_name'], tep_href_link('index.php', 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
       } else {
         break;
       }
     }
-  } elseif ( isset($_GET['manufacturers_id']) ) {
-    $manufacturers_query = tep_db_query("select manufacturers_name from manufacturers where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
-
-    if ( tep_db_num_rows($manufacturers_query) ) {
+  } elseif (isset($HTTP_GET_VARS['manufacturers_id'])) {
+    $manufacturers_query = tep_db_query("select manufacturers_name from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . (int)$HTTP_GET_VARS['manufacturers_id'] . "'");
+    if (tep_db_num_rows($manufacturers_query)) {
       $manufacturers = tep_db_fetch_array($manufacturers_query);
 
       $breadcrumb->add($manufacturers['manufacturers_name'], tep_href_link('index.php', 'manufacturers_id=' . $_GET['manufacturers_id']));
     }
   }
+*/
+  if (isset($cPath_array)) {
+    for ($i=0, $n=sizeof($cPath_array); $i<$n; $i++) {
+      // header tags seo - reloaded
+      $categories_query = tep_db_query("select coalesce(NULLIF(categories_seo_title, ''), categories_name) as categories_name from categories_description where categories_id = '" . (int)$cPath_array[$i] . "' and language_id = '" . (int)$_SESSION['languages_id'] . "'");
+      // eof
+     if (tep_db_num_rows($categories_query) > 0) {
+        $categories = tep_db_fetch_array($categories_query);
+        $breadcrumb->add($categories['categories_name'], tep_href_link('index.php', 'cPath=' . implode('_', array_slice($cPath_array, 0, ($i+1)))));
+      } else {
+        break;
+      }
+    }
+  } elseif (isset($_GET['manufacturers_id'])) {
+    $manufacturers_query = tep_db_query("select manufacturers_name from manufacturers where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
+    if (tep_db_num_rows($manufacturers_query)) {
+      $manufacturers = tep_db_fetch_array($manufacturers_query);
 
+      $breadcrumb->add($manufacturers['manufacturers_name'], tep_href_link('index.php', 'manufacturers_id=' . $_GET['manufacturers_id']));
+    }
+  }
+// add the products model to the breadcrumb trail
+  if (isset($_GET['products_id'])) {
+/* ** Altered for SEO Header Tags RELOADED **
+    $model_query = tep_db_query("select products_model from products where products_id = '" . (int)$HTTP_GET_VARS['products_id'] . "'");
+*/
+    $model_query = tep_db_query("select coalesce(NULLIF(pd.products_seo_title, ''), p.products_model) as products_model from products p, products_description pd where p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
+/* ** EOF alteration for SEO Header Tags RELOADED ** */
+    if (tep_db_num_rows($model_query)) {
+      $model = tep_db_fetch_array($model_query);
+      $breadcrumb->add($model['products_model'], tep_href_link('product_info.php', 'cPath=' . $cPath . '&products_id=' . $_GET['products_id']));
+    }
+  }
 // TODO remove when no more global sessions exist
   if ( $session_started == true ) {
     extract($_SESSION, EXTR_OVERWRITE+EXTR_REFS);

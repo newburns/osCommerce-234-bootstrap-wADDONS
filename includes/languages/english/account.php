@@ -29,7 +29,6 @@ define('MY_ACCOUNT_INFORMATION', 'View or change my account information.');
 define('MY_ACCOUNT_ADDRESS_BOOK', 'View or change entries in my address book.');
 define('MY_ACCOUNT_PASSWORD', 'Change my account password.');
 
-
 define('MY_ORDERS_TITLE', 'My Orders');
 define('MY_ORDERS_VIEW', 'View the orders I have made.');
 
@@ -45,7 +44,8 @@ define('MY_ACCOUNT_LOGOFF', 'Securely Log Out');
 ************************************************************************
 */
 // CCGV
-define('MY_ACCOUNT_VOUCHER', 'Send Gift Voucher');
+define('GIFT_VOUCHER_COUPON', 'Gift Voucher/Coupon:');
 define('CCGV_BALANCE', '<FONT COLOR="#ff0000">Gift Voucher Balance:</FONT> ');
+define('CCGV_SENDVOUCHER', 'Send Gift Voucher.');
 define('CCGV_FAQ', 'Gift Voucher FAQ.');
 ?>

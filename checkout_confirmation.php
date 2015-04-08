@@ -51,6 +51,7 @@
   }
 
 // load the selected payment module
+/* ** Altered for CCGV ***/
   require(DIR_WS_CLASSES . 'payment.php');
 
   if ($credit_covers) $payment=''; // CCGV  
@@ -65,9 +66,9 @@
   $order_total_modules->collect_posts();// CCGV
   $order_total_modules->pre_confirmation_check();//  CCGV
 
-// Line edited for CCGV
-//  if ( ( is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !is_object($$payment) ) || (is_object($$payment) && ($$payment->enabled == false)) ) {
-  if ( ($payment_modules->selected_module != $payment) || ( is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !is_object($$payment))&& (!$credit_covers) ) || (is_object($$payment) && ($$payment->enabled == false)) ) {  
+/* ** Altered for CCGV ***/
+//  if ( ($payment_modules->selected_module != $payment) || ( is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !is_object($$payment) ) || (is_object($$payment) && ($$payment->enabled == false)) ) {
+  if ( ($payment_modules->selected_module != $payment) || ( is_array($payment_modules->modules) && (sizeof($payment_modules->modules) > 1) && !is_object($$payment) ) && (!$credit_covers) || (is_object($$payment) && ($$payment->enabled == false)) ) {
 /* ** EOF alteration for CCGV ** */
     tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_PAYMENT_MODULE_SELECTED), 'SSL'));
 
@@ -80,9 +81,10 @@
 // load the selected shipping module
   require(DIR_WS_CLASSES . 'shipping.php');
   $shipping_modules = new shipping($shipping);
-//Lines below repositioned for CCGV
+/* ** Altered for CCGV ***/
 //  require(DIR_WS_CLASSES . 'order_total.php');
 //  $order_total_modules = new order_total;
+/* ** EOF alteration for CCGV ** */
 
 // Stock Check
   $any_out_of_stock = false;

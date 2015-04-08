@@ -159,6 +159,20 @@ define('ENTRY_PASSWORD_NEW', 'New Password');
 define('ENTRY_PASSWORD_NEW_TEXT', '');
 define('ENTRY_PASSWORD_NEW_ERROR', 'Your new Password must contain a minimum of ' . ENTRY_PASSWORD_MIN_LENGTH . ' characters.');
 define('ENTRY_PASSWORD_NEW_ERROR_NOT_MATCHING', 'The Password Confirmation must match your new Password.');
+// new placeholders
+define('ENTRY_PRICE_FROM_TEXT', '');
+define('ENTRY_PRICE_TO_TEXT', '');
+define('ENTRY_DATE_FROM_TEXT', '');
+define('ENTRY_DATE_TO_TEXT', '');
+define('ENTRY_COMMENTS_TEXT', '');
+define('ENTRY_NAME_TEXT', '');
+define('ENTRY_ENQUIRY_TEXT', '');
+define('ENTRY_REVIEW_TEXT', '');
+define('ENTRY_FORM_FIELD_CUSTOMER_NAME_TEXT', '');
+define('ENTRY_FORM_FIELD_CUSTOMER_EMAIL_TEXT', '');
+define('ENTRY_FORM_FIELD_FRIEND_NAME_TEXT', '');
+define('ENTRY_FORM_FIELD_FRIEND_EMAIL_TEXT', '');
+define('ENTRY_FORM_TITLE_FRIEND_MESSAGE_TEXT', '');
 
 define('FORM_REQUIRED_INFORMATION', '<span class="glyphicon glyphicon-asterisk inputRequirement"></span> Required information');
 
@@ -262,6 +276,7 @@ define('TEXT_SORT_BY', 'Sort By ');
 */
 // SEO Header Tags Reloaded
   define('TEXT_DISPLAY_NUMBER_OF_TESTIMONIALS', 'Displaying <strong>%d</strong> to <strong>%d</strong> (of <strong>%d</strong> testimonials)');
+  define('FORM_REQUIRED_INFORMATION', '<span class="glyphicon glyphicon-asterisk form-control-feedback inputRequirement"></span> Required information');
 // CCGV
   define('VOUCHER_BALANCE', 'Voucher Balance');
   define('BOX_HEADING_GIFT_VOUCHER', 'Gift Voucher Account');

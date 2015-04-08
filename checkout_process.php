@@ -63,14 +63,7 @@
 
   require(DIR_WS_CLASSES . 'order.php');
   $order = new order;
-
-/* ** Altered for CCGV ** MOVED FUNCTION FURTHER UP IN CODE */
-// load the before_process function from the payment modules
-require_once(DIR_WS_CLASSES . 'order_total.php');
-  $order_total_modules = new order_total;
-  $order_totals = $order_total_modules->process();
   $payment_modules->before_process();
-/* ** EOF alterations for CCGV ** */  
 
 // Stock Check
   $any_out_of_stock = false;
@@ -323,8 +316,8 @@ $order_total_modules->apply_credit(); // CCGV
 /* ** Altered for Mail Manager **
   tep_mail($order->customer['firstname'] . ' ' . $order->customer['lastname'], $order->customer['email_address'], EMAIL_TEXT_SUBJECT, $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS);
 */
-  if (file_exists(DIR_WS_MODULES.'mail_manager/order_confirm.php')){
-	include(DIR_WS_MODULES.'mail_manager/order_confirm.php'); 
+  if (file_exists('includes/modules/mail_manager/order_confirm.php')){
+	include('includes/modules/mail_manager/order_confirm.php'); 
 	}else{ 
 	tep_mail($order->customer['firstname'] . ' ' . $order->customer['lastname'], $order->customer['email_address'], EMAIL_TEXT_SUBJECT, $email_order, STORE_OWNER, STORE_OWNER_EMAIL_ADDRESS); 
   }

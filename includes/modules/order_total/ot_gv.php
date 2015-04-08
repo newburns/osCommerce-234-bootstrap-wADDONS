@@ -29,8 +29,7 @@
     }
     function process() {
       global $order, $currencies, $cot_gv;
-//      if ($_SESSION['cot_gv']) {  // old code Strider
-       if (tep_session_is_registered('cot_gv')) {
+       if (!isset($_SESSION['cot_gv'])) {
         $order_total = $this->get_order_total();
         $od_amount = $this->calculate_credit($order_total);
         if ($this->calculate_tax != "None") {
@@ -38,10 +37,6 @@
           $od_amount = $this->calculate_credit($order_total);
         }
         $this->deduction = $od_amount;
-//        if (($this->calculate_tax == "Credit Note") && (DISPLAY_PRICE_WITH_TAX != 'true')) {
-//          $od_amount -= $tod_amount;
-//          $order->info['total'] -= $tod_amount;
-//        }
         $order->info['total'] = $order->info['total'] - $od_amount;
         if ($od_amount > 0) {
           $this->output[] = array('title' => $this->title . ':',
@@ -60,9 +55,8 @@
     }
   function pre_confirmation_check($order_total) {
     global $cot_gv, $order;
-//    if ($_SESSION['cot_gv']) {  // old code Strider
       $od_amount = 0; // set the default amount we will send back
-      if (tep_session_is_registered('cot_gv')) {
+      if (!isset($_SESSION['cot_gv'])) {
 // pre confirmation check doesn't do a true order process. It just attempts to see if
 // there is enough to handle the order. But depending on settings it will not be shown
 // all of the order so this is why we do this runaround jane. What do we know so far.
@@ -82,16 +76,8 @@
       }
     return $od_amount;
   }
-    // original code
-  /*function pre_confirmation_check($order_total) {
-      if ($SESSION['cot_gv']) {
-        $gv_payment_amount = $this->calculate_credit($order_total);
-      }
-      return $gv_payment_amount;
-    } */
     function use_credit_amount() {
     global $cot_gv;
-//      $_SESSION['cot_gv'] = false;     // old code - Strider
       $cot_gv = false;
       if ($this->selection_test()) {
         $output_string .=  '<td align="right" class="main">';
@@ -108,7 +94,7 @@
         $gv_order_amount = $gv_order_amount * 100 / 100;
         if (MODULE_ORDER_TOTAL_GV_QUEUE == 'false') {
           // GV_QUEUE is true so release amount to account immediately
-          $gv_query=tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
+          $gv_query=tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
           $customer_gv = false;
           $total_gv_amount = 0;
           if ($gv_result = tep_db_fetch_array($gv_query)) {
@@ -117,9 +103,9 @@
           }
           $total_gv_amount = $total_gv_amount + $gv_order_amount;
           if ($customer_gv) {
-            $gv_update=tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount = '" . $total_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
+            $gv_update=tep_db_query("update coupon_gv_customer set amount = '" . $total_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
           } else {
-            $gv_insert=tep_db_query("insert into " . TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('" . $customer_id . "', '" . $total_gv_amount . "')");
+            $gv_insert=tep_db_query("insert into coupon_gv_customer (customer_id, amount) values ('" . $customer_id . "', '" . $total_gv_amount . "')");
           }
         } else {
          // GV_QUEUE is true - so queue the gv for release by store owner
@@ -128,14 +114,14 @@
       }
     }
     function credit_selection() {
-      global $customer_id, $currencies, $language;
+      global $customer_id, $currencies;
       $selection_string = '';
-      $gv_query = tep_db_query("select coupon_id from " . TABLE_COUPONS . " where coupon_type = 'G' and coupon_active='Y'");
+      $gv_query = tep_db_query("select coupon_id from coupons where coupon_type = 'G' and coupon_active='Y'");
       if (tep_db_num_rows($gv_query)) {
         $selection_string .= '<tr>' . "\n";
         $selection_string .= '  <td width="10">' .  tep_draw_separator('pixel_trans.gif', '10', '1') .'</td>';
         $selection_string .= '  <td class="main">' . "\n";
-        $image_submit = '<input type="image" name="submit_redeem" onclick="submitFunction()" src="' . DIR_WS_LANGUAGES . $language . '/images/buttons/button_redeem.gif" border="0" alt="' . IMAGE_REDEEM_VOUCHER . '" title = "' . IMAGE_REDEEM_VOUCHER . '">';
+        $image_submit = '<input type="image" name="submit_redeem" onclick="submitFunction()" src="' . DIR_WS_LANGUAGES . $_SESSION['language'] . '/images/buttons/button_redeem.gif" border="0" alt="' . IMAGE_REDEEM_VOUCHER . '" title = "' . IMAGE_REDEEM_VOUCHER . '">';
         $selection_string .= TEXT_ENTER_GV_CODE . tep_draw_input_field('gv_redeem_code') . '</td>';
         $selection_string .= ' <td align="right">' . $image_submit . '</td>';
         $selection_string .= '  <td width="10">' . tep_draw_separator('pixel_trans.gif', '10', '1') . '</td>';
@@ -146,23 +132,23 @@
     function apply_credit() {
       global $order, $customer_id, $coupon_no, $cot_gv;
       if (tep_session_is_registered('cot_gv')) {
-        $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
+        $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
         $gv_result = tep_db_fetch_array($gv_query);
         $gv_payment_amount = $this->deduction;
         $gv_amount = $gv_result['amount'] - $gv_payment_amount;
-        $gv_update = tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount = '" . $gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
+        $gv_update = tep_db_query("update coupon_gv_customer set amount = '" . $gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
       }
       return $gv_payment_amount;
     }
     function collect_posts() {
       global $currencies, $_POST, $customer_id, $coupon_no, $REMOTE_ADDR;
       if ($_POST['gv_redeem_code']) {
-        $gv_query = tep_db_query("select coupon_id, coupon_type, coupon_amount from " . TABLE_COUPONS . " where coupon_code = '" . $_POST['gv_redeem_code'] . "'");
+        $gv_query = tep_db_query("select coupon_id, coupon_type, coupon_amount from coupons where coupon_code = '" . $_POST['gv_redeem_code'] . "'");
         $gv_result = tep_db_fetch_array($gv_query);
         if (tep_db_num_rows($gv_query) != 0) {
-          $redeem_query = tep_db_query("select * from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $gv_result['coupon_id'] . "'");
+          $redeem_query = tep_db_query("select * from coupon_redeem_track where coupon_id = '" . $gv_result['coupon_id'] . "'");
           if ( (tep_db_num_rows($redeem_query) != 0) && ($gv_result['coupon_type'] == 'G') ) {
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_GV), 'SSL'));
+            tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_INVALID_REDEEM_GV), 'SSL'));
           }
         }
 
@@ -174,30 +160,30 @@
           // date
           // redemption flag
           // now update customer account with gv_amount
-          $gv_amount_query=tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
+          $gv_amount_query=tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
           $customer_gv = false;
           $total_gv_amount = $gv_amount;;
           if ($gv_amount_result = tep_db_fetch_array($gv_amount_query)) {
             $total_gv_amount = $gv_amount_result['amount'] + $gv_amount;
             $customer_gv = true;
           }
-          $gv_update = tep_db_query("update " . TABLE_COUPONS . " set coupon_active = 'N' where coupon_id = '" . $gv_result['coupon_id'] . "'");
-          $gv_redeem = tep_db_query("insert into  " . TABLE_COUPON_REDEEM_TRACK . " (coupon_id, customer_id, redeem_date, redeem_ip) values ('" . $gv_result['coupon_id'] . "', '" . $customer_id . "', now(),'" . $REMOTE_ADDR . "')");
+          $gv_update = tep_db_query("update coupons set coupon_active = 'N' where coupon_id = '" . $gv_result['coupon_id'] . "'");
+          $gv_redeem = tep_db_query("insert into coupon_redeem_track (coupon_id, customer_id, redeem_date, redeem_ip) values ('" . $gv_result['coupon_id'] . "', '" . $customer_id . "', now(),'" . $REMOTE_ADDR . "')");
           if ($customer_gv) {
             // already has gv_amount so update
-            $gv_update = tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount = '" . $total_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
+            $gv_update = tep_db_query("update coupon_gv_customer set amount = '" . $total_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
           } else {
             // no gv_amount so insert
-            $gv_insert = tep_db_query("insert into " . TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('" . $customer_id . "', '" . $total_gv_amount . "')");
+            $gv_insert = tep_db_query("insert into coupon_gv_customer (customer_id, amount) values ('" . $customer_id . "', '" . $total_gv_amount . "')");
           }
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_REDEEMED_AMOUNT. $currencies->format($gv_amount)), 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_REDEEMED_AMOUNT. $currencies->format($gv_amount)), 'SSL'));
        }
      }
-     if ($_POST['submit_redeem_x'] && $gv_result['coupon_type'] == 'G') tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
+     if ($_POST['submit_redeem_x'] && $gv_result['coupon_type'] == 'G') tep_redirect(tep_href_link('checkout_payment.php', 'error_message=' . urlencode(ERROR_NO_REDEEM_CODE), 'SSL'));
    }
     function calculate_credit($amount) {
       global $customer_id, $order;
-      $gv_query=tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
+      $gv_query=tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
       $gv_result=tep_db_fetch_array($gv_query);
       $gv_payment_amount = $gv_result['amount'];
       $gv_amount = $gv_payment_amount;
@@ -246,7 +232,7 @@
       return $tod_amount;
     }
     function user_has_gv_account($c_id) {
-      $gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . $c_id . "'");
+      $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . $c_id . "'");
       if ($gv_result = tep_db_fetch_array($gv_query)) {
         if ($gv_result['amount']>0) {
           return true;
@@ -263,7 +249,7 @@
     }
     function check() {
       if (!isset($this->check)) {
-        $check_query = tep_db_query("select configuration_value from " . TABLE_CONFIGURATION . " where configuration_key = 'MODULE_ORDER_TOTAL_GV_STATUS'");
+        $check_query = tep_db_query("select configuration_value from configuration where configuration_key = 'MODULE_ORDER_TOTAL_GV_STATUS'");
         $this->check = tep_db_num_rows($check_query);
       }
       return $this->check;
@@ -272,17 +258,17 @@
       return array('MODULE_ORDER_TOTAL_GV_STATUS', 'MODULE_ORDER_TOTAL_GV_SORT_ORDER', 'MODULE_ORDER_TOTAL_GV_QUEUE', 'MODULE_ORDER_TOTAL_GV_INC_SHIPPING', 'MODULE_ORDER_TOTAL_GV_INC_TAX', 'MODULE_ORDER_TOTAL_GV_CALC_TAX', 'MODULE_ORDER_TOTAL_GV_TAX_CLASS', 'MODULE_ORDER_TOTAL_GV_CREDIT_TAX');
     }
     function install() {
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Total', 'MODULE_ORDER_TOTAL_GV_STATUS', 'true', 'Do you want to display the Gift Voucher value?', '6', '1','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_ORDER_TOTAL_GV_SORT_ORDER', '3', 'Sort order of display.', '6', '2', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Queue Purchases', 'MODULE_ORDER_TOTAL_GV_QUEUE', 'true', 'Do you want to queue purchases of the Gift Voucher?', '6', '3','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Include Shipping', 'MODULE_ORDER_TOTAL_GV_INC_SHIPPING', 'false', 'Include Shipping in calculation', '6', '5', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Include Tax', 'MODULE_ORDER_TOTAL_GV_INC_TAX', 'true', 'Include Tax in calculation.', '6', '6','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Re-calculate Tax', 'MODULE_ORDER_TOTAL_GV_CALC_TAX', 'None', 'Re-Calculate Tax', '6', '7','tep_cfg_select_option(array(\'None\', \'Standard\', \'Credit Note\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Tax Class', 'MODULE_ORDER_TOTAL_GV_TAX_CLASS', '0', 'Use the following tax class when treating Gift Voucher as Credit Note.', '6', '0', 'tep_get_tax_class_title', 'tep_cfg_pull_down_tax_classes(', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Credit including Tax', 'MODULE_ORDER_TOTAL_GV_CREDIT_TAX', 'false', 'Add tax to purchased Gift Voucher when crediting to Account', '6', '8','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Total', 'MODULE_ORDER_TOTAL_GV_STATUS', 'true', 'Do you want to display the Gift Voucher value?', '6', '1','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_ORDER_TOTAL_GV_SORT_ORDER', '3', 'Sort order of display.', '6', '2', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Queue Purchases', 'MODULE_ORDER_TOTAL_GV_QUEUE', 'true', 'Do you want to queue purchases of the Gift Voucher?', '6', '3','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Include Shipping', 'MODULE_ORDER_TOTAL_GV_INC_SHIPPING', 'false', 'Include Shipping in calculation', '6', '5', 'tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Include Tax', 'MODULE_ORDER_TOTAL_GV_INC_TAX', 'true', 'Include Tax in calculation.', '6', '6','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Re-calculate Tax', 'MODULE_ORDER_TOTAL_GV_CALC_TAX', 'None', 'Re-Calculate Tax', '6', '7','tep_cfg_select_option(array(\'None\', \'Standard\', \'Credit Note\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, use_function, set_function, date_added) values ('Tax Class', 'MODULE_ORDER_TOTAL_GV_TAX_CLASS', '0', 'Use the following tax class when treating Gift Voucher as Credit Note.', '6', '0', 'tep_get_tax_class_title', 'tep_cfg_pull_down_tax_classes(', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function ,date_added) values ('Credit including Tax', 'MODULE_ORDER_TOTAL_GV_CREDIT_TAX', 'false', 'Add tax to purchased Gift Voucher when crediting to Account', '6', '8','tep_cfg_select_option(array(\'true\', \'false\'), ', now())");
     }
     function remove() {
-      tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      tep_db_query("delete from configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
     }
   }
 ?>
