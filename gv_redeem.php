@@ -12,18 +12,18 @@
 
   require('includes/application_top.php');
   // if the customer is not logged on, redirect them to the login page
-if (!tep_session_is_registered('customer_id')) {
-$navigation->set_snapshot();
-tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
-}
+  if (!isset($_SESSION['customer_id'])) {
+    $navigation->set_snapshot();
+    tep_redirect(tep_href_link('login.php', '', 'SSL'));
+  }
 
 // check for a voucher number in the url
   if (isset($_GET['gv_no'])) {
     $error = true;
-    $gv_query = tep_db_query("select c.coupon_id, c.coupon_amount from " . TABLE_COUPONS . " c, " . TABLE_COUPON_EMAIL_TRACK . " et where coupon_code = '" . $_GET['gv_no'] . "' and c.coupon_id = et.coupon_id");
+    $gv_query = tep_db_query("select c.coupon_id, c.coupon_amount from coupons c, coupon_email_track et where coupon_code = '" . $_GET['gv_no'] . "' and c.coupon_id = et.coupon_id");
     if (tep_db_num_rows($gv_query) >0) {
       $coupon = tep_db_fetch_array($gv_query);
-      $redeem_query = tep_db_query("select coupon_id from ". TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $coupon['coupon_id'] . "'");
+      $redeem_query = tep_db_query("select coupon_id from coupon_redeem_track where coupon_id = '" . $coupon['coupon_id'] . "'");
       if (tep_db_num_rows($redeem_query) == 0 ) {
 // check for required session variables
         if (!tep_session_is_registered('gv_id')) {
@@ -38,18 +38,18 @@ tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
   } else {
     tep_redirect('index.php');
   }
-  if ((!$error) && (tep_session_is_registered('customer_id'))) {
+  if ((!$error) && (!isset($_SESSION['customer_id']))) {
 // Update redeem status
-    $gv_query = tep_db_query("insert into  " . TABLE_COUPON_REDEEM_TRACK . " (coupon_id, customer_id, redeem_date, redeem_ip) values ('" . $coupon['coupon_id'] . "', '" . $customer_id . "', now(),'" . $REMOTE_ADDR . "')");
-    $gv_update = tep_db_query("update " . TABLE_COUPONS . " set coupon_active = 'N' where coupon_id = '" . $coupon['coupon_id'] . "'");
+    $gv_query = tep_db_query("insert into  coupon_redeem_track (coupon_id, customer_id, redeem_date, redeem_ip) values ('" . $coupon['coupon_id'] . "', '" . $customer_id . "', now(),'" . $REMOTE_ADDR . "')");
+    $gv_update = tep_db_query("update coupons set coupon_active = 'N' where coupon_id = '" . $coupon['coupon_id'] . "'");
     tep_gv_account_update($customer_id, $gv_id);
     tep_session_unregister('gv_id');   
   } 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_GV_REDEEM);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/gv_redeem.php');
 
-  $breadcrumb->add(NAVBAR_TITLE, tep_href_link(FILENAME_GV_REDEEM));
+  $breadcrumb->add(NAVBAR_TITLE, tep_href_link('gv_redeem.php'));
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <h1><?php echo HEADING_TITLE; ?></h1>
@@ -80,6 +80,6 @@ tep_redirect(tep_href_link(FILENAME_LOGIN, '', 'SSL'));
 </div>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

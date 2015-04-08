@@ -31,8 +31,8 @@
     function execute() {
       global $PHP_SELF, $_GET, $cPath, $oscTemplate;
 
-      if (basename($PHP_SELF) == FILENAME_PRODUCT_INFO) {
-        $oscTemplate->addBlock('<link rel="canonical" href="' . tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . (int)$_GET['products_id'], 'NONSSL', false) . '" />' . "\n", $this->group);
+      if (basename($PHP_SELF) == 'product_info') {
+        $oscTemplate->addBlock('<link rel="canonical" href="' . tep_href_link('product_info', 'products_id=' . (int)$_GET['products_id'], 'NONSSL', false) . '" />' . "\n", $this->group);
       } elseif (basename($PHP_SELF) == 'index.php') {
         if (isset($cPath) && tep_not_null($cPath)) {
           $oscTemplate->addBlock('<link rel="canonical" href="' . tep_href_link('index.php', 'cPath=' . $cPath, 'NONSSL', false) . '" />' . "\n", $this->group);

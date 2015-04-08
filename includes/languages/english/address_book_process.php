@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -36,4 +36,7 @@ define('WARNING_PRIMARY_ADDRESS_DELETION', 'The primary address cannot be delete
 
 define('ERROR_NONEXISTING_ADDRESS_BOOK_ENTRY', 'The address book entry does not exist.');
 define('ERROR_ADDRESS_BOOK_FULL', 'Your address book is full. Please delete an unneeded address to save a new one.');
+
+define('EDIT_ADDRESS_TITLE', 'Edit Address');
+define('EDIT_ADDRESS_DESCRIPTION', 'Edit the selected Address');
 ?>

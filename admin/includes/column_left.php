@@ -69,7 +69,7 @@
 
 </div>
 
-<script type="text/javascript">
+<script>
 $('#adminAppMenu').accordion({
   heightStyle: 'content',
   collapsible: true,

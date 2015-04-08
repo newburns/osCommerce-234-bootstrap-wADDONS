@@ -32,7 +32,7 @@
     function getOutput() {
       global $_GET;
 
-      $params = array('url=' . urlencode(tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['products_id'], 'NONSSL', false)));
+      $params = array('url=' . urlencode(tep_href_link('product_info', 'products_id=' . $_GET['products_id'], 'NONSSL', false)));
 
       if ( strlen(MODULE_SOCIAL_BOOKMARKS_TWITTER_BUTTON_ACCOUNT) > 0 ) {
         $params[] = 'via=' . urlencode(MODULE_SOCIAL_BOOKMARKS_TWITTER_BUTTON_ACCOUNT);
@@ -50,7 +50,7 @@
 
       $params = implode('&', $params);
 
-      return '<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script><a href="http://twitter.com/share?' . $params . '" target="_blank" class="twitter-share-button">' . tep_output_string_protected($this->public_title) . '</a>';
+      return '<script src="http://platform.twitter.com/widgets.js" ></script><a href="http://twitter.com/share?' . $params . '" target="_blank" class="twitter-share-button">' . tep_output_string_protected($this->public_title) . '</a>';
     }
 
     function isEnabled() {

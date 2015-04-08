@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2015 osCommerce
 
   mime.php - a class to assist in building mime-HTML eMails
 
@@ -48,8 +48,7 @@
         $this->lf = "\n";
       }
 
-      reset($params);
-      while (list($key, $value) = each($params)) {
+      foreach($params as $key => $value) {
         switch ($key) {
           case 'content_type':
             $headers['Content-Type'] = $value . (isset($charset) ? '; charset="' . $charset . '"' : '');
@@ -91,8 +90,6 @@
 
 // Assign stuff to member variables
       $this->_encoded = array();
-/* HPDL PHP3 */
-//      $this->_headers  =& $headers;
       $this->_headers = $headers;
       $this->_body = $body;
     }
@@ -110,8 +107,6 @@
  */
 
     function encode() {
-/* HPDL PHP3 */
-//      $encoded =& $this->_encoded;
       $encoded = $this->_encoded;
 
       if (tep_not_null($this->_subparts)) {
@@ -121,13 +116,10 @@
 // Add body parts to $subparts
         for ($i=0; $i<count($this->_subparts); $i++) {
           $headers = array();
-/* HPDL PHP3 */
-//          $tmp = $this->_subparts[$i]->encode();
           $_subparts = $this->_subparts[$i];
           $tmp = $_subparts->encode();
 
-          reset($tmp['headers']);
-          while (list($key, $value) = each($tmp['headers'])) {
+          foreach($tmp['headers'] as $key => $value) {
             $headers[] = $key . ': ' . $value;
           }
 
@@ -140,10 +132,7 @@
       }
 
 // Add headers to $encoded
-/* HPDL PHP3 */
-//      $encoded['headers'] =& $this->_headers;
       $encoded['headers'] = $this->_headers;
-
       return $encoded;
     }
 
@@ -163,11 +152,8 @@
  * @access public
  */
 
-/* HPDL PHP3 */
-//    function &addSubPart($body, $params) {
     function addSubPart($body, $params) {
       $this->_subparts[] = new mime($body, $params);
-
       return $this->_subparts[count($this->_subparts) - 1];
     }
 
@@ -214,7 +200,7 @@
       $escape = '=';
       $output = '';
 
-      while (list(, $line) = each($lines)) {
+      foreach($lines as $line) {
         $linlen = strlen($line);
         $newline = '';
 

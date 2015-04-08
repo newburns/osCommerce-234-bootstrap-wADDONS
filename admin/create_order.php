@@ -76,7 +76,7 @@
   // #### Generate Page
 
  require('includes/form_check.js.php'); ?>
-<script language="javascript" type="text/javascript"><!--
+<script language="javascript" ><!--
 function selectExisting() {
   document.create_order.customers_create_type.value = 'existing';
   selectorsStatus(false);
@@ -114,7 +114,7 @@ function selectorsExtras(status) {
 
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" onLoad="selectorsExtras(true)">
 <!-- header //-->
-<?php require(DIR_WS_INCLUDES . 'template_top.php'); ?>
+<?php require(includes . 'template_top.php'); ?>
 <!-- header_eof //-->		
 	
   <!-- body //-->
@@ -262,15 +262,15 @@ function selectorsExtras(status) {
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'template_bottom.php'); ?>
+<?php require(includes . 'template_bottom.php'); ?>
 <!-- footer_eof //-->
 <br>
-<script language="javascript" type="text/javascript"><!--
+<script language="javascript" ><!--
 selectorsExtras(true);
 //--></script>
 
 </body>
 </html>
 <?php 
-require(DIR_WS_INCLUDES . 'application_bottom.php'); 
+require(includes . 'application_bottom.php'); 
 ?>

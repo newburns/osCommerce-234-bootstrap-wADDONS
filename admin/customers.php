@@ -65,12 +65,7 @@
           }
         }
 
-        if (strlen($customers_email_address) < ENTRY_EMAIL_ADDRESS_MIN_LENGTH) {
-          $error = true;
-          $entry_email_address_error = true;
-        } else {
-          $entry_email_address_error = false;
-        }
+        $entry_email_address_error = false;
 
         if (!tep_validate_email($customers_email_address)) {
           $error = true;
@@ -227,11 +222,11 @@
     }
   }
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 
   if ($action == 'edit' || $action == 'update') {
 ?>
-<script type="text/javascript"><!--
+<script ><!--
 
 function check_form() {
   var error = 0;
@@ -271,11 +266,6 @@ function check_form() {
     error = 1;
   }
 <?php } ?>
-
-  if (customers_email_address.length < <?php echo ENTRY_EMAIL_ADDRESS_MIN_LENGTH; ?>) {
-    error_message = error_message + "<?php echo JS_EMAIL_ADDRESS; ?>";
-    error = 1;
-  }
 
   if (entry_street_address.length < <?php echo ENTRY_STREET_ADDRESS_MIN_LENGTH; ?>) {
     error_message = error_message + "<?php echo JS_ADDRESS; ?>";
@@ -420,7 +410,7 @@ function check_form() {
       echo tep_draw_input_field('customers_dob', tep_date_short($cInfo->customers_dob), 'maxlength="10" id="customers_dob"', true);
     }
 ?>
-              <script type="text/javascript">$('#customers_dob').datepicker({dateFormat: '<?php echo JQUERY_DATEPICKER_FORMAT; ?>', changeMonth: true, changeYear: true, yearRange: '-100:+0'});</script>
+              <script >$('#customers_dob').datepicker({dateFormat: '<?php echo JQUERY_DATEPICKER_FORMAT; ?>', changeMonth: true, changeYear: true, yearRange: '-100:+0'});</script>
             </td>
           </tr>
 <?php
@@ -787,6 +777,6 @@ function check_form() {
     </table>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

@@ -393,7 +393,7 @@
     $messageStack->add(ERROR_CATALOG_IMAGE_DIRECTORY_DOES_NOT_EXIST, 'error');
   }
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 
   if ($action == 'new_product') {
     $parameters = array('products_name' => '',
@@ -459,7 +459,7 @@
 
     $form_action = (isset($_GET['pID'])) ? 'update_product' : 'insert_product';
 ?>
-<script type="text/javascript"><!--
+<script ><!--
 var tax_rates = new Array();
 <?php
     for ($i=0, $n=sizeof($tax_class_array); $i<$n; $i++) {
@@ -583,7 +583,7 @@ function updateNet() {
           <tr>
             <td colspan="2"><?php echo tep_draw_separator('pixel_trans.gif', '1', '10'); ?></td>
           </tr>
-<script type="text/javascript"><!--
+<script ><!--
 updateGross();
 //--></script>
 <?php
@@ -664,7 +664,7 @@ updateGross();
 #piList li { margin: 5px 0; padding: 2px; }
 </style>
 
-<script type="text/javascript">
+<script>
 $('#piList').sortable({
   containment: 'parent'
 });
@@ -770,7 +770,7 @@ function showPiDelConfirm(piId) {
       </tr>
     </table>
 
-<script type="text/javascript">
+<script>
 $('#products_date_available').datepicker({
   dateFormat: 'yy-mm-dd'
 });
@@ -1202,6 +1202,6 @@ $('#products_date_available').datepicker({
 <?php
   }
 
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

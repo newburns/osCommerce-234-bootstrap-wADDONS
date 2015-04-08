@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
   
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -23,12 +23,12 @@
 // the following cPath references come from application_top.php
   $category_depth = 'top';
   if (isset($cPath) && tep_not_null($cPath)) {
-    $categories_products_query = tep_db_query("select count(*) as total from " . TABLE_PRODUCTS_TO_CATEGORIES . " where categories_id = '" . (int)$current_category_id . "'");
+    $categories_products_query = tep_db_query("select count(*) as total from products_to_categories where categories_id = '" . (int)$current_category_id . "'");
     $categories_products = tep_db_fetch_array($categories_products_query);
     if ($categories_products['total'] > 0) {
       $category_depth = 'products'; // display products
     } else {
-      $category_parent_query = tep_db_query("select count(*) as total from " . TABLE_CATEGORIES . " where parent_id = '" . (int)$current_category_id . "'");
+      $category_parent_query = tep_db_query("select count(*) as total from categories where parent_id = '" . (int)$current_category_id . "'");
       $category_parent = tep_db_fetch_array($category_parent_query);
       if ($category_parent['total'] > 0) {
         $category_depth = 'nested'; // navigate through the categories
@@ -38,9 +38,9 @@
     }
   }
 
-  require(DIR_WS_LANGUAGES . $language . '/' . 'index.php');
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/index.php');
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require('includes/template_top.php');
 
   if ($category_depth == 'nested') {
 /* ** Altered for SEO Header Tags RELOADED **
@@ -77,18 +77,20 @@ if (tep_not_null($category['categories_description'])) {
 // check to see if there are deeper categories within the current category
       $category_links = array_reverse($cPath_array);
       for($i=0, $n=sizeof($category_links); $i<$n; $i++) {
-        $categories_query = tep_db_query("select count(*) as total from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "'");
+        $categories_query = tep_db_query("select count(*) as total from categories c, categories_description cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
         $categories = tep_db_fetch_array($categories_query);
         if ($categories['total'] < 1) {
           // do nothing, go through the loop
         } else {
-          $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "' order by sort_order, cd.categories_name");
+          $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from categories c, categories_description cd where c.parent_id = '" . (int)$category_links[$i] . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "' order by sort_order, cd.categories_name");
           break; // we've found the deepest category the customer is in
         }
       }
     } else {
-      $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.parent_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "' order by sort_order, cd.categories_name");
+      $categories_query = tep_db_query("select c.categories_id, cd.categories_name, c.categories_image, c.parent_id from categories c, categories_description cd where c.parent_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "' order by sort_order, cd.categories_name");
     }
+
+    $number_of_categories = tep_db_num_rows($categories_query);
 
     while ($categories = tep_db_fetch_array($categories_query)) {
       $cPath_new = tep_get_path($categories['categories_id']);
@@ -102,14 +104,15 @@ if (tep_not_null($category['categories_description'])) {
       echo '</div>';
     }
 
+
 // needed for the new products module shown below
     $new_products_category_id = $current_category_id;
 ?>
       </div>
 
-    <br />
+<div class="clearfix"></div>
 
-<?php include(DIR_WS_MODULES . FILENAME_NEW_PRODUCTS); ?>
+<?php include('includes/modules/new_products.php'); ?>
 
   </div>
 </div>
@@ -129,8 +132,7 @@ if (tep_not_null($category['categories_description'])) {
     asort($define_list);
 
     $column_list = array();
-    reset($define_list);
-    while (list($key, $value) = each($define_list)) {
+    foreach($define_list as $key => $value) {
       if ($value > 0) $column_list[] = $key;
     }
 
@@ -163,19 +165,19 @@ if (tep_not_null($category['categories_description'])) {
     if (isset($_GET['manufacturers_id']) && !empty($_GET['manufacturers_id'])) {
       if (isset($_GET['filter_id']) && tep_not_null($_GET['filter_id'])) {
 // We are asked to show only a specific category
-        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from " . TABLE_PRODUCTS . " p left join " . TABLE_SPECIALS . " s on p.products_id = s.products_id, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_MANUFACTURERS . " m, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$languages_id . "' and p2c.categories_id = '" . (int)$_GET['filter_id'] . "'";
+        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from products p left join specials s on p.products_id = s.products_id, products_description pd, manufacturers m, products_to_categories p2c where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "' and p2c.categories_id = '" . (int)$_GET['filter_id'] . "'";
       } else {
 // We show them all
-        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from " . TABLE_PRODUCTS . " p left join " . TABLE_SPECIALS . " s on p.products_id = s.products_id, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_MANUFACTURERS . " m where p.products_status = '1' and pd.products_id = p.products_id and pd.language_id = '" . (int)$languages_id . "' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'";
+        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from products p left join specials s on p.products_id = s.products_id, products_description pd, manufacturers m where p.products_status = '1' and pd.products_id = p.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'";
       }
     } else {
 // show the products in a given categorie
       if (isset($_GET['filter_id']) && tep_not_null($_GET['filter_id'])) {
 // We are asked to show only specific catgeory
-        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from " . TABLE_PRODUCTS . " p left join " . TABLE_SPECIALS . " s on p.products_id = s.products_id, " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_MANUFACTURERS . " m, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['filter_id'] . "' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$languages_id . "' and p2c.categories_id = '" . (int)$current_category_id . "'";
+        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from products p left join specials s on p.products_id = s.products_id, products_description pd, manufacturers m, products_to_categories p2c where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and m.manufacturers_id = '" . (int)$_GET['filter_id'] . "' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "' and p2c.categories_id = '" . (int)$current_category_id . "'";
       } else {
 // We show them all
-        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from " . TABLE_PRODUCTS_DESCRIPTION . " pd, " . TABLE_PRODUCTS . " p left join " . TABLE_MANUFACTURERS . " m on p.manufacturers_id = m.manufacturers_id left join " . TABLE_SPECIALS . " s on p.products_id = s.products_id, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c where p.products_status = '1' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$languages_id . "' and p2c.categories_id = '" . (int)$current_category_id . "'";
+        $listing_sql = "select " . $select_column_list . " p.products_id, SUBSTRING_INDEX(pd.products_description, ' ', 20) as products_description, p.manufacturers_id, p.products_price, p.products_tax_class_id, IF(s.status, s.specials_new_products_price, NULL) as specials_new_products_price, IF(s.status, s.specials_new_products_price, p.products_price) as final_price from products_description pd, products p left join manufacturers m on p.manufacturers_id = m.manufacturers_id left join specials s on p.products_id = s.products_id, products_to_categories p2c where p.products_status = '1' and p.products_id = p2c.products_id and pd.products_id = p2c.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "' and p2c.categories_id = '" . (int)$current_category_id . "'";
       }
     }
 
@@ -225,22 +227,22 @@ if (tep_not_null($category['categories_description'])) {
 /* ** Altered for SEO Header Tags RELOADED **
     $catname = HEADING_TITLE;
     if (isset($_GET['manufacturers_id']) && !empty($_GET['manufacturers_id'])) {
-      $image = tep_db_query("select manufacturers_image, manufacturers_name as catname from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
+      $image = tep_db_query("select manufacturers_image, manufacturers_name as catname from manufacturers where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
       $image = tep_db_fetch_array($image);
       $catname = $image['catname'];
     } elseif ($current_category_id) {
-      $image = tep_db_query("select c.categories_image, cd.categories_name as catname from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "'");
+      $image = tep_db_query("select c.categories_image, cd.categories_name as catname from categories c, categories_description cd where c.categories_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
       $image = tep_db_fetch_array($image);
       $catname = $image['catname'];
     }
 */
     $catname = HEADING_TITLE;
     if (isset($_GET['manufacturers_id']) && !empty($_GET['manufacturers_id'])) {
-     $image = tep_db_query("select m.manufacturers_image, m.manufacturers_name as catname, mi.manufacturers_description as catdesc from " . TABLE_MANUFACTURERS . " m, " . TABLE_MANUFACTURERS_INFO . " mi where m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and m.manufacturers_id = mi.manufacturers_id and mi.languages_id = '" . (int)$languages_id . "'");
+     $image = tep_db_query("select m.manufacturers_image, m.manufacturers_name as catname, mi.manufacturers_description as catdesc from manufacturers m, manufacturers_info mi where m.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' and m.manufacturers_id = mi.manufacturers_id and mi.languages_id = '" . (int)$_SESSION['languages_id'] . "'");
       $image = tep_db_fetch_array($image);
       $catname = $image['catname'];
     } elseif ($current_category_id) {
-      $image = tep_db_query("select c.categories_image, cd.categories_name as catname, cd.categories_description as catdesc from " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where c.categories_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "'");
+      $image = tep_db_query("select c.categories_image, cd.categories_name as catname, cd.categories_description as catdesc from categories c, categories_description cd where c.categories_id = '" . (int)$current_category_id . "' and c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
       $image = tep_db_fetch_array($image);
       $catname = $image['catname'];
     }
@@ -267,9 +269,9 @@ if (tep_not_null($image['catdesc'])) {
 // optional Product List Filter
     if (PRODUCT_LIST_FILTER > 0) {
       if (isset($_GET['manufacturers_id']) && !empty($_GET['manufacturers_id'])) {
-        $filterlist_sql = "select distinct c.categories_id as id, cd.categories_name as name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, " . TABLE_CATEGORIES . " c, " . TABLE_CATEGORIES_DESCRIPTION . " cd where p.products_status = '1' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id and p2c.categories_id = cd.categories_id and cd.language_id = '" . (int)$languages_id . "' and p.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' order by cd.categories_name";
+        $filterlist_sql = "select distinct c.categories_id as id, cd.categories_name as name from products p, products_to_categories p2c, categories c, categories_description cd where p.products_status = '1' and p.products_id = p2c.products_id and p2c.categories_id = c.categories_id and p2c.categories_id = cd.categories_id and cd.language_id = '" . (int)$_SESSION['languages_id'] . "' and p.manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "' order by cd.categories_name";
       } else {
-        $filterlist_sql= "select distinct m.manufacturers_id as id, m.manufacturers_name as name from " . TABLE_PRODUCTS . " p, " . TABLE_PRODUCTS_TO_CATEGORIES . " p2c, " . TABLE_MANUFACTURERS . " m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . (int)$current_category_id . "' order by m.manufacturers_name";
+        $filterlist_sql= "select distinct m.manufacturers_id as id, m.manufacturers_name as name from products p, products_to_categories p2c, manufacturers m where p.products_status = '1' and p.manufacturers_id = m.manufacturers_id and p.products_id = p2c.products_id and p2c.categories_id = '" . (int)$current_category_id . "' order by m.manufacturers_name";
       }
       $filterlist_query = tep_db_query($filterlist_sql);
       if (tep_db_num_rows($filterlist_query) > 1) {
@@ -290,7 +292,7 @@ if (tep_not_null($image['catdesc'])) {
       }
     }
 
-    include(DIR_WS_MODULES . FILENAME_PRODUCT_LISTING);
+    include('includes/modules/product_listing.php');
 ?>
 
 </div>
@@ -310,7 +312,7 @@ if (tep_not_null($image['catdesc'])) {
 ?>
 
 <div class="contentContainer">
-  <div class="contentText">
+   <div class="alert alert-info">
     <?php echo tep_customer_greeting(); ?>
   </div>
 
@@ -325,8 +327,8 @@ if (tep_not_null($image['catdesc'])) {
 <?php
     }
 
-    include(DIR_WS_MODULES . FILENAME_NEW_PRODUCTS);
-    include(DIR_WS_MODULES . FILENAME_UPCOMING_PRODUCTS);
+    include('includes/modules/new_products.php');
+    include('includes/modules/upcoming_products.php');
 ?>
 
 </div>
@@ -334,6 +336,6 @@ if (tep_not_null($image['catdesc'])) {
 <?php
   }
 
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

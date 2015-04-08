@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
   
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -19,47 +19,50 @@
 
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_LOGOFF);
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/logoff.php');
 
   $breadcrumb->add(NAVBAR_TITLE);
 
-  tep_session_unregister('customer_id');
-  tep_session_unregister('customer_default_address_id');
-  tep_session_unregister('customer_first_name');
-  tep_session_unregister('customer_country_id');
-  tep_session_unregister('customer_zone_id');
-if ( tep_session_is_registered('sendto') ) {
-  tep_session_unregister('sendto');
-}
+   unset($_SESSION['customer_id']);
+  unset($_SESSION['customer_default_address_id']);
+  unset($_SESSION['customer_first_name']);
+  unset($_SESSION['customer_country_id']);
+  unset($_SESSION['customer_zone_id']);
 
-if ( tep_session_is_registered('billto') ) {
-  tep_session_unregister('billto');
-}
+  if ( isset($_SESSION['sendto']) ) {
+    unset($_SESSION['sendto']);
+  }
 
-if ( tep_session_is_registered('shipping') ) {
-  tep_session_unregister('shipping');
-}
+  if ( isset($_SESSION['billto']) ) {
+    unset($_SESSION['billto']);
+  }
 
-if ( tep_session_is_registered('payment') ) {
-  tep_session_unregister('payment');
-}
+  if ( isset($_SESSION['shipping']) ) {
+    unset($_SESSION['shipping']);
+  }
 
-if ( tep_session_is_registered('comments') ) {
-  tep_session_unregister('comments');
-}
+  if ( isset($_SESSION['payment']) ) {
+    unset($_SESSION['payment']);
+  }
+
+  if ( isset($_SESSION['comments']) ) {
+    unset($_SESSION['comments']);
+  }
+  
+ }
 /* ** Altered for CCGV ** */
-if ( tep_session_is_registered('gv_id') ) {
-  tep_session_unregister('gv_id');
-}
-if ( tep_session_is_registered('cc_id') ) {
-  tep_session_unregister('cc_id');
-}
+  if ( isset($_SESSION['gv_id']) ) {
+    unset($_SESSION['gv_id']);
+  }
+  if ( isset($_SESSION['cc_id']) ) {
+    unset($_SESSION['cc_id']);
+  }
 
 /* ** EOF alteration for CCGV ** */
 
-  $cart->reset();
+  $_SESSION['cart']->reset();
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require('includes/template_top.php');
 ?>
 
 <div class="page-header">
@@ -73,12 +76,12 @@ if ( tep_session_is_registered('cc_id') ) {
     </div>
   </div>
 
-  <div class="buttonSet">
-    <div class="text-right"><?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link('index.php'), null, null, 'btn-danger'); ?></div>
+  <div class="text-right">
+    <?php echo tep_draw_button(IMAGE_BUTTON_CONTINUE, 'glyphicon glyphicon-chevron-right', tep_href_link('index.php')); ?>
   </div>
 </div>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require('includes/template_bottom.php');
+  require('includes/application_bottom.php');
 ?>

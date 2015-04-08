@@ -19,7 +19,7 @@
   require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ACCOUNT);
 
 
-require(DIR_WS_INCLUDES . 'template_top.php'); ?>
+require(includes . 'template_top.php'); ?>
 <!-- header_eof //-->
 
 <!-- body //-->
@@ -48,9 +48,9 @@ require(DIR_WS_INCLUDES . 'template_top.php'); ?>
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php require(DIR_WS_INCLUDES . 'template_bottom.php'); ?>
+<?php require(includes . 'template_bottom.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
 </html>
-<?php require(DIR_WS_INCLUDES . 'application_bottom.php'); ?>
+<?php require(includes . 'application_bottom.php'); ?>

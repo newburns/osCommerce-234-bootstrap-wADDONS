@@ -283,7 +283,7 @@ require('includes/form_check.js.php'); ?>
 <body marginwidth="0" marginheight="0" topmargin="0" bottommargin="0" leftmargin="0" rightmargin="0" bgcolor="#FFFFFF">
 <!-- header //-->
 <?php
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 ?>
 <!-- header_eof //-->
 
@@ -335,7 +335,7 @@ require('includes/form_check.js.php'); ?>
 <!-- body_eof //-->
 
 <!-- footer //-->
-<?php include(DIR_WS_INCLUDES . 'template_bottom.php'); ?>
+<?php include(includes . 'template_bottom.php'); ?>
 <!-- footer_eof //-->
 <br>
 </body>
@@ -420,5 +420,5 @@ $customer_default_address_id = $address_id;
     tep_redirect(tep_href_link(FILENAME_CREATE_ACCOUNT_SUCCESS, '', 'SSL'));
   }
 
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2013 osCommerce
+  Copyright (c) 2015 osCommerce
   
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -59,18 +59,13 @@ define('CHARSET', 'utf-8');
 define('TITLE', STORE_NAME);
 
 // header text in includes/header.php
-define('HEADER_TITLE_CREATE_ACCOUNT', 'Create an Account');
 define('HEADER_TITLE_MY_ACCOUNT', 'My Account');
-define('HEADER_TITLE_CART_CONTENTS', 'Cart Contents');
-define('HEADER_TITLE_CHECKOUT', 'Checkout');
 define('HEADER_TITLE_TOP', '<i class="glyphicon glyphicon-home"><span class="sr-only">Home</span></i>');
 define('HEADER_TITLE_CATALOG', 'Catalog');
-define('HEADER_TITLE_LOGOFF', 'Log Off');
-define('HEADER_TITLE_LOGIN', 'Log In');
 
 // text for gender
-define('MALE', 'M<span class="hidden-xs">ale</span>');
-define('FEMALE', 'F<span class="hidden-xs">emale</span>');
+define('MALE', 'Male');
+define('FEMALE', 'Female');
 define('MALE_ADDRESS', 'Mr.');
 define('FEMALE_ADDRESS', 'Ms.');
 
@@ -85,7 +80,6 @@ define('CHECKOUT_BAR_FINISHED', 'Finished!');
 
 // pull down default text
 define('PULL_DOWN_DEFAULT', 'Please Select');
-define('TYPE_BELOW', 'Type Below');
 
 // javascript messages
 define('JS_ERROR', 'Errors have occured during the process of your form.\n\nPlease make the following corrections:\n\n');
@@ -119,9 +113,9 @@ define('ENTRY_LAST_NAME_ERROR', 'Your Last Name must contain a minimum of ' . EN
 define('ENTRY_LAST_NAME_TEXT', '');
 define('ENTRY_DATE_OF_BIRTH', 'Date of Birth');
 define('ENTRY_DATE_OF_BIRTH_ERROR', 'Your Date of Birth must be in this format: MM/DD/YYYY (eg 05/21/1970)');
-define('ENTRY_DATE_OF_BIRTH_TEXT', 'eg. 05/21/1970');
+define('ENTRY_DATE_OF_BIRTH_TEXT', '(eg. 05/21/1970)');
 define('ENTRY_EMAIL_ADDRESS', 'E-Mail Address');
-define('ENTRY_EMAIL_ADDRESS_ERROR', 'Your E-Mail Address must contain a minimum of ' . ENTRY_EMAIL_ADDRESS_MIN_LENGTH . ' characters.');
+define('ENTRY_EMAIL_ADDRESS_ERROR', 'Your E-Mail Address does not appear to be formatted correctly.');
 define('ENTRY_EMAIL_ADDRESS_CHECK_ERROR', 'Your E-Mail Address does not appear to be valid - please make any necessary corrections.');
 define('ENTRY_EMAIL_ADDRESS_ERROR_EXISTS', 'Your E-Mail Address already exists in our records - please log in with the e-mail address or create an account with a different address.');
 define('ENTRY_EMAIL_ADDRESS_TEXT', '');
@@ -137,7 +131,7 @@ define('ENTRY_CITY', 'City');
 define('ENTRY_CITY_ERROR', 'Your City must contain a minimum of ' . ENTRY_CITY_MIN_LENGTH . ' characters.');
 define('ENTRY_CITY_TEXT', '');
 define('ENTRY_STATE', 'State/Province');
-define('ENTRY_STATE_ERROR', 'Your State must contain a minimum of ' . ENTRY_STATE_MIN_LENGTH . ' characters.');
+define('ENTRY_STATE_ERROR', 'State does not appear to be formatted correctly.');
 define('ENTRY_STATE_ERROR_SELECT', 'Please select a state from the States pull down menu.');
 define('ENTRY_STATE_TEXT', '');
 define('ENTRY_COUNTRY', 'Country');
@@ -165,7 +159,22 @@ define('ENTRY_PASSWORD_NEW', 'New Password');
 define('ENTRY_PASSWORD_NEW_TEXT', '');
 define('ENTRY_PASSWORD_NEW_ERROR', 'Your new Password must contain a minimum of ' . ENTRY_PASSWORD_MIN_LENGTH . ' characters.');
 define('ENTRY_PASSWORD_NEW_ERROR_NOT_MATCHING', 'The Password Confirmation must match your new Password.');
-define('PASSWORD_HIDDEN', '--HIDDEN--');
+// new placeholders
+define('ENTRY_PRICE_FROM_TEXT', '');
+define('ENTRY_PRICE_TO_TEXT', '');
+define('ENTRY_DATE_FROM_TEXT', '');
+define('ENTRY_DATE_TO_TEXT', '');
+define('ENTRY_COMMENTS_TEXT', '');
+define('ENTRY_NAME_TEXT', '');
+define('ENTRY_ENQUIRY_TEXT', '');
+define('ENTRY_REVIEW_TEXT', '');
+define('ENTRY_FORM_FIELD_CUSTOMER_NAME_TEXT', '');
+define('ENTRY_FORM_FIELD_CUSTOMER_EMAIL_TEXT', '');
+define('ENTRY_FORM_FIELD_FRIEND_NAME_TEXT', '');
+define('ENTRY_FORM_FIELD_FRIEND_EMAIL_TEXT', '');
+define('ENTRY_FORM_TITLE_FRIEND_MESSAGE_TEXT', '');
+
+define('FORM_REQUIRED_INFORMATION', '<span class="glyphicon glyphicon-asterisk inputRequirement"></span> Required information');
 
 // constants for use in tep_prev_next_display function
 define('TEXT_RESULT_PAGE', 'Result Pages:');
@@ -218,10 +227,6 @@ define('SMALL_IMAGE_BUTTON_VIEW', 'View');
 define('SMALL_IMAGE_BUTTON_BUY', 'Buy');
 
 define('ICON_ARROW_RIGHT', 'more');
-define('ICON_CART', 'In Cart');
-define('ICON_ERROR', 'Error');
-define('ICON_SUCCESS', 'Success');
-define('ICON_WARNING', 'Warning');
 
 define('TEXT_GREETING_PERSONAL', 'Welcome back <span class="greetUser">%s!</span> Would you like to see which <a href="%s"><u>new products</u></a> are available to purchase?');
 define('TEXT_GREETING_PERSONAL_RELOGON', '<small>If you are not %s, please <a href="%s"><u>log yourself in</u></a> with your account information.</small>');
@@ -238,83 +243,30 @@ define('TEXT_REVIEW_RATING', 'Rating: %s [%s]');
 define('TEXT_REVIEW_DATE_ADDED', 'Date Added: %s');
 define('TEXT_NO_REVIEWS', 'There are currently no product reviews.');
 
-define('TEXT_NO_NEW_PRODUCTS', 'There are currently no products.');
-
 define('TEXT_UNKNOWN_TAX_RATE', 'Unknown tax rate');
-
-define('TEXT_REQUIRED', '<span class="errorText">Required</span>');
-
-define('ERROR_TEP_MAIL', '<font face="Verdana, Arial" size="2" color="#ff0000"><strong><small>TEP ERROR:</small> Cannot send the email through the specified SMTP server. Please check your php.ini setting and correct the SMTP server if necessary.</strong></font>');
 
 define('TEXT_CCVAL_ERROR_INVALID_DATE', 'The expiry date entered for the credit card is invalid. Please check the date and try again.');
 define('TEXT_CCVAL_ERROR_INVALID_NUMBER', 'The credit card number entered is invalid. Please check the number and try again.');
 define('TEXT_CCVAL_ERROR_UNKNOWN_CARD', 'The first four digits of the number entered are: %s. If that number is correct, we do not accept that type of credit card. If it is wrong, please try again.');
 
-define('FOOTER_TEXT_BODY', 'Copyright &copy; ' . date('Y') . ' <a href="' . tep_href_link('index.php') . '">' . STORE_NAME . '</a>');
-
-// footer icons
-// courtesy of Orman Clark for PremiumPixels.com
-define('FOOTER_TEXT_PAYMENT_ICONS', tep_image(DIR_WS_ICONS . 'visa.png', 'Visa', '', '', '', false). tep_image(DIR_WS_ICONS . 'paypal.png', 'Paypal', '', '', '', false) . tep_image(DIR_WS_ICONS . 'mastercard.png', 'MasterCard', '', '', '', false));
-
-// category views
-define('TEXT_VIEW', 'View: ');
-define('TEXT_VIEW_LIST', ' List');
-define('TEXT_VIEW_GRID', ' Grid');
+// message for required inputs
+define('FORM_REQUIRED_INPUT', '<span><span class="glyphicon glyphicon-asterisk form-control-feedback inputRequirement"></span></span>');
 
 // search placeholder
-define('TEXT_SEARCH_PLACEHOLDER','Search');
-
-// message for required inputs
-define('FORM_REQUIRED_INPUT', '<span class="glyphicon glyphicon-asterisk form-control-feedback inputRequirement"></span>');
+define('TEXT_SEARCH_PLACEHOLDER', 'Search Keywords...');
 
 // reviews
-define('REVIEWS_TEXT_RATED', 'Rated %s by <cite title="%s">%s</cite>');
-define('REVIEWS_TEXT_AVERAGE', 'Average rating based on %s review(s) %s');
-define('REVIEWS_TEXT_TITLE', 'What our customers say...');
-
-// grid/list
-define('TEXT_SORT_BY', 'Sort By ');
-// moved from index
-define('TABLE_HEADING_IMAGE', '');
-define('TABLE_HEADING_MODEL', 'Model');
-define('TABLE_HEADING_PRODUCTS', 'Product Name');
-define('TABLE_HEADING_MANUFACTURER', 'Manufacturer');
-define('TABLE_HEADING_QUANTITY', 'Quantity');
-define('TABLE_HEADING_PRICE', 'Price');
-define('TABLE_HEADING_WEIGHT', 'Weight');
-define('TABLE_HEADING_BUY_NOW', 'Buy Now');
-
-//header titles
-define('HEADER_CART_CONTENTS', '<i class="glyphicon glyphicon-shopping-cart"></i> %s item(s) <span class="caret"></span>');
-define('HEADER_CART_NO_CONTENTS', '<i class="glyphicon glyphicon-shopping-cart"></i> 0 items');
-define('HEADER_ACCOUNT_LOGGED_OUT', '<i class="glyphicon glyphicon-user"></i><span class="hidden-sm"> My Account</span> <span class="caret"></span>');
-define('HEADER_ACCOUNT_LOGGED_IN', '<i class="glyphicon glyphicon-user"></i> %s <span class="caret"></span>');
-define('HEADER_SITE_SETTINGS', '<i class="glyphicon glyphicon-cog"></i><span class="hidden-sm"> Site Settings</span> <span class="caret"></span>');
-define('HEADER_TOGGLE_NAV', 'Toggle Navigation');
-define('HEADER_HOME', '<i class="glyphicon glyphicon-home"></i><span class="hidden-sm"> Home</span>');
-define('HEADER_WHATS_NEW', '<i class="glyphicon glyphicon-certificate"></i><span class="hidden-sm">  New Products</span>');
-define('HEADER_SPECIALS', '<i class="glyphicon glyphicon-fire"></i><span class="hidden-sm"> Special Offers</span>');
-define('HEADER_REVIEWS', '<i class="glyphicon glyphicon-comment"></i><span class="hidden-sm"> Reviews</span>');
-// header dropdowns
-define('HEADER_ACCOUNT_LOGIN', '<i class="glyphicon glyphicon-log-in"></i> Log In');
-define('HEADER_ACCOUNT_LOGOFF', '<i class="glyphicon glyphicon-log-out"></i> Log Off');
-define('HEADER_ACCOUNT', 'My Account');
-define('HEADER_ACCOUNT_HISTORY', 'My Orders');
-define('HEADER_ACCOUNT_EDIT', 'My Details');
-define('HEADER_ACCOUNT_ADDRESS_BOOK', 'My Address Book');
-define('HEADER_ACCOUNT_PASSWORD', 'My Password');
-define('HEADER_ACCOUNT_REGISTER', '<i class="glyphicon glyphicon-pencil"></i> Register');
-define('HEADER_CART_HAS_CONTENTS', '%s item(s), %s');
-define('HEADER_CART_VIEW_CART', 'View Cart');
-define('HEADER_CART_CHECKOUT', '<i class="glyphicon glyphicon-chevron-right"></i> Checkout');
-define('USER_LOCALIZATION', '<abbr title="Selected Language">L:</abbr> %s <abbr title="Selected Currency">C:</abbr> %s');
-define('TABLE_HEADING_LATEST_ADDED', 'Latest Products');
+define('REVIEWS_TEXT_RATED', 'Rated %s by <span title="%s" itemprop="author" itemscope itemtype="http://schema.org/Person"><span itemprop="name">%s</span></span>');
+define('REVIEWS_TEXT_AVERAGE', 'Average rating based on <span itemprop="ratingCount">%s</span> review(s) %s');
 
 // product notifications
 define('PRODUCT_SUBSCRIBED', '%s has been added to your Notification List');
 define('PRODUCT_UNSUBSCRIBED', '%s has been removed from your Notification List');
 define('PRODUCT_ADDED', '%s has been added to your Cart');
 define('PRODUCT_REMOVED', '%s has been removed from your Cart');
+
+// sorting product_listing module
+define('TEXT_SORT_BY', 'Sort By ');
 
 /*
 ************************************************************************

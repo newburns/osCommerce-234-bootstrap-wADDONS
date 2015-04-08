@@ -31,7 +31,7 @@ if (DIR_WS_HTTP_CATALOG==NULL){
 	}
 
 //define values for placeholder variables
-$product_link = tep_href_link(FILENAME_PRODUCT_INFO, 'products_id=' . $_GET['products_id'], 'NONSSL', false);
+$product_link = tep_href_link('product_info', 'products_id=' . $_GET['products_id'], 'NONSSL', false);
 $product_image = tep_image($image_urlfix.DIR_WS_IMAGES . $product_info['products_image_med'], $product_info['products_name'], '', '', '');
 $product_name = $product_info['products_name'];
 

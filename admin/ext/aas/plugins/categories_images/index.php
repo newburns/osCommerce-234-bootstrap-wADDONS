@@ -11,7 +11,7 @@
 defined('AAS') or die;
 ?>
 <div class="overlay" id="categories_images">
-  <script src="ext/aas/plugins/categories_images/js/categories_images.js" type="text/javascript"></script>
+  <script src="ext/aas/plugins/categories_images/js/categories_images.js" ></script>
   <div class="container">
     <div class="top-loriza">
         <span style="font-size:20px;"><?php echo AAS_CATEGORY_IMAGES_TITLE; ?></span>

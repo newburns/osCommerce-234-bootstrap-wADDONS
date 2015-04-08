@@ -20,8 +20,8 @@ defined('AAS') or die;
       <div id="clocks_module_content"></div>
       <div class="clear"></div>
     </div>
-    <script src="ext/aas/plugins/clocks/js/jQueryRotateCompressed.js" type="text/javascript"></script>
-    <script src="ext/aas/plugins/clocks/js/clocks.js" type="text/javascript"></script>
+    <script src="ext/aas/plugins/clocks/js/jQueryRotateCompressed.js" ></script>
+    <script src="ext/aas/plugins/clocks/js/clocks.js" ></script>
     <script>
     $(function(){
 

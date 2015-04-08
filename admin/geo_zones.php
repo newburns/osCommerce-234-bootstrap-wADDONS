@@ -79,11 +79,11 @@
     }
   }
 
-  require(DIR_WS_INCLUDES . 'template_top.php');
+  require(includes . 'template_top.php');
 
   if (isset($_GET['zID']) && (($saction == 'edit') || ($saction == 'new'))) {
 ?>
-<script type="text/javascript"><!--
+<script ><!--
 function resetZoneSelected(theForm) {
   if (theForm.state.value != '') {
     theForm.zone_id.selectedIndex = '0';
@@ -321,6 +321,6 @@ function update_zone(theForm) {
     </table>
 
 <?php
-  require(DIR_WS_INCLUDES . 'template_bottom.php');
-  require(DIR_WS_INCLUDES . 'application_bottom.php');
+  require(includes . 'template_bottom.php');
+  require(includes . 'application_bottom.php');
 ?>

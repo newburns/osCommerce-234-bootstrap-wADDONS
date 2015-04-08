@@ -219,8 +219,8 @@ $example_code .= "\n}";
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>PHPMailer Test Page</title>
-    <script type="text/javascript" src="scripts/shCore.js"></script>
-    <script type="text/javascript" src="scripts/shBrushPhp.js"></script>
+    <script  src="scripts/shCore.js"></script>
+    <script  src="scripts/shBrushPhp.js"></script>
     <link type="text/css" rel="stylesheet" href="styles/shCore.css">
     <link type="text/css" rel="stylesheet" href="styles/shThemeDefault.css">
     <style>
