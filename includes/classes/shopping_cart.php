@@ -54,7 +54,7 @@
           $gv_query = tep_db_query("insert into coupon_redeem_track (coupon_id, customer_id, redeem_date, redeem_ip) values ('" . $gv_id . "', '" . (int)$customer_id . "', now(),'" . $REMOTE_ADDR . "')");
           $gv_update = tep_db_query("update coupons set coupon_active = 'Y' where coupon_id = '" . $gv_id . "'");
           tep_gv_account_update($customer_id, $gv_id);
-          tep_session_unregister('gv_id');
+          unset($_SESSION['gv_id']);
         }
 /* ** EOF alterations for CCGV ** */
       }
@@ -451,8 +451,7 @@
        }
      }
           } elseif ($this->show_weight() == 0) {
-            reset($this->contents);
-            while (list($products_id, ) = each($this->contents)) {
+            foreach ( array_keys($this->contents) as $products_id ) {
               $virtual_check_query = tep_db_query("select products_weight from products where products_id = '" . $products_id . "'");
               $virtual_check = tep_db_fetch_array($virtual_check_query);
               if ($virtual_check['products_weight'] == 0) {
@@ -511,8 +510,7 @@
     function count_contents_virtual() {  // get total number of items in cart disregard gift vouchers
       $total_items = 0;
       if (is_array($this->contents)) {
-        reset($this->contents);
-        while (list($products_id, ) = each($this->contents)) {
+        foreach ( array_keys($this->contents) as $products_id ) {
           $no_count = false;
           $gv_query = tep_db_query("select products_model from products where products_id = '" . $products_id . "'");
           $gv_result = tep_db_fetch_array($gv_query);
