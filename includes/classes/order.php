@@ -140,8 +140,6 @@
 
       $this->content_type = $_SESSION['cart']->get_content_type();
 
-      $this->content_type = $cart->get_content_type();
-/* ** Altered for CCGV **
       if ( ($this->content_type != 'virtual') && ($sendto == false) ) {
         $sendto = $customer_default_address_id;
       }

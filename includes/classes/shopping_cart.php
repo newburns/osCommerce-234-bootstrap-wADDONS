@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2012 osCommerce
+  Copyright (c) 2015 osCommerce
   
   Edited by 2014 Newburns Design and Technology
   *************************************************
@@ -451,8 +451,7 @@
        }
      }
           } elseif ($this->show_weight() == 0) {
-            reset($this->contents);
-            while (list($products_id, ) = each($this->contents)) {
+            foreach ( array_keys($this->contents) as $products_id ) {
               $virtual_check_query = tep_db_query("select products_weight from products where products_id = '" . $products_id . "'");
               $virtual_check = tep_db_fetch_array($virtual_check_query);
               if ($virtual_check['products_weight'] == 0) {
@@ -511,8 +510,7 @@
     function count_contents_virtual() {  // get total number of items in cart disregard gift vouchers
       $total_items = 0;
       if (is_array($this->contents)) {
-        reset($this->contents);
-        while (list($products_id, ) = each($this->contents)) {
+        foreach ( array_keys($this->contents) as $products_id ) {
           $no_count = false;
           $gv_query = tep_db_query("select products_model from products where products_id = '" . $products_id . "'");
           $gv_result = tep_db_fetch_array($gv_query);

@@ -80,9 +80,10 @@
 // load the selected shipping module
   require(DIR_WS_CLASSES . 'shipping.php');
   $shipping_modules = new shipping($shipping);
-//Lines below repositioned for CCGV
+/* ** Altered for CCGV ** */
 //  require(DIR_WS_CLASSES . 'order_total.php');
 //  $order_total_modules = new order_total;
+/* ** EOF alteration for CCGV ** */
 
 // Stock Check
   $any_out_of_stock = false;

@@ -66,7 +66,7 @@
 
 /* ** Altered for CCGV ** MOVED FUNCTION FURTHER UP IN CODE */
 // load the before_process function from the payment modules
-require_once(DIR_WS_CLASSES . 'order_total.php');
+  require_once(DIR_WS_CLASSES . 'order_total.php');
   $order_total_modules = new order_total;
   $order_totals = $order_total_modules->process();
   $payment_modules->before_process();
