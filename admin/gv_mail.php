@@ -54,9 +54,9 @@
       $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', $from, $subject);
 // Now create the coupon main and email entry
        $coupon_id = tep_db_insert_id();
-       tep_db_query("insert into " . TABLE_COUPONS . " (coupon_id, coupon_code, coupon_type, coupon_amount, coupon_status, date_created) values ('" . (int)$coupon_id . "','" . $id1 . "', 'G', '" . $_POST['amount'] . "', '1', now() )");
+       tep_db_query("insert into coupons (coupon_id, coupon_code, coupon_type, coupon_amount, coupon_status, date_created) values ('" . (int)$coupon_id . "','" . $id1 . "', 'G', '" . $_POST['amount'] . "', '1', now() )");
        $coupon_id = tep_db_insert_id();
-       tep_db_query("insert into " . TABLE_COUPON_EMAIL_TRACK . " (coupon_id, customer_id_sent, sent_firstname, sent_lastname, emailed_to, date_sent) values ('" . (int)$coupon_id . "', '". $mail['customers_id'] . "', '" . $mail['customers_firstname'] . "', '" . $mail['customers_lastname'] . "', '" . $mail['customers_email_address'] . "', now() )");
+       tep_db_query("insert into coupon_email_track (coupon_id, customer_id_sent, sent_firstname, sent_lastname, emailed_to, date_sent) values ('" . (int)$coupon_id . "', '". $mail['customers_id'] . "', '" . $mail['customers_firstname'] . "', '" . $mail['customers_lastname'] . "', '" . $mail['customers_email_address'] . "', now() )");
 }
     tep_redirect(tep_href_link('gv_mail.php', 'mail_sent_to=' . urlencode($mail_sent_to)));
   }

@@ -3,13 +3,12 @@
  $Id: pb_handler.php VER: 1.0.3414 $
  osCommerce, Open Source E-Commerce Solutions
  http://www.oscommerce.com
- Copyright (c) 2008 osCommerce
+ Copyright (c) 2015 osCommerce
  Released under the GNU General Public License
  */
 
 chdir('../../../../');
 require ('includes/application_top.php');
-reset($_POST);
 $result = "VERIFIED";
 $ok = true;
 $my_order = null;
@@ -158,7 +157,7 @@ if ($result == 'VERIFIED')
     if ($invoice_approved)
     {
     	// for email
-		include(DIR_WS_LANGUAGES . $language . '/modules/payment/inpay.php');
+		include(DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/payment/inpay.php');
         // let's re-create the required arrays
         require (DIR_WS_CLASSES.'order.php');
         $order = new order($_POST['order_id']);
@@ -176,7 +175,7 @@ if ($result == 'VERIFIED')
             {
                 if (DOWNLOAD_ENABLED == 'true')
                 {
-                    $stock_query_raw = "SELECT products_quantity, pad.products_attributes_filename 
+                    $stock_query_raw = "SELECT products_quantity, pad.products_attributes_filename
                                     FROM ".TABLE_PRODUCTS." p
                                     LEFT JOIN ".TABLE_PRODUCTS_ATTRIBUTES." pa
                                     ON p.products_id=pa.products_id
@@ -277,7 +276,7 @@ if ($result == 'VERIFIED')
         $email_order = STORE_NAME."\n".
         EMAIL_SEPARATOR."\n".
         EMAIL_TEXT_ORDER_NUMBER.' '.$_POST['order_id']."\n".
-        EMAIL_TEXT_INVOICE_URL.' '.tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id='.$_POST['order_id'], 'SSL', false)."\n".
+        EMAIL_TEXT_INVOICE_URL.' '.tep_href_link('account_history_info.php', 'order_id='.$_POST['order_id'], 'SSL', false)."\n".
         EMAIL_TEXT_DATE_ORDERED.' '.strftime(DATE_FORMAT_LONG)."\n\n";
         // BOF order comment fix by AlexStudio
         if ($comments)
@@ -286,7 +285,7 @@ if ($result == 'VERIFIED')
 			// $email_order .= $comments."\n\n";
         }
         // EOF order comment fix by AlexStudio
-        
+
         $email_order .= EMAIL_TEXT_PRODUCTS."\n".
         EMAIL_SEPARATOR."\n".
         $products_ordered.
@@ -342,16 +341,14 @@ if ($result == 'VERIFIED')
     {
         $email_body = '$_POST:'."\n\n";
 
-        reset($_POST);
-        while ( list ($key, $value) = each($_POST))
+        foreach ( $_POST as $key => $value )
         {
             $email_body .= $key.'='.$value."\n";
         }
 
         $email_body .= "\n".'$_GET:'."\n\n";
 
-        reset($_GET);
-        while ( list ($key, $value) = each($_GET))
+        foreach ( $_GET as $key => $value )
         {
             $email_body .= $key.'='.$value."\n";
         }

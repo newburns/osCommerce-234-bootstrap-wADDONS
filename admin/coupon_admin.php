@@ -30,7 +30,7 @@
         break;
     }
 	//get the coupon code to include in the email for customer
-    $coupon_query = tep_db_query("select coupon_code from " . TABLE_COUPONS . " where coupon_id = '" . $_GET['cid'] . "'");
+    $coupon_query = tep_db_query("select coupon_code from coupons where coupon_id = '" . $_GET['cid'] . "'");
     $coupon_result = tep_db_fetch_array($coupon_query);
     $from = tep_db_prepare_input($_POST['from']);
     $subject = tep_db_prepare_input($_POST['subject']);
@@ -74,8 +74,8 @@
         break;
     case 'confirmdelete':
      $coupon_id = tep_db_prepare_input($_GET['cid']);
-	 tep_db_query("delete from " . TABLE_COUPONS . " where coupon_id='".$_GET['cid']."'");
-     tep_db_query("delete from " . TABLE_COUPONS_DESCRIPTION . " where coupon_id='".$_GET['cid']."'");
+	 tep_db_query("delete from coupons where coupon_id='".$_GET['cid']."'");
+     tep_db_query("delete from coupons_description where coupon_id='".$_GET['cid']."'");
      break;
     case 'update':
       // get all $_POST and validate
@@ -100,7 +100,7 @@
         $coupon_code = create_coupon_code();
       }
       if ($_POST['coupon_code']) $coupon_code = $_POST['coupon_code'];
-      $query1 = tep_db_query("select coupon_code from " . TABLE_COUPONS . " where coupon_code = '" . tep_db_prepare_input($coupon_code) . "'");
+      $query1 = tep_db_query("select coupon_code from coupons where coupon_code = '" . tep_db_prepare_input($coupon_code) . "'");
       if (tep_db_num_rows($query1) && $_POST['coupon_code'] && $_GET['oldaction'] != 'voucheredit')  {
         $update_errors = 1;
         $messageStack->add(ERROR_COUPON_EXISTS, 'error');
@@ -145,7 +145,7 @@
           tep_db_perform(TABLE_COUPONS, $sql_data_array, 'update', "coupon_id='" . $_GET['cid']."'");
           for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
           $language_id = $languages[$i]['id'];
-            $update = tep_db_query("update " . TABLE_COUPONS_DESCRIPTION . " set coupon_name = '" . tep_db_prepare_input($_POST['coupon_name'][$language_id]) . "', coupon_description = '" . tep_db_prepare_input($_POST['coupon_desc'][$language_id]) . "' where coupon_id = '" . $_GET['cid'] . "' and language_id = '" . $language_id . "'");
+            $update = tep_db_query("update coupons_description set coupon_name = '" . tep_db_prepare_input($_POST['coupon_name'][$language_id]) . "', coupon_description = '" . tep_db_prepare_input($_POST['coupon_desc'][$language_id]) . "' where coupon_id = '" . $_GET['cid'] . "' and language_id = '" . $language_id . "'");
           }
         } else {
           $query = tep_db_perform(TABLE_COUPONS, $sql_data_array);
@@ -187,7 +187,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-    $cc_query_raw = "select * from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $_GET['cid'] . "'";
+    $cc_query_raw = "select * from coupon_redeem_track where coupon_id = '" . $_GET['cid'] . "'";
     $cc_query = tep_db_query($cc_query_raw);
     while ($cc_list = tep_db_fetch_array($cc_query)) {
       $rows++;
@@ -219,9 +219,9 @@ $redeem_ip = tep_get_ip_address();
 <?php
       $heading = array();
       $contents = array();
-      $coupon_description_query = tep_db_query("select c.coupon_code, c.coupon_amount, cd.coupon_name, cd.coupon_description from " . TABLE_COUPONS . " c, " . TABLE_COUPONS_DESCRIPTION . " cd where c.coupon_id = '" . $_GET['cid'] . "'");
+      $coupon_description_query = tep_db_query("select c.coupon_code, c.coupon_amount, cd.coupon_name, cd.coupon_description from coupons c, coupons_description cd where c.coupon_id = '" . $_GET['cid'] . "'");
       $coupon_desc = tep_db_fetch_array($coupon_description_query);
-      $count_customers = tep_db_query("select * from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $_GET['cid'] . "' and customer_id = '" . $cInfo->customer_id . "'");
+      $count_customers = tep_db_query("select * from coupon_redeem_track where coupon_id = '" . $_GET['cid'] . "' and customer_id = '" . $cInfo->customer_id . "'");
       $heading[] = array('text' => '<b>' . TEXT_REDEMPTIONS . '</b>');
 	    $contents[] = array('text' => COUPON_ID . ':  ' . $_GET['cid']);
       $contents[] = array('text' => COUPON_CODE . ': ' . $coupon_desc['coupon_code']);
@@ -243,7 +243,7 @@ $redeem_ip = tep_get_ip_address();
 <?php
     break;
   case 'preview_email':
-    $coupon_query = tep_db_query("select coupon_code from " . TABLE_COUPONS . " where coupon_id = '" . $_GET['cid'] . "'");
+    $coupon_query = tep_db_query("select coupon_code from coupons where coupon_id = '" . $_GET['cid'] . "'");
     $coupon_result = tep_db_fetch_array($coupon_query);
     switch ($_POST['customers_email_address']) {
     case '***':
@@ -323,7 +323,7 @@ $redeem_ip = tep_get_ip_address();
 <?php
     break;
   case 'email':
-    $coupon_query = tep_db_query("select coupon_code from " . TABLE_COUPONS . " where coupon_id = '" . $_GET['cid'] . "'");
+    $coupon_query = tep_db_query("select coupon_code from coupons where coupon_id = '" . $_GET['cid'] . "'");
     $coupon_result = tep_db_fetch_array($coupon_query);
 ?>
       <td width="100%" valign="top"><table border="0" width="100%" cellspacing="0" cellpadding="2">
@@ -517,12 +517,12 @@ $redeem_ip = tep_get_ip_address();
     $languages = tep_get_languages();
     for ($i = 0, $n = sizeof($languages); $i < $n; $i++) {
       $language_id = $languages[$i]['id'];
-      $coupon_query = tep_db_query("select coupon_name, coupon_description from " . TABLE_COUPONS_DESCRIPTION . " where coupon_id = '" .  $_GET['cid'] . "' and language_id = '" . (int)$language_id . "'");
+      $coupon_query = tep_db_query("select coupon_name, coupon_description from coupons_description where coupon_id = '" .  $_GET['cid'] . "' and language_id = '" . (int)$language_id . "'");
       $coupon = tep_db_fetch_array($coupon_query);
       $coupon_name[$language_id] = $coupon['coupon_name'];
       $coupon_desc[$language_id] = $coupon['coupon_description'];
     }
-    $coupon_query = tep_db_query("select coupon_code, coupon_amount, coupon_type, coupon_minimum_order, coupon_start_date, coupon_expire_date, uses_per_coupon, uses_per_user, restrict_to_products, restrict_to_categories, coupon_status from " . TABLE_COUPONS . " where coupon_id = '" . $_GET['cid'] . "'");
+    $coupon_query = tep_db_query("select coupon_code, coupon_amount, coupon_type, coupon_minimum_order, coupon_start_date, coupon_expire_date, uses_per_coupon, uses_per_user, restrict_to_products, restrict_to_categories, coupon_status from coupons where coupon_id = '" . $_GET['cid'] . "'");
     $coupon=tep_db_fetch_array($coupon_query);
     $coupon_amount = $coupon['coupon_amount'];
     if ($coupon['coupon_type']=='P') {
@@ -709,7 +709,7 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
       } else {
         echo '          <tr class="dataTableRow" onmouseover="this.className=\'dataTableRowOver\';this.style.cursor=\'hand\'" onmouseout="this.className=\'dataTableRow\'" onclick="document.location.href=\'' . tep_href_link('coupon_admin.php', tep_get_all_get_params(array('cid', 'action')) . 'cid=' . $cc_list['coupon_id']) . '\'">' . "\n";
       }
-      $coupon_description_query = tep_db_query("select coupon_name from " . TABLE_COUPONS_DESCRIPTION . " where coupon_id = '" . $cc_list['coupon_id'] . "' and language_id = '" . $languages_id . "'");
+      $coupon_description_query = tep_db_query("select coupon_name from coupons_description where coupon_id = '" . $cc_list['coupon_id'] . "' and language_id = '" . $languages_id . "'");
       $coupon_desc = tep_db_fetch_array($coupon_description_query);
 ?>
                 <td class="dataTableContent"><?php echo $coupon_desc['coupon_name']; ?></td>
@@ -776,7 +776,7 @@ $('#coupon_start_date,#coupon_expire_date').datepicker({
         if ($cInfo->restrict_to_categories) {
           $cat_details = '<a href="listcategories.php?cid=' . $cInfo->coupon_id . '" target="_blank" onclick="window.open(\'listcategories.php?cid=' . $cInfo->coupon_id . '\', \'Valid_Categories\', \'scrollbars=yes,resizable=yes,menubar=yes,width=600,height=600\'); return false">View</a>';
         }
-		$coupon_name_query = tep_db_query("select coupon_name from " . TABLE_COUPONS_DESCRIPTION . " where coupon_id = '" . $cInfo->coupon_id . "' and language_id = '" . (int)$languages_id . "'");
+		$coupon_name_query = tep_db_query("select coupon_name from coupons_description where coupon_id = '" . $cInfo->coupon_id . "' and language_id = '" . (int)$languages_id . "'");
         $coupon_name = tep_db_fetch_array($coupon_name_query);
 		$heading[] = array('text' => '<strong>' . COUPON_INFO . '</strong>');
         $contents[] = array('text'=>COUPON_ID . ':&nbsp;' . $cInfo->coupon_id);

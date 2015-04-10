@@ -31,7 +31,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $gv_query_raw = "select c.coupon_amount, c.coupon_code, c.coupon_id, et.sent_firstname, et.sent_lastname, et.customer_id_sent, et.emailed_to, et.date_sent from " . TABLE_COUPONS . " c, " . TABLE_COUPON_EMAIL_TRACK . " et where c.coupon_id = et.coupon_id order by et.date_sent DESC";
+  $gv_query_raw = "select c.coupon_amount, c.coupon_code, c.coupon_id, et.sent_firstname, et.sent_lastname, et.customer_id_sent, et.emailed_to, et.date_sent from coupons c, coupon_email_track et where c.coupon_id = et.coupon_id order by et.date_sent DESC";
   $gv_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $gv_query_raw, $gv_query_numrows);
   $gv_query = tep_db_query($gv_query_raw);
   while ($gv_list = tep_db_fetch_array($gv_query)) {
@@ -67,7 +67,7 @@
   $contents = array();
   $heading[] = array('text' => '<b>Gift Vouchers Sent Information</b>');
   $contents[] = array('text' => 'GV ID: ' . $gInfo->coupon_id .'');
-  $redeem_query = tep_db_query("select * from " . TABLE_COUPON_REDEEM_TRACK . " where coupon_id = '" . $gInfo->coupon_id . "'");
+  $redeem_query = tep_db_query("select * from coupon_redeem_track where coupon_id = '" . $gInfo->coupon_id . "'");
   $redeemed = 'No';
   if (tep_db_num_rows($redeem_query) > 0) $redeemed = 'Yes';
   $contents[] = array('text' => TEXT_INFO_SENDERS_ID . ' ' . $gInfo->customer_id_sent);

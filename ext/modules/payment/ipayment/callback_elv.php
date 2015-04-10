@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -13,7 +13,7 @@
   chdir('../../../../');
   require('includes/application_top.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/modules/payment/ipayment_elv.php');
+  require(DIR_WS_LANGUAGES . $_SESSION['language'] . '/modules/payment/ipayment_elv.php');
   require('includes/modules/payment/ipayment_elv.php');
   $ipayment_elv = new ipayment_elv();
 

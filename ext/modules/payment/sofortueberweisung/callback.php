@@ -6,7 +6,7 @@
   http://www.oscommerce.com
 
   Copyright (c) 2006 - 2007 Henri Schmidhuber (http://www.in-solution.de)
-  Copyright (c) 2007 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -52,7 +52,7 @@
   $comment = '';
 
   if ($pw != MODULE_PAYMENT_SOFORTUEBERWEISUNG_DIRECT_BNA_PASSWORT) {
-    $comment = 'ungültiges Benachrichtigung Passwort' . "\n";
+    $comment = 'ung?ltiges Benachrichtigung Passwort' . "\n";
   }
 
   // check if order exists
@@ -74,9 +74,9 @@
       }
 
       if ((int)$betrag_integer == (int)$order_total_integer) {
-        $comment = 'Zahlung durch Sofortüberweisung Benachrichtigung bestätigt!';
+        $comment = 'Zahlung durch Sofort?berweisung Benachrichtigung best?tigt!';
       } else {
-        $comment = "Sofortüberweisungs Transaktionscheck fehlgeschlagen. Bitte manuell überprüfen\n" . ($betrag_integer/100) . '!=' . ($order_total_integer/100);
+        $comment = "Sofort?berweisungs Transaktionscheck fehlgeschlagen. Bitte manuell ?berpr?fen\n" . ($betrag_integer/100) . '!=' . ($order_total_integer/100);
       }
 
       if (MODULE_PAYMENT_SOFORTUEBERWEISUNG_DIRECT_STORE_TRANSACTION_DETAILS == 'True') {

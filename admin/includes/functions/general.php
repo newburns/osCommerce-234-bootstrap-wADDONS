@@ -757,9 +757,9 @@
 // Sets the status of a discount coupon
   function tep_set_coupon_status($coupon_id, $status) {
     if ($status == '1') {
-      return tep_db_query("update " . TABLE_COUPONS . " set coupon_status = '1' where coupon_id = '" . (int)$coupon_id . "'");
+      return tep_db_query("update coupons set coupon_status = '1' where coupon_id = '" . (int)$coupon_id . "'");
     } elseif ($status == '0') {
-      return tep_db_query("update " . TABLE_COUPONS . " set coupon_status = '0' where coupon_id = '" . (int)$coupon_id . "'");
+      return tep_db_query("update coupons set coupon_status = '0' where coupon_id = '" . (int)$coupon_id . "'");
     } else {
       return -1;
     }
@@ -1749,7 +1749,7 @@ return $output;
     $good_result = 0;
     while ($good_result == 0) {
       $id1 = substr($ccid, $random_start,$length);
-      $query = tep_db_query("select coupon_code from " . TABLE_COUPONS . " where coupon_code = '" . $id1 . "'");
+      $query = tep_db_query("select coupon_code from coupons where coupon_code = '" . $id1 . "'");
       if (tep_db_num_rows($query) == 0) $good_result = 1;
     }
     return $id1;
@@ -1757,15 +1757,15 @@ return $output;
 ////
 // Update the Customers GV account
   function tep_gv_account_update($customer_id, $gv_id) {
-    $customer_gv_query = tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id = '" . (int)$customer_id . "'");
-    $coupon_gv_query = tep_db_query("select coupon_amount from " . TABLE_COUPONS . " where coupon_id = '" . $gv_id . "'");
+    $customer_gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
+    $coupon_gv_query = tep_db_query("select coupon_amount from coupons where coupon_id = '" . $gv_id . "'");
     $coupon_gv = tep_db_fetch_array($coupon_gv_query);
     if (tep_db_num_rows($customer_gv_query) > 0) {
       $customer_gv = tep_db_fetch_array($customer_gv_query);
       $new_gv_amount = $customer_gv['amount'] + $coupon_gv['coupon_amount'];
- $gv_query = tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount = '" . $new_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
+ $gv_query = tep_db_query("update coupon_gv_customer set amount = '" . $new_gv_amount . "' where customer_id = '" . (int)$customer_id . "'");
     } else {
-      $gv_query = tep_db_query("insert into " . TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('" . $customer_id . "', '" . $coupon_gv['coupon_amount'] . "')");
+      $gv_query = tep_db_query("insert into coupon_gv_customer (customer_id, amount) values ('" . $customer_id . "', '" . $coupon_gv['coupon_amount'] . "')");
     }
   }
 /* ** EOF alterations for CCGV ** */

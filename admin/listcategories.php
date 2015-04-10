@@ -30,7 +30,7 @@ table {border-collapse: collapse}
 </td>
 </tr>
 <?php
-   $coupon_get = tep_db_query("select restrict_to_categories from " . TABLE_COUPONS . " where coupon_id='".$_GET['cid']."'");
+   $coupon_get = tep_db_query("select restrict_to_categories from coupons where coupon_id='".$_GET['cid']."'");
    $get_result = tep_db_fetch_array($coupon_get);
    echo "<tr><th>Category ID</th><th>Category Name</th></tr><tr>";
    $cat_ids = preg_split("[,]", $get_result['restrict_to_categories']);

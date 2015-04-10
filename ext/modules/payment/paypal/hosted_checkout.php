@@ -20,7 +20,7 @@
   }
 
   if ( $error === false ) {
-    if ( !isset($_GET['key']) || !tep_session_is_registered('pphs_key') || ($_GET['key'] != $pphs_key) || !tep_session_is_registered('pphs_result') ) {
+    if ( !isset($_GET['key']) || !isset($_SESSION['pphs_key']) || ($_GET['key'] != $pphs_key) || !isset($_SESSION['pphs_result']) ) {
       $error = true;
     }
   }
@@ -41,14 +41,14 @@
       $form_url = 'https://securepayments.sandbox.paypal.com/webapps/HostedSoleSolutionApp/webflow/sparta/hostedSoleSolutionProcess';
     }
   } else {
-    $form_url = tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=paypal_pro_hs', 'SSL');
+    $form_url = tep_href_link('checkout_payment.php', 'payment_error=paypal_pro_hs', 'SSL');
   }
 ?>
 <!DOCTYPE html>
 <html <?php echo HTML_PARAMS; ?>>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo CHARSET; ?>" />
-<title><?php echo tep_output_string_protected($oscTemplate->getTitle()); ?></title>
+<title><?php echo tep_output_string_protected(TITLE); ?></title>
 <base href="<?php echo (($request_type == 'SSL') ? HTTPS_SERVER : HTTP_SERVER) . DIR_WS_CATALOG; ?>" />
 </head>
 <body>
@@ -69,5 +69,5 @@
 </html>
 
 <?php
-  require(includes . 'application_bottom.php');
+  require('includes/application_bottom.php');
 ?>

@@ -10,14 +10,14 @@
   require(DIR_WS_CLASSES . 'currencies.php');
   $currencies = new currencies();
   if ($_GET['action']=='confirmrelease' && isset($_GET['gid'])) {
-    $gv_query=tep_db_query("select release_flag from " . TABLE_COUPON_GV_QUEUE . " where unique_id='".$_GET['gid']."'");
+    $gv_query=tep_db_query("select release_flag from coupon_gv_queue where unique_id='".$_GET['gid']."'");
     $gv_result=tep_db_fetch_array($gv_query);
     if ($gv_result['release_flag']=='N') { 
-      $gv_query=tep_db_query("select customer_id, amount from " . TABLE_COUPON_GV_QUEUE ." where unique_id='".$_GET['gid']."'");
+      $gv_query=tep_db_query("select customer_id, amount from coupon_gv_queue where unique_id='".$_GET['gid']."'");
       if ($gv_resulta=tep_db_fetch_array($gv_query)) {
       $gv_amount = $gv_resulta['amount'];
       //Let's build a message object using the email class
-      $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from " . TABLE_CUSTOMERS . " where customers_id = '" . $gv_resulta['customer_id'] . "'");
+      $mail_query = tep_db_query("select customers_firstname, customers_lastname, customers_email_address from customers where customers_id = '" . $gv_resulta['customer_id'] . "'");
       $mail = tep_db_fetch_array($mail_query);
       $message = TEXT_REDEEM_COUPON_MESSAGE_HEADER;
       $message .= sprintf(TEXT_REDEEM_COUPON_MESSAGE_AMOUNT, $currencies->format($gv_amount));
@@ -29,7 +29,7 @@
       $mimemessage->build_message();
       $mimemessage->send($mail['customers_firstname'] . ' ' . $mail['customers_lastname'], $mail['customers_email_address'], '', EMAIL_FROM, TEXT_REDEEM_COUPON_SUBJECT );
       $gv_amount=$gv_resulta['amount'];
-      $gv_query=tep_db_query("select amount from " . TABLE_COUPON_GV_CUSTOMER . " where customer_id='".$gv_resulta['customer_id']."'");
+      $gv_query=tep_db_query("select amount from coupon_gv_customer where customer_id='".$gv_resulta['customer_id']."'");
       $customer_gv=false;
       $total_gv_amount=0;
       if ($gv_result=tep_db_fetch_array($gv_query)) {
@@ -38,16 +38,16 @@
       }    
       $total_gv_amount=$total_gv_amount+$gv_amount;
       if ($customer_gv) {
-        $gv_update=tep_db_query("update " . TABLE_COUPON_GV_CUSTOMER . " set amount='".$total_gv_amount."' where customer_id='".$gv_resulta['customer_id']."'");
+        $gv_update=tep_db_query("update coupon_gv_customer set amount='".$total_gv_amount."' where customer_id='".$gv_resulta['customer_id']."'");
       } else {
-        $gv_insert=tep_db_query("insert into " .TABLE_COUPON_GV_CUSTOMER . " (customer_id, amount) values ('".$gv_resulta['customer_id']."','".$total_gv_amount."')");
+        $gv_insert=tep_db_query("insert into coupon_gv_customer (customer_id, amount) values ('".$gv_resulta['customer_id']."','".$total_gv_amount."')");
       }
-        $gv_update=tep_db_query("update " . TABLE_COUPON_GV_QUEUE . " set release_flag='Y' where unique_id='".$_GET['gid']."'");
+        $gv_update=tep_db_query("update coupon_gv_queue set release_flag='Y' where unique_id='".$_GET['gid']."'");
       }
     }
 } else {
 	if ($_GET['action']=='delete' && isset($_GET['gid'])) {
-	$gv_query=tep_db_query("delete from " . TABLE_COUPON_GV_QUEUE . " where unique_id='".$_GET['gid']."'");
+	$gv_query=tep_db_query("delete from coupon_gv_queue where unique_id='".$_GET['gid']."'");
 }
   }
   require(includes . 'template_top.php');
@@ -72,7 +72,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $gv_query_raw = "select c.customers_firstname, c.customers_lastname, gv.unique_id, gv.date_created, gv.amount, gv.order_id from " . TABLE_CUSTOMERS . " c, " . TABLE_COUPON_GV_QUEUE . " gv where (gv.customer_id = c.customers_id and gv.release_flag = 'N')";
+  $gv_query_raw = "select c.customers_firstname, c.customers_lastname, gv.unique_id, gv.date_created, gv.amount, gv.order_id from " . TABLE_CUSTOMERS . " c, coupon_gv_queue gv where (gv.customer_id = c.customers_id and gv.release_flag = 'N')";
   $gv_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $gv_query_raw, $gv_query_numrows);
   $gv_query = tep_db_query($gv_query_raw);
   while ($gv_list = tep_db_fetch_array($gv_query)) {
