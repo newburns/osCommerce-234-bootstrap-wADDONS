@@ -3,7 +3,7 @@
   $Id: gv_sent.php,v 2.3.3.4 2014/05/13 16:17:14 MOMMOROODLES Exp $
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
   Released under the GNU General Public License
 */
   require('includes/application_top.php');
