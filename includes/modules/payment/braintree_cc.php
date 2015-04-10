@@ -36,10 +36,6 @@
 
       $braintree_error = null;
 
-      if ( version_compare(PHP_VERSION, '5.2.1', '<') ) {
-        $braintree_error = sprintf(MODULE_PAYMENT_BRAINTREE_CC_ERROR_ADMIN_PHP, '5.2.1');
-      }
-
       if ( !isset($braintree_error) ) {
         $requiredExtensions = array('xmlwriter', 'SimpleXML', 'openssl', 'dom', 'hash', 'curl');
 
@@ -107,7 +103,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_BRAINTREE_CC_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_BRAINTREE_CC_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_BRAINTREE_CC_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -140,7 +136,7 @@
     }
 
     function confirmation() {
-      global $customer_id, $order, $currencies, $currency;
+      global $customer_id, $order, $currencies;
 
       $months_array = array();
 
@@ -149,7 +145,7 @@
                                 'text' => tep_output_string_protected(sprintf('%02d', $i)));
       }
 
-      $today = getdate(); 
+      $today = getdate();
       $years_array = array();
 
       for ($i=$today['year']; $i < $today['year']+10; $i++) {
@@ -159,8 +155,8 @@
 
       $content = '';
 
-      if ( !$this->isValidCurrency($currency) ) {
-        $content .= sprintf(MODULE_PAYMENT_BRAINTREE_CC_CURRENCY_CHARGE, $currencies->format($order->info['total'], true, DEFAULT_CURRENCY), DEFAULT_CURRENCY, $currency);
+      if ( !$this->isValidCurrency($_SESSION['currency']) ) {
+        $content .= sprintf(MODULE_PAYMENT_BRAINTREE_CC_CURRENCY_CHARGE, $currencies->format($order->info['total'], true, DEFAULT_CURRENCY), DEFAULT_CURRENCY, $_SESSION['currency']);
       }
 
       if ( MODULE_PAYMENT_BRAINTREE_CC_TOKENS == 'True' ) {
@@ -170,7 +166,7 @@
           $content .= '<table id="braintree_table" border="0" width="100%" cellspacing="0" cellpadding="2">';
 
           while ( $tokens = tep_db_fetch_array($tokens_query) ) {
-            $content .= '<tr class="moduleRow" id="braintree_card_' . (int)$tokens['id'] . '">' . 
+            $content .= '<tr class="moduleRow" id="braintree_card_' . (int)$tokens['id'] . '">' .
                         '  <td width="40" valign="top"><input type="radio" name="braintree_card" value="' . (int)$tokens['id'] . '" /></td>' .
                         '  <td valign="top">' . MODULE_PAYMENT_BRAINTREE_CC_CREDITCARD_LAST_4 . '&nbsp;' . tep_output_string_protected($tokens['number_filtered']) . '&nbsp;&nbsp;' . tep_output_string_protected(substr($tokens['expiry_date'], 0, 2) . '/' . substr($tokens['expiry_date'], 2)) . '&nbsp;&nbsp;' . tep_output_string_protected($tokens['card_type']) . '</td>' .
                         '</tr>';
@@ -235,7 +231,7 @@
     }
 
     function before_process() {
-      global $customer_id, $order, $_POST, $braintree_result, $braintree_token, $braintree_error;
+      global $customer_id, $order, $braintree_result, $braintree_token, $braintree_error;
 
       $braintree_token = null;
       $braintree_token_cvv = null;
@@ -257,7 +253,7 @@
               }
 
               if ( !isset($braintree_token_cvv) || empty($braintree_token_cvv) ) {
-                tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardcvv', 'SSL'));
+                tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardcvv', 'SSL'));
               }
             }
           }
@@ -280,7 +276,7 @@
           $months_array[] = sprintf('%02d', $i);
         }
 
-        $today = getdate(); 
+        $today = getdate();
         $years_array = array();
 
         for ($i=$today['year']; $i < $today['year']+10; $i++) {
@@ -288,28 +284,28 @@
         }
 
         if ( !isset($cc_owner) || empty($cc_owner) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardowner', 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardowner', 'SSL'));
         }
 
         if ( !isset($cc_number) || empty($cc_number) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardnumber', 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardnumber', 'SSL'));
         }
 
         if ( !isset($cc_expires_month) || !in_array($cc_expires_month, $months_array) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
         }
 
         if ( !isset($cc_expires_year) || !in_array($cc_expires_year, $years_array) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
         }
 
         if ( ($cc_expires_year == date('Y')) && ($cc_expires_month < date('m')) ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardexpires', 'SSL'));
         }
 
         if ( MODULE_PAYMENT_BRAINTREE_CC_VERIFY_WITH_CVV == 'True' ) {
           if ( !isset($cc_cvv) || empty($cc_cvv) ) {
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardcvv', 'SSL'));
+            tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardcvv', 'SSL'));
           }
         }
       }
@@ -414,11 +410,11 @@
         }
       }
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL'));
+      tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'SSL'));
     }
 
     function after_process() {
-      global $_POST, $customer_id, $insert_id, $braintree_result, $braintree_token;
+      global $customer_id, $insert_id, $braintree_result, $braintree_token;
 
       $status_comment = array('Transaction ID: ' . $braintree_result->transaction->id);
 
@@ -451,11 +447,11 @@
                               'customer_notified' => '0',
                               'comments' => implode("\n", $status_comment));
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
     }
 
     function get_error() {
-      global $_GET, $braintree_error;
+      global $braintree_error;
 
       $message = MODULE_PAYMENT_BRAINTREE_CC_ERROR_GENERAL;
 
@@ -477,10 +473,10 @@
             $message = MODULE_PAYMENT_BRAINTREE_CC_ERROR_CARDCVV;
             break;
         }
-      } elseif ( tep_session_is_registered('braintree_error') ) {
+      } elseif ( isset($_SESSION['braintree_error']) ) {
         $message = $braintree_error . ' ' . $message;
 
-        tep_session_unregister('braintree_error');
+        unset($_SESSION['braintree_error']);
       }
 
       $error = array('title' => MODULE_PAYMENT_BRAINTREE_CC_ERROR_TITLE,
@@ -525,7 +521,7 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
@@ -568,10 +564,10 @@ EOD;
       }
 
       if (!defined('MODULE_PAYMENT_BRAINTREE_CC_TRANSACTION_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Braintree [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Braintree [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -579,12 +575,12 @@ EOD;
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Braintree [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Braintree [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -652,10 +648,10 @@ EOD;
     }
 
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$currencies->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -666,9 +662,7 @@ EOD;
     }
 
     function getTransactionCurrency() {
-      global $currency;
-
-      return $this->isValidCurrency($currency) ? $currency : DEFAULT_CURRENCY;
+      return $this->isValidCurrency($_SESSION['currency']) ? $_SESSION['currency'] : DEFAULT_CURRENCY;
     }
 
     function getMerchantAccountId($currency) {

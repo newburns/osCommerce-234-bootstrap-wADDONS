@@ -66,7 +66,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_SAGE_PAY_FORM_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_SAGE_PAY_FORM_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_SAGE_PAY_FORM_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -101,7 +101,7 @@
     }
 
     function process_button() {
-      global $customer_id, $order, $currency, $cartID;
+      global $customer_id, $order, $cartID;
 
       $process_button_string = '';
 
@@ -119,10 +119,10 @@
       $crypt = array('ReferrerID' => 'C74D7B82-E9EB-4FBD-93DB-76F0F551C802',
                      'VendorTxCode' => substr(date('YmdHis') . '-' . $customer_id . '-' . $cartID, 0, 40),
                      'Amount' => $this->format_raw($order->info['total']),
-                     'Currency' => $currency,
+                     'Currency' => $_SESSION['currency'],
                      'Description' => substr(STORE_NAME, 0, 100),
-                     'SuccessURL' => tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL'),
-                     'FailureURL' => tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL'),
+                     'SuccessURL' => tep_href_link('checkout_process.php', '', 'SSL'),
+                     'FailureURL' => tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'SSL'),
                      'CustomerName' => substr($order->billing['firstname'] . ' ' . $order->billing['lastname'], 0, 100),
                      'CustomerEMail' => substr($order->customer['email_address'], 0, 255),
                      'BillingSurname' => substr($order->billing['lastname'], 0, 20),
@@ -209,7 +209,7 @@
     }
 
     function before_process() {
-      global $_GET, $sage_pay_response;
+      global $sage_pay_response;
 
       if (isset($_GET['crypt']) && tep_not_null($_GET['crypt'])) {
         $transaction_response = $this->decryptParams($_GET['crypt']);
@@ -229,10 +229,10 @@
 
           $error = $this->getErrorMessageNumber($sage_pay_response['StatusDetail']);
 
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . (tep_not_null($error) ? '&error=' . $error : ''), 'SSL'));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . (tep_not_null($error) ? '&error=' . $error : ''), 'SSL'));
         }
       } else {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL'));
+        tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'SSL'));
       }
     }
 
@@ -289,12 +289,10 @@
                               'customer_notified' => '0',
                               'comments' => trim($result_string));
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
     }
 
     function get_error() {
-      global $_GET;
-
       $message = MODULE_PAYMENT_SAGE_PAY_FORM_ERROR_GENERAL;
 
       $error_number = null;
@@ -372,7 +370,7 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
@@ -396,10 +394,10 @@
 
     function getParams() {
       if (!defined('MODULE_PAYMENT_SAGE_PAY_FORM_TRANSACTION_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Sage Pay [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Sage Pay [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -407,12 +405,12 @@
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Sage Pay [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Sage Pay [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -475,10 +473,10 @@
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$currencies->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -580,8 +578,6 @@
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_SAGE_PAY_FORM_DEBUG_EMAIL)) {
         $email_body = '';
 

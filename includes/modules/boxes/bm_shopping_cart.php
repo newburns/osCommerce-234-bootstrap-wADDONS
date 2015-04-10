@@ -51,12 +51,12 @@
 			$gv_contents_string .= '<div style="text-align:center; width:100%; margin:auto;"><a href="'. tep_href_link(FILENAME_GV_SEND) . '">' . BOX_SEND_TO_FRIEND . '</a></div></div>';
 			}
 		}
-	if (!isset($_SESSION['gv_id']))	{
+	if ($_SESSION['gv_id']))	{
 		$gv_query = tep_db_query("select coupon_amount from coupons where coupon_id = '" . $gv_id . "'");
 		$coupon = tep_db_fetch_array($gv_query);
 		$gv_contents_string = '<div style="text-align:center; width:100%; margin:auto;">' . VOUCHER_REDEEMED . '</td><td class="smalltext" align="right" valign="bottom">' . $currencies->format($coupon['coupon_amount']) . '</div>';
 		}
-	if (!isset($_SESSION['cc_id']) && $cc_id) {
+	if ($_SESSION['cc_id']) && $cc_id) {
 		$coupon_query = tep_db_query("select * from coupons where coupon_id = '" . $cc_id . "'");
 		$coupon = tep_db_fetch_array($coupon_query);
 		$coupon_desc_query = tep_db_query("select * from coupons_description where coupon_id = '" . $cc_id . "' and language_id = '" . $languages_id . "'");

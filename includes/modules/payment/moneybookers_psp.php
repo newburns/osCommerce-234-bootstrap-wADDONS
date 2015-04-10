@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -56,7 +56,7 @@
         $this->enabled = false;
       } elseif ( ($this->enabled == true) && ((int)MODULE_PAYMENT_MONEYBOOKERS_PSP_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_MONEYBOOKERS_PSP_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_MONEYBOOKERS_PSP_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -74,9 +74,7 @@
     }
 
     function confirmation() {
-      global $language;
-
-      include(DIR_FS_CATALOG . 'includes/languages/' . $language . '/modules/payment/moneybookers.php');
+      include(DIR_FS_CATALOG . 'includes/languages/' . $_SESSION['language'] . '/modules/payment/moneybookers.php');
 
       parent::confirmation();
     }
@@ -96,20 +94,20 @@
 
       $zone_id = 0;
 
-      $zone_query = tep_db_query("select geo_zone_id from " . TABLE_GEO_ZONES . " where geo_zone_name = 'Moneybookers Postepay'");
+      $zone_query = tep_db_query("select geo_zone_id from geo_zones where geo_zone_name = 'Moneybookers Postepay'");
       if (tep_db_num_rows($zone_query)) {
         $zone = tep_db_fetch_array($zone_query);
 
         $zone_id = $zone['geo_zone_id'];
       } else {
-        tep_db_query("insert into " . TABLE_GEO_ZONES . " values (null, 'Moneybookers Postepay', 'The zone for the Moneybookers Postepay payment module', null, now())");
+        tep_db_query("insert into geo_zones values (null, 'Moneybookers Postepay', 'The zone for the Moneybookers Postepay payment module', null, now())");
         $zone_id = tep_db_insert_id();
 
-        $country_query = tep_db_query("select countries_id from " . TABLE_COUNTRIES . " where countries_iso_code_2 = 'IT'");
+        $country_query = tep_db_query("select countries_id from countries where countries_iso_code_2 = 'IT'");
         if (tep_db_num_rows($country_query)) {
           $country = tep_db_fetch_array($country_query);
 
-          tep_db_query("insert into " . TABLE_ZONES_TO_GEO_ZONES . " values (null, '" . (int)$country['countries_id'] . "', 0, '" . (int)$zone_id . "', null, now())");
+          tep_db_query("insert into zones_to_geo_zones values (null, '" . (int)$country['countries_id'] . "', 0, '" . (int)$zone_id . "', null, now())");
         }
       }
 

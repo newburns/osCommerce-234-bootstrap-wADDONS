@@ -16,7 +16,7 @@
     function rbsworldpay_hosted() {
       global $order;
 
-      $this->signature = 'rbs|worldpay_hosted|2.0|2.3';
+      $this->signature = 'rbs|worldpay_hosted|2.2|2.3';
       $this->api_version = '4.6';
 
       $this->code = 'rbsworldpay_hosted';
@@ -60,7 +60,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_RBSWORLDPAY_HOSTED_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -84,20 +84,20 @@
     function selection() {
       global $cart_RBS_Worldpay_Hosted_ID;
 
-      if (tep_session_is_registered('cart_RBS_Worldpay_Hosted_ID')) {
+      if (isset($_SESSION['cart_RBS_Worldpay_Hosted_ID'])) {
         $order_id = substr($cart_RBS_Worldpay_Hosted_ID, strpos($cart_RBS_Worldpay_Hosted_ID, '-')+1);
 
-        $check_query = tep_db_query('select orders_id from ' . TABLE_ORDERS_STATUS_HISTORY . ' where orders_id = "' . (int)$order_id . '" limit 1');
+        $check_query = tep_db_query('select orders_id from orders_status_history where orders_id = "' . (int)$order_id . '" limit 1');
 
         if (tep_db_num_rows($check_query) < 1) {
-          tep_db_query('delete from ' . TABLE_ORDERS . ' where orders_id = "' . (int)$order_id . '"');
-          tep_db_query('delete from ' . TABLE_ORDERS_TOTAL . ' where orders_id = "' . (int)$order_id . '"');
-          tep_db_query('delete from ' . TABLE_ORDERS_STATUS_HISTORY . ' where orders_id = "' . (int)$order_id . '"');
-          tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS . ' where orders_id = "' . (int)$order_id . '"');
-          tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . ' where orders_id = "' . (int)$order_id . '"');
-          tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_DOWNLOAD . ' where orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders where orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders_total where orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders_status_history where orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders_productswhere orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders_products_attributes where orders_id = "' . (int)$order_id . '"');
+          tep_db_query('delete from orders_products_download where orders_id = "' . (int)$order_id . '"');
 
-          tep_session_unregister('cart_RBS_Worldpay_Hosted_ID');
+          unset($_SESSION['cart_RBS_Worldpay_Hosted_ID']);
         }
       }
 
@@ -106,38 +106,38 @@
     }
 
     function pre_confirmation_check() {
-      global $cartID, $cart;
+      global $cartID;
 
-      if (empty($cart->cartID)) {
-        $cartID = $cart->cartID = $cart->generate_cart_id();
+      if (empty($_SESSION['cart']->cartID)) {
+        $cartID = $_SESSION['cart']->cartID = $_SESSION['cart']->generate_cart_id();
       }
 
-      if (!tep_session_is_registered('cartID')) {
+      if (!isset($_SESSION['cartID'])) {
         tep_session_register('cartID');
       }
     }
 
     function confirmation() {
-      global $cartID, $cart_RBS_Worldpay_Hosted_ID, $customer_id, $languages_id, $order, $order_total_modules;
+      global $cartID, $cart_RBS_Worldpay_Hosted_ID, $customer_id, $order, $order_total_modules;
 
       $insert_order = false;
 
-      if (tep_session_is_registered('cart_RBS_Worldpay_Hosted_ID')) {
+      if (isset($_SESSION['cart_RBS_Worldpay_Hosted_ID'])) {
         $order_id = substr($cart_RBS_Worldpay_Hosted_ID, strpos($cart_RBS_Worldpay_Hosted_ID, '-')+1);
 
-        $curr_check = tep_db_query("select currency from " . TABLE_ORDERS . " where orders_id = '" . (int)$order_id . "'");
+        $curr_check = tep_db_query("select currency from orders where orders_id = '" . (int)$order_id . "'");
         $curr = tep_db_fetch_array($curr_check);
 
         if ( ($curr['currency'] != $order->info['currency']) || ($cartID != substr($cart_RBS_Worldpay_Hosted_ID, 0, strlen($cartID))) ) {
-          $check_query = tep_db_query('select orders_id from ' . TABLE_ORDERS_STATUS_HISTORY . ' where orders_id = "' . (int)$order_id . '" limit 1');
+          $check_query = tep_db_query('select orders_id from orders_status_history where orders_id = "' . (int)$order_id . '" limit 1');
 
           if (tep_db_num_rows($check_query) < 1) {
-            tep_db_query('delete from ' . TABLE_ORDERS . ' where orders_id = "' . (int)$order_id . '"');
-            tep_db_query('delete from ' . TABLE_ORDERS_TOTAL . ' where orders_id = "' . (int)$order_id . '"');
-            tep_db_query('delete from ' . TABLE_ORDERS_STATUS_HISTORY . ' where orders_id = "' . (int)$order_id . '"');
-            tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS . ' where orders_id = "' . (int)$order_id . '"');
-            tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . ' where orders_id = "' . (int)$order_id . '"');
-            tep_db_query('delete from ' . TABLE_ORDERS_PRODUCTS_DOWNLOAD . ' where orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders where orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders_total where orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders_status_history where orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders_productswhere orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders_products_attributes where orders_id = "' . (int)$order_id . '"');
+            tep_db_query('delete from orders_products_download where orders_id = "' . (int)$order_id . '"');
           }
 
           $insert_order = true;
@@ -206,7 +206,7 @@
                                 'currency' => $order->info['currency'],
                                 'currency_value' => $order->info['currency_value']);
 
-        tep_db_perform(TABLE_ORDERS, $sql_data_array);
+        tep_db_perform('orders', $sql_data_array);
 
         $insert_id = tep_db_insert_id();
 
@@ -218,7 +218,7 @@
                                   'class' => $order_totals[$i]['code'],
                                   'sort_order' => $order_totals[$i]['sort_order']);
 
-          tep_db_perform(TABLE_ORDERS_TOTAL, $sql_data_array);
+          tep_db_perform('orders_total', $sql_data_array);
         }
 
         for ($i=0, $n=sizeof($order->products); $i<$n; $i++) {
@@ -229,9 +229,10 @@
                                   'products_price' => $order->products[$i]['price'],
                                   'final_price' => $order->products[$i]['final_price'],
                                   'products_tax' => $order->products[$i]['tax'],
-                                  'products_quantity' => $order->products[$i]['qty']);
+                                  'products_quantity' => $order->products[$i]['qty'],
+                                  'products_full_id' => $order->products[$i]['id']);
 
-          tep_db_perform(TABLE_ORDERS_PRODUCTS, $sql_data_array);
+          tep_db_perform('orders_products', $sql_data_array);
 
           $order_products_id = tep_db_insert_id();
 
@@ -241,19 +242,19 @@
             for ($j=0, $n2=sizeof($order->products[$i]['attributes']); $j<$n2; $j++) {
               if (DOWNLOAD_ENABLED == 'true') {
                 $attributes_query = "select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount , pad.products_attributes_filename
-                                     from " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_OPTIONS_VALUES . " poval, " . TABLE_PRODUCTS_ATTRIBUTES . " pa
-                                     left join " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " pad
+                                     from products_options popt, products_options_values poval, products_attributes pa
+                                     left join products_attributes_download pad
                                      on pa.products_attributes_id=pad.products_attributes_id
                                      where pa.products_id = '" . $order->products[$i]['id'] . "'
                                      and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "'
                                      and pa.options_id = popt.products_options_id
                                      and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "'
                                      and pa.options_values_id = poval.products_options_values_id
-                                     and popt.language_id = '" . $languages_id . "'
-                                     and poval.language_id = '" . $languages_id . "'";
+                                     and popt.language_id = '" . (int)$_SESSION['languages_id'] . "'
+                                     and poval.language_id = '" . (int)$_SESSION['languages_id'] . "'";
                 $attributes = tep_db_query($attributes_query);
               } else {
-                $attributes = tep_db_query("select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix from " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_OPTIONS_VALUES . " poval, " . TABLE_PRODUCTS_ATTRIBUTES . " pa where pa.products_id = '" . $order->products[$i]['id'] . "' and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "' and pa.options_id = popt.products_options_id and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "' and pa.options_values_id = poval.products_options_values_id and popt.language_id = '" . $languages_id . "' and poval.language_id = '" . $languages_id . "'");
+                $attributes = tep_db_query("select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix from products_options popt, products_options_values poval, products_attributes pa where pa.products_id = '" . $order->products[$i]['id'] . "' and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "' and pa.options_id = popt.products_options_id and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "' and pa.options_values_id = poval.products_options_values_id and popt.language_id = '" . (int)$_SESSION['languages_id'] . "' and poval.language_id = '" . (int)$_SESSION['languages_id'] . "'");
               }
               $attributes_values = tep_db_fetch_array($attributes);
 
@@ -264,7 +265,7 @@
                                       'options_values_price' => $attributes_values['options_values_price'],
                                       'price_prefix' => $attributes_values['price_prefix']);
 
-              tep_db_perform(TABLE_ORDERS_PRODUCTS_ATTRIBUTES, $sql_data_array);
+              tep_db_perform(orders_products_attributes, $sql_data_array);
 
               if ((DOWNLOAD_ENABLED == 'true') && isset($attributes_values['products_attributes_filename']) && tep_not_null($attributes_values['products_attributes_filename'])) {
                 $sql_data_array = array('orders_id' => $insert_id,
@@ -273,7 +274,7 @@
                                         'download_maxdays' => $attributes_values['products_attributes_maxdays'],
                                         'download_count' => $attributes_values['products_attributes_maxcount']);
 
-                tep_db_perform(TABLE_ORDERS_PRODUCTS_DOWNLOAD, $sql_data_array);
+                tep_db_perform('orders_products_download', $sql_data_array);
               }
             }
           }
@@ -287,17 +288,17 @@
     }
 
     function process_button() {
-      global $order, $currency, $languages_id, $language, $customer_id, $cart_RBS_Worldpay_Hosted_ID;
+      global $order, $customer_id, $cart_RBS_Worldpay_Hosted_ID;
 
       $order_id = substr($cart_RBS_Worldpay_Hosted_ID, strpos($cart_RBS_Worldpay_Hosted_ID, '-')+1);
 
-      $lang_query = tep_db_query("select code from " . TABLE_LANGUAGES . " where languages_id = '" . (int)$languages_id . "'");
+      $lang_query = tep_db_query("select code from languages where languages_id = '" . (int)$_SESSION['languages_id'] . "'");
       $lang = tep_db_fetch_array($lang_query);
 
       $process_button_string = tep_draw_hidden_field('instId', MODULE_PAYMENT_RBSWORLDPAY_HOSTED_INSTALLATION_ID) .
                                tep_draw_hidden_field('cartId', $order_id) .
                                tep_draw_hidden_field('amount', $this->format_raw($order->info['total'])) .
-                               tep_draw_hidden_field('currency', $currency) .
+                               tep_draw_hidden_field('currency', $_SESSION['currency']) .
                                tep_draw_hidden_field('desc', STORE_NAME) .
                                tep_draw_hidden_field('name', $order->billing['firstname'] . ' ' . $order->billing['lastname']) .
                                tep_draw_hidden_field('address1', $order->billing['street_address']) .
@@ -311,12 +312,12 @@
                                tep_draw_hidden_field('hideCurrency', 'true') .
                                tep_draw_hidden_field('lang', strtoupper($lang['code'])) .
                                tep_draw_hidden_field('signatureFields', 'amount:currency:cartId') .
-                               tep_draw_hidden_field('signature', md5(MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD . ':' . $this->format_raw($order->info['total']) . ':' . $currency . ':' . $order_id)) .
+                               tep_draw_hidden_field('signature', md5(MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD . ':' . $this->format_raw($order->info['total']) . ':' . $_SESSION['currency'] . ':' . $order_id)) .
                                tep_draw_hidden_field('MC_callback', tep_href_link('ext/modules/payment/rbsworldpay/hosted_callback.php', '', 'SSL', false)) .
-                               tep_draw_hidden_field('M_sid', tep_session_id()) .
+                               tep_draw_hidden_field('M_sid', session_id()) .
                                tep_draw_hidden_field('M_cid', $customer_id) .
-                               tep_draw_hidden_field('M_lang', $language) .
-                               tep_draw_hidden_field('M_hash', md5(tep_session_id() . $customer_id . $order_id . $language . number_format($order->info['total'], 2) . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD));
+                               tep_draw_hidden_field('M_lang', $_SESSION['language']) .
+                               tep_draw_hidden_field('M_hash', md5(session_id() . $customer_id . $order_id . $_SESSION['language'] . number_format($order->info['total'], 2) . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD));
 
       if (MODULE_PAYMENT_RBSWORLDPAY_HOSTED_TRANSACTION_METHOD == 'Pre-Authorization') {
         $process_button_string .= tep_draw_hidden_field('authMode', 'E');
@@ -330,31 +331,31 @@
     }
 
     function before_process() {
-      global $_GET, $customer_id, $language, $order, $order_totals, $sendto, $billto, $languages_id, $payment, $currencies, $cart, $cart_RBS_Worldpay_Hosted_ID;
+      global $customer_id, $order, $order_totals, $sendto, $billto, $payment, $currencies, $cart_RBS_Worldpay_Hosted_ID;
       global $$payment;
 
       $order_id = substr($cart_RBS_Worldpay_Hosted_ID, strpos($cart_RBS_Worldpay_Hosted_ID, '-')+1);
 
-      if (!isset($_GET['hash']) || ($_GET['hash'] != md5(tep_session_id() . $customer_id . $order_id . $language . number_format($order->info['total'], 2) . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD))) {
+      if (!isset($_GET['hash']) || ($_GET['hash'] != md5(session_id() . $customer_id . $order_id . $_SESSION['language'] . number_format($order->info['total'], 2) . MODULE_PAYMENT_RBSWORLDPAY_HOSTED_MD5_PASSWORD))) {
         $this->sendDebugEmail();
 
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART));
+        tep_redirect(tep_href_link('shopping_cart.php'));
       }
 
-      $order_query = tep_db_query("select orders_status from " . TABLE_ORDERS . " where orders_id = '" . (int)$order_id . "' and customers_id = '" . (int)$customer_id . "'");
+      $check_query = tep_db_query("select orders_status from orders where orders_id = '" . (int)$order_id . "' and customers_id = '" . (int)$customer_id . "'");
 
-      if (!tep_db_num_rows($order_query)) {
+      if (!tep_db_num_rows($check_query)) {
         $this->sendDebugEmail();
 
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART));
+        tep_redirect(tep_href_link('shopping_cart.php'));
       }
 
-      $order = tep_db_fetch_array($order_query);
+      $check = tep_db_fetch_array($check_query);
 
       $order_status_id = (MODULE_PAYMENT_RBSWORLDPAY_HOSTED_ORDER_STATUS_ID > 0 ? (int)MODULE_PAYMENT_RBSWORLDPAY_HOSTED_ORDER_STATUS_ID : (int)DEFAULT_ORDERS_STATUS_ID);
 
-      if ($order['orders_status'] == MODULE_PAYMENT_RBSWORLDPAY_HOSTED_PREPARE_ORDER_STATUS_ID) {
-        tep_db_query("update " . TABLE_ORDERS . " set orders_status = '" . $order_status_id . "', last_modified = now() where orders_id = '" . (int)$order_id . "'");
+      if ($check['orders_status'] == MODULE_PAYMENT_RBSWORLDPAY_HOSTED_PREPARE_ORDER_STATUS_ID) {
+        tep_db_query("update orders set orders_status = '" . $order_status_id . "', last_modified = now() where orders_id = '" . (int)$order_id . "'");
 
         $sql_data_array = array('orders_id' => $order_id,
                                 'orders_status_id' => $order_status_id,
@@ -362,9 +363,9 @@
                                 'customer_notified' => (SEND_EMAILS == 'true') ? '1' : '0',
                                 'comments' => $order->info['comments']);
 
-        tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+        tep_db_perform('orders_status_history', $sql_data_array);
       } else {
-        $order_status_query = tep_db_query("select orders_status_history_id from " . TABLE_ORDERS_STATUS_HISTORY . " where orders_id = '" . (int)$order_id . "' and orders_status_id = '" . (int)$order_status_id . "' and comments = '' order by date_added desc limit 1");
+        $order_status_query = tep_db_query("select orders_status_history_id from orders_status_history where orders_id = '" . (int)$order_id . "' and orders_status_id = '" . (int)$order_status_id . "' and comments = '' order by date_added desc limit 1");
 
         if (tep_db_num_rows($order_status_query)) {
           $order_status = tep_db_fetch_array($order_status_query);
@@ -372,7 +373,7 @@
           $sql_data_array = array('customer_notified' => (SEND_EMAILS == 'true') ? '1' : '0',
                                   'comments' => $order->info['comments']);
 
-          tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array, 'update', "orders_status_history_id = '" . (int)$order_status['orders_status_history_id'] . "'");
+          tep_db_perform('orders_status_history', $sql_data_array, 'update', "orders_status_history_id = '" . (int)$order_status['orders_status_history_id'] . "'");
         }
       }
 
@@ -388,7 +389,7 @@
                               'customer_notified' => '0',
                               'comments' => $trans_result);
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
 
 // initialized for the email confirmation
       $products_ordered = '';
@@ -400,10 +401,10 @@
         if (STOCK_LIMITED == 'true') {
           if (DOWNLOAD_ENABLED == 'true') {
             $stock_query_raw = "SELECT products_quantity, pad.products_attributes_filename
-                                FROM " . TABLE_PRODUCTS . " p
-                                LEFT JOIN " . TABLE_PRODUCTS_ATTRIBUTES . " pa
+                                FROM products p
+                                LEFT JOIN products_attributes pa
                                 ON p.products_id=pa.products_id
-                                LEFT JOIN " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " pad
+                                LEFT JOIN products_attributes_download pad
                                 ON pa.products_attributes_id=pad.products_attributes_id
                                 WHERE p.products_id = '" . tep_get_prid($order->products[$i]['id']) . "'";
 // Will work with only one option for downloadable products
@@ -414,7 +415,7 @@
             }
             $stock_query = tep_db_query($stock_query_raw);
           } else {
-            $stock_query = tep_db_query("select products_quantity from " . TABLE_PRODUCTS . " where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
+            $stock_query = tep_db_query("select products_quantity from products where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
           }
           if (tep_db_num_rows($stock_query) > 0) {
             $stock_values = tep_db_fetch_array($stock_query);
@@ -424,15 +425,15 @@
             } else {
               $stock_left = $stock_values['products_quantity'];
             }
-            tep_db_query("update " . TABLE_PRODUCTS . " set products_quantity = '" . $stock_left . "' where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
+            tep_db_query("update products set products_quantity = '" . $stock_left . "' where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
             if ( ($stock_left < 1) && (STOCK_ALLOW_CHECKOUT == 'false') ) {
-              tep_db_query("update " . TABLE_PRODUCTS . " set products_status = '0' where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
+              tep_db_query("update products set products_status = '0' where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
             }
           }
         }
 
 // Update products_ordered (for bestsellers list)
-        tep_db_query("update " . TABLE_PRODUCTS . " set products_ordered = products_ordered + " . sprintf('%d', $order->products[$i]['qty']) . " where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
+        tep_db_query("update products set products_ordered = products_ordered + " . sprintf('%d', $order->products[$i]['qty']) . " where products_id = '" . tep_get_prid($order->products[$i]['id']) . "'");
 
 //------insert customer choosen option to order--------
         $attributes_exist = '0';
@@ -442,19 +443,19 @@
           for ($j=0, $n2=sizeof($order->products[$i]['attributes']); $j<$n2; $j++) {
             if (DOWNLOAD_ENABLED == 'true') {
               $attributes_query = "select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix, pad.products_attributes_maxdays, pad.products_attributes_maxcount , pad.products_attributes_filename
-                                   from " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_OPTIONS_VALUES . " poval, " . TABLE_PRODUCTS_ATTRIBUTES . " pa
-                                   left join " . TABLE_PRODUCTS_ATTRIBUTES_DOWNLOAD . " pad
+                                   from products_options popt, products_options_values poval, products_attributes pa
+                                   left join products_attributes_download pad
                                    on pa.products_attributes_id=pad.products_attributes_id
                                    where pa.products_id = '" . $order->products[$i]['id'] . "'
                                    and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "'
                                    and pa.options_id = popt.products_options_id
                                    and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "'
                                    and pa.options_values_id = poval.products_options_values_id
-                                   and popt.language_id = '" . $languages_id . "'
-                                   and poval.language_id = '" . $languages_id . "'";
+                                   and popt.language_id = '" . (int)$_SESSION['languages_id'] . "'
+                                   and poval.language_id = '" . (int)$_SESSION['languages_id'] . "'";
               $attributes = tep_db_query($attributes_query);
             } else {
-              $attributes = tep_db_query("select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix from " . TABLE_PRODUCTS_OPTIONS . " popt, " . TABLE_PRODUCTS_OPTIONS_VALUES . " poval, " . TABLE_PRODUCTS_ATTRIBUTES . " pa where pa.products_id = '" . $order->products[$i]['id'] . "' and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "' and pa.options_id = popt.products_options_id and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "' and pa.options_values_id = poval.products_options_values_id and popt.language_id = '" . $languages_id . "' and poval.language_id = '" . $languages_id . "'");
+              $attributes = tep_db_query("select popt.products_options_name, poval.products_options_values_name, pa.options_values_price, pa.price_prefix from products_options popt, products_options_values poval, products_attributes pa where pa.products_id = '" . $order->products[$i]['id'] . "' and pa.options_id = '" . $order->products[$i]['attributes'][$j]['option_id'] . "' and pa.options_id = popt.products_options_id and pa.options_values_id = '" . $order->products[$i]['attributes'][$j]['value_id'] . "' and pa.options_values_id = poval.products_options_values_id and popt.language_id = '" . (int)$_SESSION['languages_id'] . "' and poval.language_id = '" . (int)$_SESSION['languages_id'] . "'");
             }
             $attributes_values = tep_db_fetch_array($attributes);
 
@@ -473,7 +474,7 @@
       $email_order = STORE_NAME . "\n" .
                      EMAIL_SEPARATOR . "\n" .
                      EMAIL_TEXT_ORDER_NUMBER . ' ' . $order_id . "\n" .
-                     EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link(FILENAME_ACCOUNT_HISTORY_INFO, 'order_id=' . $order_id, 'SSL', false) . "\n" .
+                     EMAIL_TEXT_INVOICE_URL . ' ' . tep_href_link('account_history_info.php', 'order_id=' . $order_id, 'SSL', false) . "\n" .
                      EMAIL_TEXT_DATE_ORDERED . ' ' . strftime(DATE_FORMAT_LONG) . "\n\n";
       if ($order->info['comments']) {
         $email_order .= tep_db_output($order->info['comments']) . "\n\n";
@@ -517,18 +518,18 @@
 // load the after_process function from the payment modules
       $this->after_process();
 
-      $cart->reset(true);
+      $_SESSION['cart']->reset(true);
 
 // unregister session variables used during checkout
-      tep_session_unregister('sendto');
-      tep_session_unregister('billto');
-      tep_session_unregister('shipping');
-      tep_session_unregister('payment');
-      tep_session_unregister('comments');
+      unset($_SESSION['sendto']);
+      unset($_SESSION['billto']);
+      unset($_SESSION['shipping']);
+      unset($_SESSION['payment']);
+      unset($_SESSION['comments']);
 
-      tep_session_unregister('cart_RBS_Worldpay_Hosted_ID');
+      unset($_SESSION['cart_RBS_Worldpay_Hosted_ID']);
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL'));
+      tep_redirect(tep_href_link('checkout_success.php', '', 'SSL'));
     }
 
     function after_process() {
@@ -575,7 +576,7 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
@@ -599,10 +600,10 @@
 
     function getParams() {
       if (!defined('MODULE_PAYMENT_RBSWORLDPAY_HOSTED_PREPARE_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Preparing [WorldPay]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Preparing [WorldPay]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -610,12 +611,12 @@
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Preparing [WorldPay]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Preparing [WorldPay]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -627,10 +628,10 @@
       }
 
       if (!defined('MODULE_PAYMENT_RBSWORLDPAY_HOSTED_TRANSACTIONS_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'WorldPay [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'WorldPay [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $tx_status_id = $status['status_id']+1;
@@ -638,12 +639,12 @@
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $tx_status_id . "', '" . $lang['id'] . "', 'WorldPay [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $tx_status_id . "', '" . $lang['id'] . "', 'WorldPay [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $tx_status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $tx_status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -703,10 +704,10 @@
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$this->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -717,8 +718,6 @@
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_RBSWORLDPAY_HOSTED_DEBUG_EMAIL)) {
         $email_body = '';
 

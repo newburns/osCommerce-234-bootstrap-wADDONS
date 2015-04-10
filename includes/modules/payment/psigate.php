@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2003 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -38,7 +38,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_PSIGATE_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_PSIGATE_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_PSIGATE_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -79,7 +79,7 @@
           $expires_month[] = array('id' => sprintf('%02d', $i), 'text' => strftime('%B',mktime(0,0,0,$i,1,2000)));
         }
 
-        $today = getdate(); 
+        $today = getdate();
         for ($i=$today['year']; $i < $today['year']+10; $i++) {
           $expires_year[] = array('id' => strftime('%y',mktime(0,0,0,1,1,$i)), 'text' => strftime('%Y',mktime(0,0,0,1,1,$i)));
         }
@@ -101,8 +101,6 @@
     }
 
     function pre_confirmation_check() {
-      global $_POST;
-
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
         include(DIR_WS_CLASSES . 'cc_validation.php');
 
@@ -127,7 +125,7 @@
         if ( ($result == false) || ($result < 1) ) {
           $payment_error_return = 'payment_error=' . $this->code . '&error=' . urlencode($error) . '&psigate_cc_owner=' . urlencode($_POST['psigate_cc_owner']) . '&psigate_cc_expires_month=' . $_POST['psigate_cc_expires_month'] . '&psigate_cc_expires_year=' . $_POST['psigate_cc_expires_year'];
 
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, $payment_error_return, 'SSL', true, false));
+          tep_redirect(tep_href_link('checkout_payment.php', $payment_error_return, 'SSL', true, false));
         }
 
         $this->cc_card_type = $cc_validation->cc_type;
@@ -140,7 +138,7 @@
     }
 
     function confirmation() {
-      global $_POST, $order;
+      global $order;
 
       if (MODULE_PAYMENT_PSIGATE_INPUT_MODE == 'Local') {
         $confirmation = array('title' => $this->title . ': ' . $this->cc_card_type,
@@ -158,7 +156,7 @@
     }
 
     function process_button() {
-      global $_SERVER, $order, $currencies;
+      global $order, $currencies;
 
       switch (MODULE_PAYMENT_PSIGATE_TRANSACTION_MODE) {
         case 'Always Good':
@@ -191,14 +189,14 @@
 
       $process_button_string = tep_draw_hidden_field('MerchantID', MODULE_PAYMENT_PSIGATE_MERCHANT_ID) .
                                tep_draw_hidden_field('FullTotal', number_format($order->info['total'] * $currencies->get_value(MODULE_PAYMENT_PSIGATE_CURRENCY), $currencies->currencies[MODULE_PAYMENT_PSIGATE_CURRENCY]['decimal_places'])) .
-                               tep_draw_hidden_field('ThanksURL', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL', true)) .
-                               tep_draw_hidden_field('NoThanksURL', tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'NONSSL', true)) .
+                               tep_draw_hidden_field('ThanksURL', tep_href_link('checkout_process.php', '', 'SSL', true)) .
+                               tep_draw_hidden_field('NoThanksURL', tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'NONSSL', true)) .
                                tep_draw_hidden_field('Bname', $order->billing['firstname'] . ' ' . $order->billing['lastname']) .
                                tep_draw_hidden_field('Baddr1', $order->billing['street_address']) .
                                tep_draw_hidden_field('Bcity', $order->billing['city']);
 
       if ($order->billing['country']['iso_code_2'] == 'US') {
-        $billing_state_query = tep_db_query("select zone_code from " . TABLE_ZONES . " where zone_id = '" . (int)$order->billing['zone_id'] . "'");
+        $billing_state_query = tep_db_query("select zone_code from zones where zone_id = '" . (int)$order->billing['zone_id'] . "'");
         $billing_state = tep_db_fetch_array($billing_state_query);
 
         $process_button_string .= tep_draw_hidden_field('Bstate', $billing_state['zone_code']);
@@ -238,8 +236,6 @@
     }
 
     function get_error() {
-      global $_GET;
-
       if (isset($_GET['ErrMsg']) && tep_not_null($_GET['ErrMsg'])) {
         $error = stripslashes(urldecode($_GET['ErrMsg']));
       } elseif (isset($_GET['Err']) && tep_not_null($_GET['Err'])) {

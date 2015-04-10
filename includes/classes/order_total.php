@@ -102,10 +102,8 @@
         $header_string .= '      </tr>' . "\n";
         $header_string .= '    </table></td>' . "\n";
         $header_string .= '  </tr>' . "\n";
-        reset($this->modules);
         $output_string = '';
-        while (list(, $value) = each($this->modules)) {
-          $class = substr($value, 0, strrpos($value, '.'));
+        foreach($this->modules as $value) {
           if ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) {
             $use_credit_string = $GLOBALS[$class]->use_credit_amount();
             if ($selection_string =='') $selection_string = $GLOBALS[$class]->credit_selection();
@@ -134,8 +132,7 @@
 //
     function update_credit_account($i) {
       if (MODULE_ORDER_TOTAL_INSTALLED) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ( ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) ) {
             $GLOBALS[$class]->update_credit_account($i);
@@ -152,13 +149,12 @@
     function collect_posts() {
       global $_POST,$_SESSION;
       if (MODULE_ORDER_TOTAL_INSTALLED) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ( ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) ) {
             $post_var = 'c' . $GLOBALS[$class]->code;
             if ($_POST[$post_var]) {
-              if (!tep_session_is_registered($post_var)) tep_session_register($post_var);
+              if (!isset($_SESSION['$post_var'])) tep_session_register($post_var);
               $post_var = $_POST[$post_var];
             }
             $GLOBALS[$class]->collect_posts();
@@ -175,9 +171,8 @@
       global $payment, $order, $credit_covers;
       if (MODULE_ORDER_TOTAL_INSTALLED) {
         $total_deductions  = 0;
-        reset($this->modules);
         $order_total = $order->info['total'];
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           $order_total = $this->get_order_total_main($class,$order_total);
           if ( ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) ) {
@@ -186,11 +181,11 @@
           }
         }
         if ($order->info['total'] - $total_deductions <= 0 ) {
-          if(!tep_session_is_registered('credit_covers')) tep_session_register('credit_covers');
+          if(!isset($_SESSION['credit_covers'])) tep_session_register('credit_covers');
           $credit_covers = true;
         }
         else{   // belts and suspenders to get rid of credit_covers variable if it gets set once and they put something else in the cart
-          if(tep_session_is_registered('credit_covers')) tep_session_unregister('credit_covers');
+          if(!isset($_SESSION['credit_covers'])) unset($_SESSION['credit_covers']);
         }
       }
     }
@@ -200,8 +195,7 @@
 //
     function apply_credit() {
       if (MODULE_ORDER_TOTAL_INSTALLED) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ( ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) ) {
             $GLOBALS[$class]->apply_credit();
@@ -214,12 +208,11 @@
     function clear_posts() {
       global $_POST,$_SESSION;
       if (MODULE_ORDER_TOTAL_INSTALLED) {
-        reset($this->modules);
-        while (list(, $value) = each($this->modules)) {
+        foreach($this->modules as $value) {
           $class = substr($value, 0, strrpos($value, '.'));
           if ( ($GLOBALS[$class]->enabled && $GLOBALS[$class]->credit_class) ) {
             $post_var = 'c' . $GLOBALS[$class]->code;
-              if (tep_session_is_registered($post_var)) tep_session_unregister($post_var);
+              if (!isset($_SESSION['$post_var'])) unset($_SESSION['$post_var']);
           }
         }
       }

@@ -324,7 +324,7 @@ global $order, $cart, $customer_id, $cc_id;
   $coupon_query=tep_db_query("select coupon_code from coupons where coupon_id='".$cc_id."'");
   if (tep_db_num_rows($coupon_query) !=0) {
     $coupon_result=tep_db_fetch_array($coupon_query);
-    $coupon_get=tep_db_query("select coupon_amount, coupon_minimum_order,restrict_to_products,restrict_to_categories, coupon_type from coupons where coupon_code='".$coupon_result['coupon_code']."'");
+    $coupon_get=tep_db_query("select coupon_amount, coupon_minimum_order,restrict_to_products, restrict_to_categories, coupon_type from coupons where coupon_code='".$coupon_result['coupon_code']."'");
     $get_result=tep_db_fetch_array($coupon_get);
     $in_cat = true;
     if ($get_result['restrict_to_categories']) {

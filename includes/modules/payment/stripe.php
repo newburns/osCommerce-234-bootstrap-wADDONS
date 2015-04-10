@@ -14,9 +14,9 @@
     var $code, $title, $description, $enabled;
 
     function stripe() {
-      global $_GET, $PHP_SELF, $order, $payment;
+      global $PHP_SELF, $order, $payment;
 
-      $this->signature = 'stripe|stripe|1.0|2.3';
+      $this->signature = 'stripe|stripe|1.1|2.3';
       $this->api_version = '2014-05-19';
 
       $this->code = 'stripe';
@@ -56,7 +56,7 @@
         }
       }
 
-      if ( defined('FILENAME_MODULES') && ($PHP_SELF == FILENAME_MODULES) && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
+      if ( defined('FILENAME_MODULES') && (basename($PHP_SELF) == 'modules.php') && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
         echo $this->getTestConnectionResult();
         exit;
       }
@@ -67,7 +67,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_STRIPE_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_STRIPE_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_STRIPE_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -91,7 +91,7 @@
     function selection() {
       global $customer_id, $payment;
 
-      if ( (MODULE_PAYMENT_STRIPE_TOKENS == 'True') && !tep_session_is_registered('payment') ) {
+      if ( (MODULE_PAYMENT_STRIPE_TOKENS == 'True') && !isset($_SESSION['payment']) ) {
         $tokens_query = tep_db_query("select 1 from customers_stripe_tokens where customers_id = '" . (int)$customer_id . "' limit 1");
 
         if ( tep_db_num_rows($tokens_query) ) {
@@ -113,7 +113,7 @@
     }
 
     function confirmation() {
-      global $customer_id, $order, $currencies, $currency;
+      global $customer_id, $order, $currencies;
 
       $months_array = array();
 
@@ -122,7 +122,7 @@
                                 'text' => tep_output_string_protected(sprintf('%02d', $i)));
       }
 
-      $today = getdate(); 
+      $today = getdate();
       $years_array = array();
 
       for ($i=$today['year']; $i < $today['year']+10; $i++) {
@@ -220,7 +220,7 @@
     }
 
     function before_process() {
-      global $customer_id, $order, $currency, $_POST, $stripe_result, $stripe_error;
+      global $customer_id, $order, $stripe_result, $stripe_error;
 
       $stripe_result = null;
 
@@ -238,7 +238,7 @@
             $params['customer'] = $stripe_token_array[0];
             $params['card'] = $stripe_token_array[1];
           } else {
-            tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=cardstored', 'SSL'));
+            tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=cardstored', 'SSL'));
           }
         }
       }
@@ -270,7 +270,7 @@
 
       if ( !empty($params) ) {
         $params['amount'] = $this->format_raw($order->info['total']);
-        $params['currency'] = $currency;
+        $params['currency'] = $_SESSION['currency'];
         $params['capture'] = (MODULE_PAYMENT_STRIPE_TRANSACTION_METHOD == 'Capture') ? 'true' : 'false';
 
         $stripe_result = json_decode($this->sendTransactionToGateway('https://api.stripe.com/v1/charges', $params), true);
@@ -290,11 +290,11 @@
 
       $this->sendDebugEmail($stripe_result);
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL'));
+      tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'SSL'));
     }
 
     function after_process() {
-      global $insert_id, $customer_id, $stripe_result, $_POST;
+      global $insert_id, $customer_id, $stripe_result;
 
       $status_comment = array('Transaction ID: ' . $stripe_result['id'],
                               'CVC: ' . $stripe_result['card']['cvc_check']);
@@ -321,22 +321,22 @@
                               'customer_notified' => '0',
                               'comments' => implode("\n", $status_comment));
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
 
-      if ( tep_session_is_registered('stripe_error') ) {
-        tep_session_unregister('stripe_error');
+      if ( isset($_SESSION['stripe_error']) ) {
+        unset($_SESSION['stripe_error']);
       }
     }
 
     function get_error() {
-      global $_GET, $stripe_error;
+      global $stripe_error;
 
       $message = MODULE_PAYMENT_STRIPE_ERROR_GENERAL;
 
-      if ( tep_session_is_registered('stripe_error') ) {
+      if ( isset($_SESSION['stripe_error']) ) {
         $message = $stripe_error . ' ' . $message;
 
-        tep_session_unregister('stripe_error');
+        unset($_SESSION['stripe_error']);
       }
 
       if ( isset($_GET['error']) && !empty($_GET['error']) ) {
@@ -389,7 +389,7 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
@@ -432,10 +432,10 @@ EOD;
       }
 
       if (!defined('MODULE_PAYMENT_STRIPE_TRANSACTION_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Stripe [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Stripe [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -443,12 +443,12 @@ EOD;
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Stripe [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Stripe [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -594,9 +594,17 @@ EOD;
       $dialog_error = MODULE_PAYMENT_STRIPE_DIALOG_CONNECTION_ERROR;
       $dialog_connection_time = MODULE_PAYMENT_STRIPE_DIALOG_CONNECTION_TIME;
 
-      $test_url = tep_href_link(FILENAME_MODULES, 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
+      $test_url = tep_href_link('modules.php', 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
 
       $js = <<<EOD
+<script>
+if ( typeof jQuery == 'undefined' ) {
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></scr' + 'ipt>');
+  document.write('<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css" />');
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></scr' + 'ipt>');
+}
+</script>
+
 <script>
 $(function() {
   $('#tcdprogressbar').progressbar({
@@ -655,10 +663,10 @@ EOD;
     }
 
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$currencies->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -676,6 +684,11 @@ EOD;
       $stripe_publishable_key = MODULE_PAYMENT_STRIPE_PUBLISHABLE_KEY;
 
       $js = <<<EOD
+<script>
+if ( typeof jQuery == 'undefined' ) {
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></scr' + 'ipt>');
+}
+</script>
 <script src="https://js.stripe.com/v2/"></script>
 <script>
 $(function() {
@@ -774,8 +787,6 @@ EOD;
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_STRIPE_DEBUG_EMAIL)) {
         $email_body = '';
 

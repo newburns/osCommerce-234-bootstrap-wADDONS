@@ -14,9 +14,9 @@
     var $code, $title, $description, $enabled;
 
     function sage_pay_server() {
-      global $_GET, $PHP_SELF, $order;
+      global $PHP_SELF, $order;
 
-      $this->signature = 'sage_pay|sage_pay_server|2.0|2.3';
+      $this->signature = 'sage_pay|sage_pay_server|2.1|2.3';
       $this->api_version = '3.00';
 
       $this->code = 'sage_pay_server';
@@ -56,7 +56,7 @@
         }
       }
 
-      if ( defined('FILENAME_MODULES') && ($PHP_SELF == FILENAME_MODULES) && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
+      if ( defined('FILENAME_MODULES') && (basename($PHP_SELF) == 'modules.php') && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
         echo $this->getTestConnectionResult();
         exit;
       }
@@ -67,7 +67,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_SAGE_PAY_SERVER_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_SAGE_PAY_SERVER_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_SAGE_PAY_SERVER_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -106,14 +106,14 @@
     }
 
     function before_process() {
-      global $_GET, $_POST, $sagepay_server_skey_code, $sagepay_server_transaction_details, $sage_pay_server_nexturl, $customer_id, $order, $currency, $order_totals, $cartID;
+      global $sagepay_server_skey_code, $sagepay_server_transaction_details, $sage_pay_server_nexturl, $customer_id, $order, $order_totals, $cartID;
 
       $sagepay_server_transaction_details = null;
 
       $error = null;
 
       if (isset($_GET['check']) && ($_GET['check'] == 'PROCESS')) {
-        if ( isset($_GET['skcode']) && tep_session_is_registered('sagepay_server_skey_code') && ($_GET['skcode'] == $sagepay_server_skey_code) ) {
+        if ( isset($_GET['skcode']) && isset($_SESSION['sagepay_server_skey_code']) && ($_GET['skcode'] == $sagepay_server_skey_code) ) {
           $skcode = tep_db_prepare_input($_GET['skcode']);
 
           $sp_query = tep_db_query('select verified, transaction_details from sagepay_server_securitykeys where code = "' . tep_db_input($skcode) . '" limit 1');
@@ -121,7 +121,7 @@
           if ( tep_db_num_rows($sp_query) ) {
             $sp = tep_db_fetch_array($sp_query);
 
-            tep_session_unregister('sagepay_server_skey_code');
+            unset($_SESSION['sagepay_server_skey_code']);
             tep_db_query('delete from sagepay_server_securitykeys where code = "' . tep_db_input($skcode) . '"');
 
             if ( $sp['verified'] == '1' ) {
@@ -132,7 +132,7 @@
           }
         }
       } else {
-        if ( !tep_session_is_registered('sagepay_server_skey_code') ) {
+        if ( !isset($_SESSION['sagepay_server_skey_code']) ) {
           tep_session_register('sagepay_server_skey_code');
           $sagepay_server_skey_code = tep_create_random_value(16);
         }
@@ -142,7 +142,7 @@
                         'Vendor' => substr(MODULE_PAYMENT_SAGE_PAY_SERVER_VENDOR_LOGIN_NAME, 0, 15),
                         'VendorTxCode' => substr(date('YmdHis') . '-' . $customer_id . '-' . $cartID, 0, 40),
                         'Amount' => $this->format_raw($order->info['total']),
-                        'Currency' => $currency,
+                        'Currency' => $_SESSION['currency'],
                         'Description' => substr(STORE_NAME, 0, 100),
                         'NotificationURL' => $this->formatURL(tep_href_link('ext/modules/payment/sage_pay/server.php', 'check=SERVER&skcode=' . $sagepay_server_skey_code, 'SSL', false)),
                         'BillingSurname' => substr($order->billing['lastname'], 0, 20),
@@ -248,7 +248,7 @@
           if ( MODULE_PAYMENT_SAGE_PAY_SERVER_PROFILE_PAGE == 'Normal' ) {
             tep_redirect($return['NextURL']);
           } else {
-            if ( !tep_session_is_registered('sage_pay_server_nexturl') ) {
+            if ( !isset($_SESSION['sage_pay_server_nexturl']) ) {
               tep_session_register('sage_pay_server_nexturl');
             }
 
@@ -263,7 +263,7 @@
         }
       }
 
-      tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . (tep_not_null($error) ? '&error=' . $error : ''), 'SSL'));
+      tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . (tep_not_null($error) ? '&error=' . $error : ''), 'SSL'));
     }
 
     function after_process() {
@@ -275,29 +275,25 @@
                               'customer_notified' => '0',
                               'comments' => trim($sagepay_server_transaction_details));
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
 
       if ( MODULE_PAYMENT_SAGE_PAY_SERVER_PROFILE_PAGE == 'Low' ) {
-        global $cart;
-
-        $cart->reset(true);
+        $_SESSION['cart']->reset(true);
 
 // unregister session variables used during checkout
-        tep_session_unregister('sendto');
-        tep_session_unregister('billto');
-        tep_session_unregister('shipping');
-        tep_session_unregister('payment');
-        tep_session_unregister('comments');
+        unset($_SESSION['sendto']);
+        unset($_SESSION['billto']);
+        unset($_SESSION['shipping']);
+        unset($_SESSION['payment']);
+        unset($_SESSION['comments']);
 
-        tep_session_unregister('sage_pay_server_nexturl');
+        unset($_SESSION['sage_pay_server_nexturl']);
 
         tep_redirect(tep_href_link('ext/modules/payment/sage_pay/redirect.php', '', 'SSL'));
       }
     }
 
     function get_error() {
-      global $_GET;
-
       $message = MODULE_PAYMENT_SAGE_PAY_SERVER_ERROR_GENERAL;
 
       $error_number = null;
@@ -357,7 +353,7 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
@@ -399,10 +395,10 @@ EOD;
       }
 
       if (!defined('MODULE_PAYMENT_SAGE_PAY_SERVER_TRANSACTION_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Sage Pay [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Sage Pay [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -410,12 +406,12 @@ EOD;
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Sage Pay [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Sage Pay [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -521,10 +517,10 @@ EOD;
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$currencies->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -590,9 +586,17 @@ EOD;
       $dialog_error = MODULE_PAYMENT_SAGE_PAY_SERVER_DIALOG_CONNECTION_ERROR;
       $dialog_connection_time = MODULE_PAYMENT_SAGE_PAY_SERVER_DIALOG_CONNECTION_TIME;
 
-      $test_url = tep_href_link(FILENAME_MODULES, 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
+      $test_url = tep_href_link('modules.php', 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
 
       $js = <<<EOD
+<script>
+if ( typeof jQuery == 'undefined' ) {
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></scr' + 'ipt>');
+  document.write('<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css" />');
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></scr' + 'ipt>');
+}
+</script>
+
 <script>
 $(function() {
   $('#tcdprogressbar').progressbar({
@@ -683,8 +687,6 @@ EOD;
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_SAGE_PAY_SERVER_DEBUG_EMAIL)) {
         $email_body = '';
 

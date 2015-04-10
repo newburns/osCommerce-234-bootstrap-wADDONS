@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -44,7 +44,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_IPAYMENT_PP_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_IPAYMENT_PP_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_IPAYMENT_PP_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -79,12 +79,12 @@
     }
 
     function process_button() {
-      global $order, $currency;
+      global $order;
 
       $zone_code = '';
 
       if (is_numeric($order->billing['zone_id']) && ($order->billing['zone_id'] > 0)) {
-        $zone_query = tep_db_query("select zone_code from " . TABLE_ZONES . " where zone_id = '" . (int)$order->billing['zone_id'] . "'");
+        $zone_query = tep_db_query("select zone_code from zones where zone_id = '" . (int)$order->billing['zone_id'] . "'");
         if (tep_db_num_rows($zone_query)) {
           $zone = tep_db_fetch_array($zone_query);
 
@@ -97,7 +97,7 @@
                                tep_draw_hidden_field('trxuser_id', MODULE_PAYMENT_IPAYMENT_PP_USER_ID) .
                                tep_draw_hidden_field('trxpassword', MODULE_PAYMENT_IPAYMENT_PP_PASSWORD) .
                                tep_draw_hidden_field('from_ip', tep_get_ip_address()) .
-                               tep_draw_hidden_field('trx_currency', $currency) .
+                               tep_draw_hidden_field('trx_currency', $_SESSION['currency']) .
                                tep_draw_hidden_field('trx_amount', $this->format_raw($order->info['total'])*100) .
                                tep_draw_hidden_field('trx_typ', ((MODULE_PAYMENT_IPAYMENT_PP_TRANSACTION_METHOD == 'Capture') ? 'auth' : 'preauth')) .
                                tep_draw_hidden_field('addr_email', $order->customer['email_address']) .
@@ -107,31 +107,31 @@
                                tep_draw_hidden_field('addr_country', $order->billing['country']['iso_code_2']) .
                                tep_draw_hidden_field('addr_state', $zone_code) .
                                tep_draw_hidden_field('addr_telefon', $order->customer['telephone']) .
-                               tep_draw_hidden_field('redirect_url', tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL', true)) .
-                               tep_draw_hidden_field('silent_error_url', tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code, 'SSL', true)) .
+                               tep_draw_hidden_field('redirect_url', tep_href_link('checkout_process.php', '', 'SSL', true)) .
+                               tep_draw_hidden_field('silent_error_url', tep_href_link('checkout_payment.php', 'payment_error=' . $this->code, 'SSL', true)) .
                                tep_draw_hidden_field('hidden_trigger_url', tep_href_link('ext/modules/payment/ipayment/callback_pp.php', '', 'SSL', false)) .
                                tep_draw_hidden_field('client_name', 'oscommerce') .
                                tep_draw_hidden_field('client_version', $this->signature);
 
       if (tep_not_null(MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD)) {
-        $process_button_string .= tep_draw_hidden_field('trx_securityhash', md5(MODULE_PAYMENT_IPAYMENT_PP_USER_ID . ($this->format_raw($order->info['total']) * 100) . $currency . MODULE_PAYMENT_IPAYMENT_PP_PASSWORD . MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD));
+        $process_button_string .= tep_draw_hidden_field('trx_securityhash', md5(MODULE_PAYMENT_IPAYMENT_PP_USER_ID . ($this->format_raw($order->info['total']) * 100) . $_SESSION['currency'] . MODULE_PAYMENT_IPAYMENT_PP_PASSWORD . MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD));
       }
 
       return $process_button_string;
     }
 
     function before_process() {
-      global $_GET, $_SERVER, $order, $currency;
+      global $order;
 
       if ($_GET['ret_errorcode'] != '0') {
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=' . tep_output_string_protected($_GET['ret_errormsg'])));
+        tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=' . tep_output_string_protected($_GET['ret_errormsg'])));
       }
 
       if (tep_not_null(MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD)) {
         $pass = true;
 
 // verify ret_param_checksum
-        if ($_GET['ret_param_checksum'] != md5(MODULE_PAYMENT_IPAYMENT_PP_USER_ID . ($this->format_raw($order->info['total']) * 100) . $currency . $_GET['ret_authcode'] . $_GET['ret_booknr'] . MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD)) {
+        if ($_GET['ret_param_checksum'] != md5(MODULE_PAYMENT_IPAYMENT_PP_USER_ID . ($this->format_raw($order->info['total']) * 100) . $_SESSION['currency'] . $_GET['ret_authcode'] . $_GET['ret_booknr'] . MODULE_PAYMENT_IPAYMENT_PP_SECRET_HASH_PASSWORD)) {
           $pass = false;
         }
 
@@ -143,7 +143,7 @@
         }
 
         if ($pass != true) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code));
+          tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code));
         }
       }
 
@@ -155,8 +155,6 @@
     }
 
     function get_error() {
-      global $_GET;
-
       $error = array('title' => MODULE_PAYMENT_IPAYMENT_PP_ERROR_HEADING,
                      'error' => ((isset($_GET['error'])) ? stripslashes(urldecode($_GET['error'])) : MODULE_PAYMENT_IPAYMENT_PP_ERROR_MESSAGE));
 
@@ -194,10 +192,10 @@
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$this->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -208,8 +206,6 @@
     }
 
     function sendDebugEmail($checksum_match = 0) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_IPAYMENT_PP_DEBUG_EMAIL)) {
         $email_body = 'iPayment (Prepaid) Transaction' . "\n\n" .
                       'Date: ' . strftime(DATE_TIME_FORMAT) . "\n" .
