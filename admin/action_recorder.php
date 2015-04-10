@@ -44,7 +44,7 @@
   $modules_array = array();
   $modules_list_array = array(array('id' => '', 'text' => TEXT_ALL_MODULES));
 
-  $modules_query = tep_db_query("select distinct module from " . TABLE_ACTION_RECORDER . " order by module");
+  $modules_query = tep_db_query("select distinct module from action_recorder order by module");
   while ($modules = tep_db_fetch_array($modules_query)) {
     $modules_array[] = $modules['module'];
 
@@ -63,7 +63,7 @@
           if (is_object(${$_GET['module']})) {
             $expired_entries += ${$_GET['module']}->expireEntries();
           } else {
-            $delete_query = tep_db_query("delete from " . TABLE_ACTION_RECORDER . " where module = '" . tep_db_input($_GET['module']) . "'");
+            $delete_query = tep_db_query("delete from action_recorder where module = '" . tep_db_input($_GET['module']) . "'");
             $expired_entries += tep_db_affected_rows();
           }
         } else {
@@ -148,7 +148,7 @@
     }
 
     if ((!isset($_GET['aID']) || (isset($_GET['aID']) && ($_GET['aID'] == $actions['id']))) && !isset($aInfo)) {
-      $actions_extra_query = tep_db_query("select identifier from " . TABLE_ACTION_RECORDER . " where id = '" . (int)$actions['id'] . "'");
+      $actions_extra_query = tep_db_query("select identifier from action_recorder where id = '" . (int)$actions['id'] . "'");
       $actions_extra = tep_db_fetch_array($actions_extra_query);
 
       $aInfo_array = array_merge($actions, $actions_extra, array('module' => $module_title));

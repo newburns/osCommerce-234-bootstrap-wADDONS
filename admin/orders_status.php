@@ -48,7 +48,7 @@
         }
 
         if (isset($_POST['default']) && ($_POST['default'] == 'on')) {
-          tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($orders_status_id) . "' where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
+          tep_db_query("update configuration set configuration_value = '" . tep_db_input($orders_status_id) . "' where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
         }
 
         tep_redirect(tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page'] . '&oID=' . $orders_status_id));
@@ -56,11 +56,11 @@
       case 'deleteconfirm':
         $oID = tep_db_prepare_input($_GET['oID']);
 
-        $orders_status_query = tep_db_query("select configuration_value from " . TABLE_CONFIGURATION . " where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
+        $orders_status_query = tep_db_query("select configuration_value from configuration where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
         $orders_status = tep_db_fetch_array($orders_status_query);
 
         if ($orders_status['configuration_value'] == $oID) {
-          tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '' where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
+          tep_db_query("update configuration set configuration_value = '' where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
         }
 
         tep_db_query("delete from " . TABLE_ORDERS_STATUS . " where orders_status_id = '" . tep_db_input($oID) . "'");

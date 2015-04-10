@@ -29,11 +29,11 @@
     }
 
     function execute() {
-       global $PHP_SELF, $oscTemplate, $categories, $current_category_id, $languages_id;
+       global $PHP_SELF, $oscTemplate, $categories, $current_category_id;
 
       if (basename($PHP_SELF) == 'index.php') {
         if ($current_category_id > 0) {
-          $meta_info_query = tep_db_query("select cd.categories_seo_description, cd.categories_seo_keywords from " . TABLE_CATEGORIES_DESCRIPTION . " cd where cd.categories_id = '" . (int)$current_category_id  . "' and cd.language_id = '" . (int)$languages_id . "'");
+          $meta_info_query = tep_db_query("select cd.categories_seo_description, cd.categories_seo_keywords from categories_description cd where cd.categories_id = '" . (int)$current_category_id  . "' and cd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
           $meta_info = tep_db_fetch_array($meta_info_query);
 
           if (tep_not_null($meta_info['categories_seo_description'])) {
@@ -55,14 +55,14 @@
     }
 
     function install() {
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Category Meta Module', 'MODULE_HEADER_TAGS_CATEGORY_META_STATUS', 'True', 'Do you want to allow Category meta tags to be added to the page header?', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Category Meta Description', 'MODULE_HEADER_TAGS_CATEGORY_META_DESCRIPTION_STATUS', 'True', 'Category Descriptions help your site and your sites visitors.', '6', '1', 'tep_cfg_select_option(array(\'True\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Category Meta Keywords', 'MODULE_HEADER_TAGS_CATEGORY_META_KEYWORDS_STATUS', 'False', 'Category Keywords are pointless.  If you are into the Chinese Market select True (for Baidu Search Engine) otherwise select False.', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
-      tep_db_query("insert into " . TABLE_CONFIGURATION . " (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_HEADER_TAGS_CATEGORY_META_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Enable Category Meta Module', 'MODULE_HEADER_TAGS_CATEGORY_META_STATUS', 'True', 'Do you want to allow Category meta tags to be added to the page header?', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Category Meta Description', 'MODULE_HEADER_TAGS_CATEGORY_META_DESCRIPTION_STATUS', 'True', 'Category Descriptions help your site and your sites visitors.', '6', '1', 'tep_cfg_select_option(array(\'True\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, set_function, date_added) values ('Display Category Meta Keywords', 'MODULE_HEADER_TAGS_CATEGORY_META_KEYWORDS_STATUS', 'False', 'Category Keywords are pointless.  If you are into the Chinese Market select True (for Baidu Search Engine) otherwise select False.', '6', '1', 'tep_cfg_select_option(array(\'True\', \'False\'), ', now())");
+      tep_db_query("insert into configuration (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added) values ('Sort Order', 'MODULE_HEADER_TAGS_CATEGORY_META_SORT_ORDER', '0', 'Sort order of display. Lowest is displayed first.', '6', '0', now())");
     }
 
     function remove() {
-      tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      tep_db_query("delete from configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
     }
 
     function keys() {

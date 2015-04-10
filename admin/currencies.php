@@ -48,7 +48,7 @@
         }
 
         if (isset($_POST['default']) && ($_POST['default'] == 'on')) {
-          tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_CURRENCY'");
+          tep_db_query("update configuration set configuration_value = '" . tep_db_input($code) . "' where configuration_key = 'DEFAULT_CURRENCY'");
         }
 
         tep_redirect(tep_href_link('currencies.php', 'page=' . $_GET['page'] . '&cID=' . $currency_id));
@@ -60,7 +60,7 @@
         $currency = tep_db_fetch_array($currency_query);
 
         if ($currency['currencies_id'] == $currencies_id) {
-          tep_db_query("update " . TABLE_CONFIGURATION . " set configuration_value = '' where configuration_key = 'DEFAULT_CURRENCY'");
+          tep_db_query("update configuration set configuration_value = '' where configuration_key = 'DEFAULT_CURRENCY'");
         }
 
         tep_db_query("delete from " . TABLE_CURRENCIES . " where currencies_id = '" . (int)$currencies_id . "'");

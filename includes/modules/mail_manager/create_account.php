@@ -18,13 +18,13 @@ if (ACCOUNT_GENDER == 'true') {
 
 
 //get status of mail manager create account  email
-$mail_manager_status_query = tep_db_query("select status, template, htmlcontent, txtcontent from  " . TABLE_MM_RESPONSEMAIL . "  where mail_id = '0'");
+$mail_manager_status_query = tep_db_query("select status, template, htmlcontent, txtcontent from mm_responsemail where mail_id = '0'");
 $mail_manager_status = tep_db_fetch_array($mail_manager_status_query);
 
 if (isset($mail_manager_status['status']) && ($mail_manager_status['status'] == '1')) { 		
 
 //retrieve html and txt headers 
-$header_query = tep_db_query("select htmlheader, htmlfooter, txtheader, txtfooter from " . TABLE_MM_TEMPLATES . " where title = '".$mail_manager_status['template']."'");
+$header_query = tep_db_query("select htmlheader, htmlfooter, txtheader, txtfooter from mm_templates where title = '".$mail_manager_status['template']."'");
 $header = tep_db_fetch_array($header_query);
  
 //build email

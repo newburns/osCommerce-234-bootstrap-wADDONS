@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2010 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -29,7 +29,7 @@
     <?php echo $listing_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?>
   </div>
   <div class="col-sm-6">
-    <div class="pull-right pagenav"><ul class="pagination"><?php echo $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></ul></div>
+    <div class="pull-right pagenav"><?php echo $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></div>
     <span class="pull-right"><?php echo TEXT_RESULT_PAGE; ?></span>
   </div>
 </div>
@@ -39,9 +39,7 @@
   if ($listing_split->number_of_rows > 0) { ?>
     <div class="well well-sm">
       <div class="btn-group btn-group-sm pull-right">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-          <?php echo TEXT_SORT_BY; ?><span class="caret"></span>
-        </button>
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><?php echo TEXT_SORT_BY; ?><span class="caret"></span></button>
 
         <ul class="dropdown-menu text-left">
           <?php
@@ -94,7 +92,7 @@
       </div>
 
     <?php
-    if (MODULE_HEADER_TAGS_GRID_LIST_VIEW_STATUS == 'True') {
+    if ( (defined('MODULE_HEADER_TAGS_GRID_LIST_VIEW_STATUS')) && (MODULE_HEADER_TAGS_GRID_LIST_VIEW_STATUS == 'True') ) {
       ?>
       <strong><?php echo TEXT_VIEW; ?></strong>
       <div class="btn-group">
@@ -116,31 +114,26 @@
     $prod_list_contents .= '<div class="item list-group-item col-sm-4">';
 	  $prod_list_contents .= '  <div class="productHolder equal-height">';
     if (isset($_GET['manufacturers_id'])  && tep_not_null($_GET['manufacturers_id'])) {
-      $prod_list_contents .= '    <a href="' . tep_href_link('product_info', 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, NULL, NULL, 'img-responsive thumbnail group list-group-image') . '</a>';
+      $prod_list_contents .= '    <a href="' . tep_href_link('product_info.php', 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . (int)$listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, NULL, NULL, 'img-responsive thumbnail group list-group-image') . '</a>';
     } else {
-      $prod_list_contents .= '    <a href="' . tep_href_link('product_info', ($sort ? 'sort=' . $sort . '&' : '') . ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, NULL, NULL, 'img-responsive thumbnail group list-group-image') . '</a>';
+      $prod_list_contents .= '    <a href="' . tep_href_link('product_info.php', ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . (int)$listing['products_id']) . '">' . tep_image(DIR_WS_IMAGES . $listing['products_image'], $listing['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT, NULL, NULL, 'img-responsive thumbnail group list-group-image') . '</a>';
     }
     $prod_list_contents .= '    <div class="caption">';
     $prod_list_contents .= '      <h2 class="group inner list-group-item-heading">';
     if (isset($_GET['manufacturers_id']) && tep_not_null($_GET['manufacturers_id'])) {
-      $prod_list_contents .= '    <a href="' . tep_href_link('product_info', 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . $listing['products_id']) . '">' . $listing['products_name'] . '</a>';
+      $prod_list_contents .= '    <a href="' . tep_href_link('product_info.php', 'manufacturers_id=' . $_GET['manufacturers_id'] . '&products_id=' . (int)$listing['products_id']) . '">' . $listing['products_name'] . '</a>';
     } else {
-      $prod_list_contents .= '    <a href="' . tep_href_link('product_info', ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . $listing['products_id']) . '">' . $listing['products_name'] . '</a>';
+      $prod_list_contents .= '    <a href="' . tep_href_link('product_info.php', ($cPath ? 'cPath=' . $cPath . '&' : '') . 'products_id=' . (int)$listing['products_id']) . '">' . $listing['products_name'] . '</a>';
     }
     $prod_list_contents .= '      </h2>';
 
     $prod_list_contents .= '      <p class="group inner list-group-item-text">' . strip_tags($listing['products_description'], '<br>') . '&hellip;</p><div class="clearfix"></div>';
 
-    // here it goes the extras, yuck
     $extra_list_contents = NULL;
-    // manufacturer
-	  if (($lc_show_manu == true) && ($listing['manufacturers_id'] !=  0)) $extra_list_contents .= '<dt>' . TABLE_HEADING_MANUFACTURER . '</dt><dd><a href="' . tep_href_link('index.php', 'manufacturers_id=' . $listing['manufacturers_id']) . '">' . $listing['manufacturers_name'] . '</a></dd>';
-    // model
-	  if ( ($lc_show_model == true) && tep_not_null($listing['products_model'])) $extra_list_contents .= '<dt>' . TABLE_HEADING_MODEL . '</dt><dd>' . $listing['products_model'] . '</dd>';
-    // stock
+	  if (($lc_show_manu == true) && ($listing['manufacturers_id'] !=  0))                  $extra_list_contents .= '<dt>' . TABLE_HEADING_MANUFACTURER . '</dt><dd><a href="' . tep_href_link('index.php', 'manufacturers_id=' . (int)$listing['manufacturers_id']) . '">' . $listing['manufacturers_name'] . '</a></dd>';
+	  if ( ($lc_show_model == true) && tep_not_null($listing['products_model']))            $extra_list_contents .= '<dt>' . TABLE_HEADING_MODEL . '</dt><dd>' . $listing['products_model'] . '</dd>';
 	  if (($lc_show_qty == true) && (tep_get_products_stock($listing['products_id'])!= 0) ) $extra_list_contents .= '<dt>' . TABLE_HEADING_QUANTITY . '</dt><dd>' . tep_get_products_stock($listing['products_id']) . '</dd>';
-    // weight
-	  if (($lc_show_lbs == true) && ($listing['products_weight'] != 0)) $extra_list_contents .= '<dt>' . TABLE_HEADING_WEIGHT . '</dt><dd>' . $listing['products_weight'] . '</dd>';
+	  if (($lc_show_lbs == true) && ($listing['products_weight'] != 0))                     $extra_list_contents .= '<dt>' . TABLE_HEADING_WEIGHT . '</dt><dd>' . $listing['products_weight'] . '</dd>';
 
     if (tep_not_null($extra_list_contents)) {
        $prod_list_contents .= '    <dl class="dl-horizontal list-group-item-text">';
@@ -154,7 +147,7 @@
     } else {
       $prod_list_contents .= '      <div class="col-xs-6"><div class="btn-group" role="group"><button type="button" class="btn btn-default">' . $currencies->display_price($listing['products_price'], tep_get_tax_rate($listing['products_tax_class_id'])) . '</button></div></div>';
     }
-    $prod_list_contents .= '       <div class="col-xs-6 text-right">' . tep_draw_button(IMAGE_BUTTON_BUY_NOW, 'cart', tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('action', 'sort', 'cPath')) . 'action=buy_now&products_id=' . $listing['products_id']), NULL, NULL, 'btn-success btn-sm') . '</div>';
+    $prod_list_contents .= '       <div class="col-xs-6 text-right">' . tep_draw_button(IMAGE_BUTTON_BUY_NOW, 'glyphicon glyphicon-shopping-cart', tep_href_link(basename($PHP_SELF), tep_get_all_get_params(array('action', 'sort', 'cPath')) . 'action=buy_now&products_id=' . (int)$listing['products_id']), NULL, NULL, 'btn-success btn-sm') . '</div>';
     $prod_list_contents .= '      </div>';
 
     $prod_list_contents .= '    </div>';
@@ -164,6 +157,7 @@
   }
 
   echo '<div id="products" class="row list-group">' . $prod_list_contents . '</div>';
+
 } else {
 ?>
 
@@ -179,7 +173,7 @@ if ( ($listing_split->number_of_rows > 0) && ((PREV_NEXT_BAR_LOCATION == '2') ||
     <?php echo $listing_split->display_count(TEXT_DISPLAY_NUMBER_OF_PRODUCTS); ?>
   </div>
   <div class="col-sm-6">
-    <div class="pull-right pagenav"><ul class="pagination"><?php echo $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></ul></div>
+    <div class="pull-right pagenav"><?php echo $listing_split->display_links(MAX_DISPLAY_PAGE_LINKS, tep_get_all_get_params(array('page', 'info', 'x', 'y'))); ?></div>
     <span class="pull-right"><?php echo TEXT_RESULT_PAGE; ?></span>
   </div>
 </div>

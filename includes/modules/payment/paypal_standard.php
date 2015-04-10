@@ -503,7 +503,7 @@
 
 /* ** Altered for CCGV ** */	
     function before_process() {
-	  global $customer_id, $order, $order_totals, $sendto, $billto, $payment, $currencies, $cart, $cart_PayPal_Standard_ID, $$payment, $messageStack, $order_total_modules;
+	  global $customer_id, $order, $order_totals, $sendto, $billto, $payment, $currencies, $cart_PayPal_Standard_ID, $$payment, $messageStack, $order_total_modules;
      
       $result = false;
                                 

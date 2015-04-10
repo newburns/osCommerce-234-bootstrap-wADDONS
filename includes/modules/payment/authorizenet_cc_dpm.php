@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -16,7 +16,7 @@
     function authorizenet_cc_dpm() {
       global $order;
 
-      $this->signature = 'authorizenet|authorizenet_cc_dpm|1.0|2.3';
+      $this->signature = 'authorizenet|authorizenet_cc_dpm|1.1|2.3';
       $this->api_version = '3.1';
 
       $this->code = 'authorizenet_cc_dpm';
@@ -60,7 +60,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_AUTHORIZENET_CC_DPM_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_AUTHORIZENET_CC_DPM_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_AUTHORIZENET_CC_DPM_ZONE . "' and zone_country_id = '" . $order->billing['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -101,7 +101,7 @@
 
       $expiry_field .= '</select>&nbsp;<select id="cc_expires_year">';
 
-      $today = getdate(); 
+      $today = getdate();
       for ($i=$today['year']; $i < $today['year']+10; $i++) {
         $expiry_field .= '<option value="' . strftime('%y',mktime(0,0,0,1,1,$i)) . '">' . strftime('%Y',mktime(0,0,0,1,1,$i)) . '</option>';
       }
@@ -109,6 +109,12 @@
       $expiry_field .= '</select>' . tep_draw_hidden_field('x_exp_date');
 
       $js = <<<EOD
+<script>
+if ( typeof jQuery == 'undefined' ) {
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></scr' + 'ipt>');
+}
+</script>
+
 <script>
 $(function() {
   $('form[name="checkout_confirmation"]').submit(function() {
@@ -135,7 +141,7 @@ EOD;
     }
 
     function process_button() {
-      global $customer_id, $order, $sendto, $currency;
+      global $customer_id, $order, $sendto;
 
       $tstamp = time();
       $sequence = rand(1, 1000);
@@ -145,7 +151,7 @@ EOD;
                       'x_show_form' => 'PAYMENT_FORM',
                       'x_delim_data' => 'FALSE',
                       'x_relay_response' => 'TRUE',
-                      'x_relay_url' => tep_href_link(FILENAME_CHECKOUT_PROCESS, '', 'SSL', false),
+                      'x_relay_url' => tep_href_link('checkout_process.php', '', 'SSL', false),
                       'x_company' => substr($order->billing['company'], 0, 50),
                       'x_address' => substr($order->billing['street_address'], 0, 60),
                       'x_city' => substr($order->billing['city'], 0, 40),
@@ -158,14 +164,14 @@ EOD;
                       'x_email' => substr($order->customer['email_address'], 0, 255),
                       'x_description' => substr(STORE_NAME, 0, 255),
                       'x_amount' => $this->format_raw($order->info['total']),
-                      'x_currency_code' => substr($currency, 0, 3),
+                      'x_currency_code' => substr($_SESSION['currency'], 0, 3),
                       'x_method' => 'CC',
                       'x_type' => MODULE_PAYMENT_AUTHORIZENET_CC_DPM_TRANSACTION_METHOD == 'Capture' ? 'AUTH_CAPTURE' : 'AUTH_ONLY',
                       'x_freight' => $this->format_raw($order->info['shipping_cost']),
                       'x_fp_sequence' => $sequence,
                       'x_fp_timestamp' => $tstamp,
-                      'x_fp_hash' => $this->_hmac(MODULE_PAYMENT_AUTHORIZENET_CC_DPM_TRANSACTION_KEY, MODULE_PAYMENT_AUTHORIZENET_CC_DPM_LOGIN_ID . '^' . $sequence . '^' . $tstamp . '^' . $this->format_raw($order->info['total']) . '^' . $currency),
-                      'x_cancel_url' => tep_href_link(FILENAME_SHOPPING_CART, '', 'SSL'),
+                      'x_fp_hash' => $this->_hmac(MODULE_PAYMENT_AUTHORIZENET_CC_DPM_TRANSACTION_KEY, MODULE_PAYMENT_AUTHORIZENET_CC_DPM_LOGIN_ID . '^' . $sequence . '^' . $tstamp . '^' . $this->format_raw($order->info['total']) . '^' . $_SESSION['currency']),
+                      'x_cancel_url' => tep_href_link('shopping_cart.php', '', 'SSL'),
                       'x_cancel_url_text' => MODULE_PAYMENT_AUTHORIZENET_CC_DPM_TEXT_RETURN_BUTTON);
 
       if (is_numeric($sendto) && ($sendto > 0)) {
@@ -205,13 +211,13 @@ EOD;
         $process_button_string .= tep_draw_hidden_field('x_line_item', ($i+1) . '<|>' . substr($order->products[$i]['name'], 0, 31) . '<|><|>' . $order->products[$i]['qty'] . '<|>' . $this->format_raw($order->products[$i]['final_price']) . '<|>' . ($order->products[$i]['tax'] > 0 ? 'YES' : 'NO'));
       }
 
-      $process_button_string .= tep_draw_hidden_field(tep_session_name(), tep_session_id());
+      $process_button_string .= tep_draw_hidden_field(session_name(), session_id());
 
       return $process_button_string;
     }
 
     function before_process() {
-      global $_POST, $order, $authorizenet_cc_dpm_error;
+      global $order, $authorizenet_cc_dpm_error;
 
       $error = false;
       $authorizenet_cc_dpm_error = false;
@@ -254,16 +260,16 @@ EOD;
         $authorizenet_cc_dpm_error = $_POST['x_response_reason_text'];
         tep_session_register('authorizenet_cc_dpm_error');
 
-        tep_redirect(tep_href_link(FILENAME_CHECKOUT_PAYMENT, 'payment_error=' . $this->code . '&error=' . $error, 'SSL'));
+        tep_redirect(tep_href_link('checkout_payment.php', 'payment_error=' . $this->code . '&error=' . $error, 'SSL'));
       }
 
-      if ( tep_session_is_registered('authorizenet_cc_dpm_error') ) {
-        tep_session_unregister('authorizenet_cc_dpm_error');
+      if ( isset($_SESSION['authorizenet_cc_dpm_error']) ) {
+        unset($_SESSION['authorizenet_cc_dpm_error']);
       }
     }
 
     function after_process() {
-      global $_POST, $insert_id;
+      global $insert_id;
 
       $response = array('Response: ' . tep_db_prepare_input($_POST['x_response_reason_text']) . ' (' . tep_db_prepare_input($_POST['x_response_reason_code']) . ')',
                         'Transaction ID: ' . tep_db_prepare_input($_POST['x_trans_id']));
@@ -310,21 +316,19 @@ EOD;
                               'customer_notified' => '0',
                               'comments' => implode("\n", $response));
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
 
       if ( ENABLE_SSL != true ) {
-        global $cart;
-
-        $cart->reset(true);
+        $_SESSION['cart']->reset(true);
 
 // unregister session variables used during checkout
-        tep_session_unregister('sendto');
-        tep_session_unregister('billto');
-        tep_session_unregister('shipping');
-        tep_session_unregister('payment');
-        tep_session_unregister('comments');
+        unset($_SESSION['sendto']);
+        unset($_SESSION['billto']);
+        unset($_SESSION['shipping']);
+        unset($_SESSION['payment']);
+        unset($_SESSION['comments']);
 
-        $redirect_url = tep_href_link(FILENAME_CHECKOUT_SUCCESS, '', 'SSL');
+        $redirect_url = tep_href_link('checkout_success.php', '', 'SSL');
 
         echo <<<EOD
 <form name="redirect" action="{$redirect_url}" method="post" target="_top">
@@ -343,7 +347,7 @@ EOD;
     }
 
     function get_error() {
-      global $_GET, $authorizenet_cc_dpm_error;
+      global $authorizenet_cc_dpm_error;
 
       $error_message = MODULE_PAYMENT_AUTHORIZENET_CC_DPM_ERROR_GENERAL;
 
@@ -361,10 +365,10 @@ EOD;
           break;
       }
 
-      if ( ($_GET['error'] != 'verification') && tep_session_is_registered('authorizenet_cc_dpm_error') ) {
+      if ( ($_GET['error'] != 'verification') && isset($_SESSION['authorizenet_cc_dpm_error']) ) {
         $error_message = $authorizenet_cc_dpm_error;
 
-        tep_session_unregister('authorizenet_cc_dpm_error');
+        unset($_SESSION['authorizenet_cc_dpm_error']);
       }
 
       $error = array('title' => MODULE_PAYMENT_AUTHORIZENET_CC_DPM_ERROR_TITLE,
@@ -375,7 +379,7 @@ EOD;
 
     function check() {
       if (!isset($this->_check)) {
-        $check_query = tep_db_query("select configuration_value from " . TABLE_CONFIGURATION . " where configuration_key = 'MODULE_PAYMENT_AUTHORIZENET_CC_DPM_STATUS'");
+        $check_query = tep_db_query("select configuration_value from configuration where configuration_key = 'MODULE_PAYMENT_AUTHORIZENET_CC_DPM_STATUS'");
         $this->_check = tep_db_num_rows($check_query);
       }
       return $this->_check;
@@ -409,12 +413,12 @@ EOD;
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
     function remove() {
-      tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      tep_db_query("delete from configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
     }
 
     function keys() {
@@ -433,10 +437,10 @@ EOD;
 
     function getParams() {
       if (!defined('MODULE_PAYMENT_AUTHORIZENET_CC_DPM_TRANSACTION_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'Authorize.net [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'Authorize.net [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -444,12 +448,12 @@ EOD;
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Authorize.net [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'Authorize.net [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -539,10 +543,10 @@ EOD;
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$this->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -553,8 +557,6 @@ EOD;
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_AUTHORIZENET_CC_DPM_DEBUG_EMAIL)) {
         $email_body = '';
 

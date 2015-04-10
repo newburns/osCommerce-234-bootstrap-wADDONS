@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -14,9 +14,9 @@
     var $code, $title, $description, $enabled;
 
     function paypal_pro_payflow_ec() {
-      global $_GET, $PHP_SELF, $order;
+      global $PHP_SELF, $order;
 
-      $this->signature = 'paypal|paypal_pro_payflow_ec|3.0|2.3';
+      $this->signature = 'paypal|paypal_pro_payflow_ec|3.1|2.3';
 
       $this->code = 'paypal_pro_payflow_ec';
       $this->title = MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_TEXT_TITLE;
@@ -61,7 +61,7 @@
         }
       }
 
-      if ( defined('FILENAME_MODULES') && ($PHP_SELF == FILENAME_MODULES) && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
+      if ( defined('FILENAME_MODULES') && (basename($PHP_SELF) == 'modules.php') && isset($_GET['action']) && ($_GET['action'] == 'install') && isset($_GET['subaction']) && ($_GET['subaction'] == 'conntest') ) {
         echo $this->getTestConnectionResult();
         exit;
       }
@@ -72,7 +72,7 @@
 
       if ( ($this->enabled == true) && ((int)MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_ZONE > 0) ) {
         $check_flag = false;
-        $check_query = tep_db_query("select zone_id from " . TABLE_ZONES_TO_GEO_ZONES . " where geo_zone_id = '" . MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
+        $check_query = tep_db_query("select zone_id from zones_to_geo_zones where geo_zone_id = '" . MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_ZONE . "' and zone_country_id = '" . $order->delivery['country']['id'] . "' order by zone_id");
         while ($check = tep_db_fetch_array($check_query)) {
           if ($check['zone_id'] < 1) {
             $check_flag = true;
@@ -113,19 +113,19 @@
     function pre_confirmation_check() {
       global $ppeuk_token, $ppeuk_secret, $ppeuk_order_total_check, $messageStack, $order;
 
-      if (!tep_session_is_registered('ppeuk_token')) {
+      if (!isset($_SESSION['ppeuk_token'])) {
         tep_redirect(tep_href_link('ext/modules/payment/paypal/express_payflow.php', '', 'SSL'));
       }
 
       $response_array = $this->getExpressCheckoutDetails($ppeuk_token);
 
       if ($response_array['RESULT'] != '0') {
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
-      } elseif ( !tep_session_is_registered('ppeuk_secret') || ($response_array['CUSTOM'] != $ppeuk_secret) ) {
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, '', 'SSL'));
+        tep_redirect(tep_href_link('shopping_cart.php', 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
+      } elseif ( !isset($_SESSION['ppeuk_secret']) || ($response_array['CUSTOM'] != $ppeuk_secret) ) {
+        tep_redirect(tep_href_link('shopping_cart.php', '', 'SSL'));
       }
 
-      if (!tep_session_is_registered('ppeuk_order_total_check')) tep_session_register('ppeuk_order_total_check');
+      if (!isset($_SESSION['ppeuk_order_total_check'])) tep_session_register('ppeuk_order_total_check');
       $ppeuk_order_total_check = true;
 
       $messageStack->add('checkout_confirmation', '<span id="PayPalNotice">' . MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_NOTICE_CHECKOUT_CONFIRMATION . '</span><script>$("#PayPalNotice").parent().css({backgroundColor: "#fcf8e3", border: "1px #faedd0 solid", color: "#a67d57", padding: "5px" });</script>', 'paypal');
@@ -155,26 +155,26 @@
     }
 
     function before_process() {
-      global $customer_id, $order, $sendto, $ppeuk_token, $ppeuk_payerid, $ppeuk_secret, $ppeuk_order_total_check, $_POST, $comments, $response_array;
+      global $customer_id, $order, $sendto, $ppeuk_token, $ppeuk_payerid, $ppeuk_secret, $ppeuk_order_total_check, $comments, $response_array;
 
-      if (!tep_session_is_registered('ppeuk_token')) {
+      if (!isset($_SESSION['ppeuk_token'])) {
         tep_redirect(tep_href_link('ext/modules/payment/paypal/express_payflow.php', '', 'SSL'));
       }
 
       $response_array = $this->getExpressCheckoutDetails($ppeuk_token);
 
       if ($response_array['RESULT'] == '0') {
-        if ( !tep_session_is_registered('ppeuk_secret') || ($response_array['CUSTOM'] != $ppeuk_secret) ) {
-          tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, '', 'SSL'));
-        } elseif ( !tep_session_is_registered('ppeuk_order_total_check') ) {
-          tep_redirect(tep_href_link(FILENAME_CHECKOUT_CONFIRMATION, '', 'SSL'));
+        if ( !isset($_SESSION['ppeuk_secret']) || ($response_array['CUSTOM'] != $ppeuk_secret) ) {
+          tep_redirect(tep_href_link('shopping_cart.php', '', 'SSL'));
+        } elseif ( !isset($_SESSION['ppeuk_order_total_check']) ) {
+          tep_redirect(tep_href_link('checkout_confirmation.php', '', 'SSL'));
         }
       } else {
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
+        tep_redirect(tep_href_link('shopping_cart.php', 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
       }
 
-      if ( tep_session_is_registered('ppeuk_order_total_check') ) {
-        tep_session_unregister('ppeuk_order_total_check');
+      if ( isset($_SESSION['ppeuk_order_total_check']) ) {
+        unset($_SESSION['ppeuk_order_total_check']);
       }
 
       if (empty($comments)) {
@@ -203,7 +203,7 @@
       $response_array = $this->doExpressCheckoutPayment($params);
 
       if ($response_array['RESULT'] != '0') {
-        tep_redirect(tep_href_link(FILENAME_SHOPPING_CART, 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
+        tep_redirect(tep_href_link('shopping_cart.php', 'error_message=' . urlencode($response_array['OSCOM_ERROR_MESSAGE']), 'SSL'));
       }
     }
 
@@ -224,13 +224,13 @@
                               'customer_notified' => '0',
                               'comments' => $pp_result);
 
-      tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
+      tep_db_perform('orders_status_history', $sql_data_array);
 
-      tep_session_unregister('ppeuk_token');
-      tep_session_unregister('ppeuk_payerid');
-      tep_session_unregister('ppeuk_payerstatus');
-      tep_session_unregister('ppeuk_addressstatus');
-      tep_session_unregister('ppeuk_secret');
+      unset($_SESSION['ppeuk_token']);
+      unset($_SESSION['ppeuk_payerid']);
+      unset($_SESSION['ppeuk_payerstatus']);
+      unset($_SESSION['ppeuk_addressstatus']);
+      unset($_SESSION['ppeuk_secret']);
     }
 
     function get_error() {
@@ -239,7 +239,7 @@
 
     function check() {
       if (!isset($this->_check)) {
-        $check_query = tep_db_query("select configuration_value from " . TABLE_CONFIGURATION . " where configuration_key = 'MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_STATUS'");
+        $check_query = tep_db_query("select configuration_value from configuration where configuration_key = 'MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_STATUS'");
         $this->_check = tep_db_num_rows($check_query);
       }
       return $this->_check;
@@ -273,12 +273,12 @@
           $sql_data_array['use_function'] = $data['use_func'];
         }
 
-        tep_db_perform(TABLE_CONFIGURATION, $sql_data_array);
+        tep_db_perform('configuration', $sql_data_array);
       }
     }
 
     function remove() {
-      tep_db_query("delete from " . TABLE_CONFIGURATION . " where configuration_key in ('" . implode("', '", $this->keys()) . "')");
+      tep_db_query("delete from configuration where configuration_key in ('" . implode("', '", $this->keys()) . "')");
     }
 
     function keys() {
@@ -297,10 +297,10 @@
 
     function getParams() {
       if (!defined('MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_TRANSACTIONS_ORDER_STATUS_ID')) {
-        $check_query = tep_db_query("select orders_status_id from " . TABLE_ORDERS_STATUS . " where orders_status_name = 'PayPal [Transactions]' limit 1");
+        $check_query = tep_db_query("select orders_status_id from orders_status where orders_status_name = 'PayPal [Transactions]' limit 1");
 
         if (tep_db_num_rows($check_query) < 1) {
-          $status_query = tep_db_query("select max(orders_status_id) as status_id from " . TABLE_ORDERS_STATUS);
+          $status_query = tep_db_query("select max(orders_status_id) as status_id from orders_status");
           $status = tep_db_fetch_array($status_query);
 
           $status_id = $status['status_id']+1;
@@ -308,12 +308,12 @@
           $languages = tep_get_languages();
 
           foreach ($languages as $lang) {
-            tep_db_query("insert into " . TABLE_ORDERS_STATUS . " (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'PayPal [Transactions]')");
+            tep_db_query("insert into orders_status (orders_status_id, language_id, orders_status_name) values ('" . $status_id . "', '" . $lang['id'] . "', 'PayPal [Transactions]')");
           }
 
-          $flags_query = tep_db_query("describe " . TABLE_ORDERS_STATUS . " public_flag");
+          $flags_query = tep_db_query("describe orders_status public_flag");
           if (tep_db_num_rows($flags_query) == 1) {
-            tep_db_query("update " . TABLE_ORDERS_STATUS . " set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
+            tep_db_query("update orders_status set public_flag = 0 and downloads_flag = 0 where orders_status_id = '" . $status_id . "'");
           }
         } else {
           $check = tep_db_fetch_array($check_query);
@@ -390,7 +390,7 @@
         $server['path'] = '/';
       }
 
-      $request_id = (isset($order) && is_object($order)) ? md5($cartID . tep_session_id() . $this->format_raw($order->info['total'])) : 'oscom_conn_test';
+      $request_id = (isset($order) && is_object($order)) ? md5($cartID . session_id() . $this->format_raw($order->info['total'])) : 'oscom_conn_test';
 
       $headers = array('X-VPS-REQUEST-ID: ' . $request_id,
                        'X-VPS-CLIENT-TIMEOUT: 45',
@@ -434,10 +434,10 @@
 
 // format prices without currency formatting
     function format_raw($number, $currency_code = '', $currency_value = '') {
-      global $currencies, $currency;
+      global $currencies;
 
       if (empty($currency_code) || !$this->is_set($currency_code)) {
-        $currency_code = $currency;
+        $currency_code = $_SESSION['currency'];
       }
 
       if (empty($currency_value) || !is_numeric($currency_value)) {
@@ -462,7 +462,7 @@
                       'TRXTYPE' => ((MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_TRANSACTION_METHOD == 'Sale') ? 'S' : 'A'),
                       'ACTION' => 'S',
                       'RETURNURL' => tep_href_link('ext/modules/payment/paypal/express_payflow.php', 'osC_Action=retrieve', 'SSL'),
-                      'CANCELURL' => tep_href_link(FILENAME_SHOPPING_CART, '', 'SSL'));
+                      'CANCELURL' => tep_href_link('shopping_cart.php', '', 'SSL'));
 
       if (is_array($parameters) && !empty($parameters)) {
         $params = array_merge($params, $parameters);
@@ -632,8 +632,6 @@
     }
 
     function sendDebugEmail($response = array()) {
-      global $_POST, $_GET;
-
       if (tep_not_null(MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_DEBUG_EMAIL)) {
         $email_body = '';
 
@@ -663,9 +661,17 @@
       $dialog_error = MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_DIALOG_CONNECTION_ERROR;
       $dialog_connection_time = MODULE_PAYMENT_PAYPAL_PRO_PAYFLOW_EC_DIALOG_CONNECTION_TIME;
 
-      $test_url = tep_href_link(FILENAME_MODULES, 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
+      $test_url = tep_href_link('modules.php', 'set=payment&module=' . $this->code . '&action=install&subaction=conntest');
 
       $js = <<<EOD
+<script>
+if ( typeof jQuery == 'undefined' ) {
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></scr' + 'ipt>');
+  document.write('<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/themes/redmond/jquery-ui.css" />');
+  document.write('<scr' + 'ipt src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"></scr' + 'ipt>');
+}
+</script>
+
 <script>
 $(function() {
   $('#tcdprogressbar').progressbar({
