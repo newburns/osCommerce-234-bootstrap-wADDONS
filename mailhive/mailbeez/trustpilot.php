@@ -74,10 +74,10 @@ class trustpilot extends mailbeez
 
         $query_raw = "select c.customers_firstname, c.customers_lastname, o.orders_id, o.customers_name,
                         o.customers_id, o.customers_email_address, o.date_purchased, s.date_added as status_date
-                      from " . TABLE_ORDERS . " o
-                        left join " . TABLE_CUSTOMERS . " c
+                      from orders o
+                        left join customers c
                           on (o.customers_id = c.customers_id)
-                        left join " . TABLE_ORDERS_STATUS_HISTORY . " s
+                        left join orders_status_history s
                           on (o.orders_id = s.orders_id)
                       where o.orders_status = s.orders_status_id
                         and s.orders_status_id = '" . (int)$status . "'
@@ -101,7 +101,7 @@ class trustpilot extends mailbeez
             }
 
             $tp_block_token = base64_encode($mail['customers_id'] . '|' . $item['customers_email_address']);
-            $tp_block_url = HTTP_SERVER . DIR_WS_HTTP_CATALOG . FILENAME_HIVE . '?ma=block&m=' . $this->module . '&mp=' . $tp_block_token;
+            $tp_block_url = HTTP_SERVER . DIR_WS_HTTP_CATALOG 'mailhive.php' . '?ma=block&m=' . $this->module . '&mp=' . $tp_block_token;
 
 
             $this->audience[$item['customers_id']] = array('firstname' => $item['customers_firstname'],
