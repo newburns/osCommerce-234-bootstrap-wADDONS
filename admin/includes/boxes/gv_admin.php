@@ -14,24 +14,24 @@
     'heading' => BOX_HEADING_GV_ADMIN,
     'apps' => array(
       array(
-        'code' => FILENAME_COUPON_ADMIN,
+        'code' => 'coupon_admin.php',
         'title' => BOX_COUPON_ADMIN,
-        'link' => tep_href_link(FILENAME_COUPON_ADMIN)
+        'link' => tep_href_link('coupon_admin.php')
       ),
       array(
-        'code' => FILENAME_GV_QUEUE,
+        'code' => 'gv_queue.php',
         'title' => BOX_GV_ADMIN_QUEUE,
-        'link' => tep_href_link(FILENAME_GV_QUEUE)
+        'link' => tep_href_link('gv_queue.php')
       ),
       array(
-        'code' => FILENAME_GV_MAIL,
+        'code' => 'gv_mail.php',
         'title' => BOX_GV_ADMIN_MAIL,
-        'link' => tep_href_link(FILENAME_GV_MAIL)
+        'link' => tep_href_link('gv_mail.php')
       ),
       array(
-        'code' => FILENAME_GV_SENT,
+        'code' => 'gv_sent.php',
         'title' => BOX_GV_ADMIN_SENT,
-        'link' => tep_href_link(FILENAME_GV_SENT)
+        'link' => tep_href_link('gv_sent.php')
       )
     )
   );

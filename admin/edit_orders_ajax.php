@@ -1,6 +1,6 @@
 <?php
   /*
-  $Id: edit_orders_ajax.php v5.0.5 08/27/2007 djmonkey1 Exp $
+  $Id: 'edit_orders_ajax.php' v5.0.5 08/27/2007 djmonkey1 Exp $
 
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
@@ -25,7 +25,7 @@
   include('order_editor/order.php');
   include('order_editor/shipping.php');
   include('order_editor/http_client.php');
-  include(DIR_WS_LANGUAGES . $language. '/' . FILENAME_ORDERS_EDIT);
+  include(DIR_WS_LANGUAGES . $language. '/' . 'edit_orders.php');
 
    
   // Include currencies class
@@ -433,7 +433,7 @@ if ($action == 'update_downloads') {
                 <td valign="top" width="100%">
 				 <br>
 				   <div>
-					<a href="javascript:openWindow('<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_POST['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
+					<a href="javascript:openWindow('<?php echo tep_href_link('edit_orders_add_product.php, 'oID=' . $_POST['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
 					</div>
 					<br>
 				</td>
@@ -822,7 +822,7 @@ if (tep_db_num_rows($orders_history_query)) {
                 <td valign="top" width="100%">
 				 <br>
 				   <div>
-					<a href="javascript:openWindow('<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
+					<a href="javascript:openWindow('<?php echo tep_href_link('edit_orders_add_product.php, 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');"><?php echo tep_image_button('button_add_article.gif', TEXT_ADD_NEW_PRODUCT); ?></a><input type="hidden" name="subaction" value="">
 					</div>
 					<br>
 				</td>

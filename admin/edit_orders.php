@@ -617,7 +617,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
         if (isset($_POST['subaction'])) {
           switch($_POST['subaction']) {
             case 'add_product':
-              tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, tep_get_all_get_params(array('action')) . 'action=edit#products'));
+              tep_redirect(tep_href_link('edit_orders.php', tep_get_all_get_params(array('action')) . 'action=edit#products'));
               break;
               
           }
@@ -631,7 +631,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
     if ( (isset($_POST['nC1'])) || (isset($_POST['nC2'])) || (isset($_POST['nC3'])) ) {
 	//then the user selected the option of sending a new email
     
-    tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, tep_get_all_get_params(array('action')) . 'action=email')); 
+    tep_redirect(tep_href_link('edit_orders.php', tep_get_all_get_params(array('action')) . 'action=email')); 
 	//redirect to the email case
 	 
   } else  { 
@@ -641,7 +641,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
 			$messageStack->add_session(SUCCESS_ORDER_UPDATED, 'success');
 		}
 
-		tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, tep_get_all_get_params(array('action')) . 'action=edit'));
+		tep_redirect(tep_href_link('edit_orders.php', tep_get_all_get_params(array('action')) . 'action=edit'));
 		
 		}
 		
@@ -909,7 +909,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
  		
 		$messageStack->add_session(SUCCESS_EMAIL_SENT, 'success');
 		
-        tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, tep_get_all_get_params(array('action')) . 'action=edit'));
+        tep_redirect(tep_href_link('edit_orders.php', tep_get_all_get_params(array('action')) . 'action=edit'));
 		  
 		 break;
 
@@ -1066,7 +1066,7 @@ document.onmousemove=positiontip
    
    if (($action == 'edit') && ($order_exists == true)) {
      
-	 echo tep_draw_form('edit_order', FILENAME_ORDERS_EDIT, tep_get_all_get_params(array('action')) . 'action=update_order');
+	 echo tep_draw_form('edit_order', 'edit_orders.php', tep_get_all_get_params(array('action')) . 'action=update_order');
     
  ?>
   
@@ -1658,7 +1658,7 @@ document.onmousemove=positiontip
                 <td valign="top" width="100%">
 				  <br>
 				    <div>					  
-					  <a href="<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID'] . '&step=1'); ?>" target="addProducts" onClick="openWindow('<?php echo tep_href_link(FILENAME_ORDERS_EDIT_ADD_PRODUCT, 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');return false"><?php echo tep_draw_button(TEXT_ADD_NEW_PRODUCT, 'plus'); ?></a><input type="hidden" name="subaction" value="">
+					  <a href="<?php echo tep_href_link('edit_orders_add_product.php, 'oID=' . $_GET['oID'] . '&step=1'); ?>" target="addProducts" onClick="openWindow('<?php echo tep_href_link('edit_orders_add_product.php, 'oID=' . $_GET['oID'] . '&step=1'); ?>','addProducts');return false"><?php echo tep_draw_button(TEXT_ADD_NEW_PRODUCT, 'plus'); ?></a><input type="hidden" name="subaction" value="">
 					  
 				    </div>
 				  <br>

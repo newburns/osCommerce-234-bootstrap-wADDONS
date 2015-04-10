@@ -20,9 +20,9 @@
       ),
 /* ** Altered for Manual Order Maker ** */	  
       array(
-        'code' => FILENAME_CREATE_ORDER,
+        'code' => 'create_order.php',
         'title' => BOX_CUSTOMERS_CREATE_ORDER,
-        'link' => tep_href_link(FILENAME_CREATE_ORDER)
+        'link' => tep_href_link('create_order.php')
       )
 /* ** EOF for Manual Order Maker ** */	  
     )

@@ -71,7 +71,7 @@
  	  $address = tep_db_fetch_array($address_query);
 	}
 
-    require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ORDER_PROCESS);
+    require(DIR_WS_LANGUAGES . $language . '/' . 'create_order_process.php');
 
   // #### Generate Page
 
@@ -235,7 +235,7 @@ function selectorsExtras(status) {
       </tr>
     </table>
     
-    <?php echo tep_draw_form('create_order', FILENAME_CREATE_ORDER_PROCESS, '', 'post', 'onsubmit="return check_form(this);" id="create_order"') . tep_draw_hidden_field('customers_create_type', 'existing', 'id="customers_create_type"') . tep_hide_session_id(); ?>
+    <?php echo tep_draw_form('create_order', 'create_order_process.php', '', 'post', 'onsubmit="return check_form(this);" id="create_order"') . tep_draw_hidden_field('customers_create_type', 'existing', 'id="customers_create_type"') . tep_hide_session_id(); ?>
     <table border="0" cellpadding="3" cellspacing="0" width="500">
     <tr>
       <td><?php

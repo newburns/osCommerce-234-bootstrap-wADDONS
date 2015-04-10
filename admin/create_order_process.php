@@ -13,9 +13,9 @@
   require('includes/application_top.php');
   require_once('includes/functions/password_funcs.php');
 
-  require(DIR_WS_LANGUAGES . $language . '/' . FILENAME_CREATE_ORDER_PROCESS);
+  require(DIR_WS_LANGUAGES . $language . '/' . 'create_order_process.php');
  // if ($_POST['action'] != 'process') {
-  //  tep_redirect(tep_href_link(FILENAME_CREATE_ORDER, '', 'SSL'));
+  //  tep_redirect(tep_href_link('create_order.php', '', 'SSL'));
   //}
   $customers_id = (empty($_POST['customers_id']) ? 0 : (int)tep_db_prepare_input($_POST['customers_id']));
   $gender = tep_db_prepare_input($_POST['customers_gender']);
@@ -65,7 +65,7 @@
   
     $inuse_query = tep_db_query("select customers_id, customers_email_address from " . TABLE_CUSTOMERS . " where customers_email_address = '" . $email_address . "'");
 	if ($inuse = tep_db_fetch_array($inuse_query)) {
-	    tep_redirect(tep_href_link(FILENAME_CREATE_ORDER, 'Customer=' . $inuse['customers_id'] . '&cust_select_button=Select&message='. urlencode(TEXT_EMAIL_EXISTS_ERROR), 'SSL'));
+	    tep_redirect(tep_href_link('create_order.php', 'Customer=' . $inuse['customers_id'] . '&cust_select_button=Select&message='. urlencode(TEXT_EMAIL_EXISTS_ERROR), 'SSL'));
 	}
   
     // do customers table entry
@@ -253,7 +253,7 @@
     tep_db_perform(TABLE_ORDERS_TOTAL, $sql_data_array);
 
 */
-  tep_redirect(tep_href_link(FILENAME_ORDERS_EDIT, 'oID=' . $insert_id, 'SSL'));
+  tep_redirect(tep_href_link('edit_orders.php', 'oID=' . $insert_id, 'SSL'));
 
   require(includes . 'application_bottom.php');
 ?>

@@ -23,10 +23,6 @@
 */
 
 // define the filenames used in the project
-  define('FILENAME_DEFINE_LANGUAGE', 'define_language.php');
-  define('FILENAME_GEO_ZONES', 'geo_zones.php');
-  define('FILENAME_LANGUAGES', 'languages.php');
-  define('FILENAME_LOGIN', 'login.php');
   define('FILENAME_MAIL', 'mail.php');
   define('FILENAME_MANUFACTURERS', 'manufacturers.php');
   define('FILENAME_MODULES', 'modules.php');
@@ -58,26 +54,5 @@
 **************               Raymond Burns                **************
 ************************************************************************
 */
-// Order Editor
-  define('FILENAME_ORDERS_EDIT', 'edit_orders.php');
-  define('FILENAME_ORDERS_EDIT_ADD_PRODUCT', 'edit_orders_add_product.php');
-  define('FILENAME_ORDERS_EDIT_AJAX', 'edit_orders_ajax.php');
-// ### MANUAL ORDER MAKER ###
-  define('FILENAME_CREATE_ORDER_PROCESS', 'create_order_process.php');
-  define('FILENAME_CREATE_ORDER', 'create_order.php');
-// Definition for Alternative Administration System
-  define('FILENAME_AAS','aas.php');  
-// Database Check Tool
-  define('FILENAME_DATABASE_CHECK', 'database_check.php');
-// CCGV
-  define('FILENAME_COUPON_ADMIN', 'coupon_admin.php');
-  define('FILENAME_GV_SENT', 'gv_sent.php');
-  define('FILENAME_GV_MAIL', 'gv_mail.php');
-  define('FILENAME_GV_QUEUE', 'gv_queue.php');
-// Mail Manager
-  define('FILENAME_MM_MAIL_MANAGER', 'mm_mail_manager.php');
-  define('FILENAME_MM_RESPONSEMAIL', 'mm_responsemail.php');
-  define('FILENAME_MM_TEMPLATES', 'mm_templates.php');
-  define('FILENAME_MM_BULKMAIL', 'mm_bulkmail.php');
-  define('FILENAME_MM_EMAIL', 'mm_email.php');
+
 ?>

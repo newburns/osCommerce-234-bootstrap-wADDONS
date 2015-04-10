@@ -42,9 +42,9 @@
         'link' => tep_href_link('cache.php')
       ),
       array(
-        'code' => FILENAME_DEFINE_LANGUAGE,
+        'code' => 'define_language.php',
         'title' => BOX_TOOLS_DEFINE_LANGUAGE,
-        'link' => tep_href_link(FILENAME_DEFINE_LANGUAGE)
+        'link' => tep_href_link('define_language.php')
       ),
       array(
         'code' => FILENAME_MAIL,
@@ -73,16 +73,16 @@
       ),
 /* ** Altered for Database Check 1.4 ** */
 	 array(
-        'code' => FILENAME_DATABASE_CHECK,
+        'code' => 'database_check.php',
         'title' => BOX_TOOLS_DATABASE_CHECK,
-        'link' => tep_href_link(FILENAME_DATABASE_CHECK)
+        'link' => tep_href_link('database_check.php')
       ),
 /* ** EOF alteration for Database Check 1.4 ** */
 /* ** Altered for Mail Manager ** */
 	 array( 
 		'code' => FILENAME_MAIL_MANAGER, 
 		'title' => BOX_TOOLS_MAIL_MANAGER, 
-		'link' => tep_href_link(FILENAME_MM_MAIL_MANAGER) 
+		'link' => tep_href_link('mm_mail_manager.php') 
 	 ), 
 /* ** EOF alterations for Mail Manager ** */
       array(
