@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -35,10 +35,10 @@
       global $order_id;
 
       if ( (int)MODULE_CONTENT_CHECKOUT_SUCCESS_REDIRECT_OLD_ORDER_MINUTES > 0 ) {
-        $check_query = tep_db_query("select 1 from " . TABLE_ORDERS . " where orders_id = '" . (int)$order_id . "' and date_purchased < date_sub(now(), interval '" . (int)MODULE_CONTENT_CHECKOUT_SUCCESS_REDIRECT_OLD_ORDER_MINUTES . "' minute)");
+        $check_query = tep_db_query("select 1 from orders where orders_id = '" . (int)$order_id . "' and date_purchased < date_sub(now(), interval '" . (int)MODULE_CONTENT_CHECKOUT_SUCCESS_REDIRECT_OLD_ORDER_MINUTES . "' minute)");
 
         if ( tep_db_num_rows($check_query) ) {
-          tep_redirect(tep_href_link(FILENAME_ACCOUNT, '', 'SSL'));
+          tep_redirect(tep_href_link('account.php', '', 'SSL'));
         }
       }
     }

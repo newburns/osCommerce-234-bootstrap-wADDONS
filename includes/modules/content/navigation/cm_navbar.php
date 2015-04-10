@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,8 +32,7 @@
     }
 
     function execute() {
-      global $PHP_SELF, $cart, $lng, $language, $currencies, $_GET, $request_type, $currency, $oscTemplate;
-      global $customer_first_name;
+      global $PHP_SELF, $cart, $lng, $language, $currencies, $request_type, $oscTemplate, $customer_first_name;
 
       ob_start();
       include(DIR_WS_MODULES . 'content/' . $this->group . '/templates/navbar.php');

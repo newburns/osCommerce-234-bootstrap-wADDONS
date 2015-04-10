@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -19,8 +19,6 @@
     var $enabled = false;
 
     function cm_account_braintree_cards() {
-      global $language;
-
       $this->code = get_class($this);
       $this->group = basename(dirname(__FILE__));
 
@@ -38,7 +36,7 @@
 
       if ( defined('MODULE_PAYMENT_INSTALLED') && tep_not_null(MODULE_PAYMENT_INSTALLED) && in_array('braintree_cc.php', explode(';', MODULE_PAYMENT_INSTALLED)) ) {
         if ( !class_exists('braintree_cc') ) {
-          include(DIR_FS_CATALOG . 'includes/languages/' . $language . '/modules/payment/braintree_cc.php');
+          include(DIR_FS_CATALOG . 'includes/languages/' . $_SESSION['language'] . '/modules/payment/braintree_cc.php');
           include(DIR_FS_CATALOG . 'includes/modules/payment/braintree_cc.php');
         }
 

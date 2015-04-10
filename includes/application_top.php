@@ -467,8 +467,8 @@
         break;
       }
     }
-  } elseif (isset($HTTP_GET_VARS['manufacturers_id'])) {
-    $manufacturers_query = tep_db_query("select manufacturers_name from " . TABLE_MANUFACTURERS . " where manufacturers_id = '" . (int)$HTTP_GET_VARS['manufacturers_id'] . "'");
+  } elseif (isset($_GET['manufacturers_id'])) {
+    $manufacturers_query = tep_db_query("select manufacturers_name from manufacturers where manufacturers_id = '" . (int)$_GET['manufacturers_id'] . "'");
     if (tep_db_num_rows($manufacturers_query)) {
       $manufacturers = tep_db_fetch_array($manufacturers_query);
 
@@ -499,7 +499,7 @@
 // add the products model to the breadcrumb trail
   if (isset($_GET['products_id'])) {
 /* ** Altered for SEO Header Tags RELOADED **
-    $model_query = tep_db_query("select products_model from products where products_id = '" . (int)$HTTP_GET_VARS['products_id'] . "'");
+    $model_query = tep_db_query("select products_model from products where products_id = '" . (int)$_GET['products_id'] . "'");
 */
     $model_query = tep_db_query("select coalesce(NULLIF(pd.products_seo_title, ''), p.products_model) as products_model from products p, products_description pd where p.products_id = '" . (int)$_GET['products_id'] . "' and p.products_id = pd.products_id and pd.language_id = '" . (int)$_SESSION['languages_id'] . "'");
 /* ** EOF alteration for SEO Header Tags RELOADED ** */

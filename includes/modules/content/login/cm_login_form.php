@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,16 +32,16 @@
     }
 
     function execute() {
-      global $_GET, $_POST, $sessiontoken, $login_customer_id, $messageStack, $oscTemplate;
+      global $login_customer_id, $messageStack, $oscTemplate;
 
       $error = false;
 
-      if (isset($_GET['action']) && ($_GET['action'] == 'process') && isset($_POST['formid']) && ($_POST['formid'] == $sessiontoken)) {
+      if (isset($_GET['action']) && ($_GET['action'] == 'process') && isset($_POST['formid']) && ($_POST['formid'] == $_SESSION['sessiontoken'])) {
         $email_address = tep_db_prepare_input($_POST['email_address']);
         $password = tep_db_prepare_input($_POST['password']);
 
 // Check if email exists
-        $customer_query = tep_db_query("select customers_id, customers_password from " . TABLE_CUSTOMERS . " where customers_email_address = '" . tep_db_input($email_address) . "' limit 1");
+        $customer_query = tep_db_query("select customers_id, customers_password from customers where customers_email_address = '" . tep_db_input($email_address) . "' limit 1");
         if (!tep_db_num_rows($customer_query)) {
           $error = true;
         } else {
@@ -56,7 +56,7 @@
 
 // migrate old hashed password to new phpass password
             if (tep_password_type($customer['customers_password']) != 'phpass') {
-              tep_db_query("update " . TABLE_CUSTOMERS . " set customers_password = '" . tep_encrypt_password($password) . "' where customers_id = '" . (int)$login_customer_id . "'");
+              tep_db_query("update customers set customers_password = '" . tep_encrypt_password($password) . "' where customers_id = '" . (int)$login_customer_id . "'");
             }
           }
         }

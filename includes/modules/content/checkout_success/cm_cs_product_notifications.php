@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -32,10 +32,10 @@
     }
 
     function execute() {
-      global $_GET, $_POST, $oscTemplate, $customer_id, $order_id;
+      global $oscTemplate, $customer_id, $order_id;
 
-      if ( tep_session_is_registered('customer_id') ) {
-        $global_query = tep_db_query("select global_product_notifications from " . TABLE_CUSTOMERS_INFO . " where customers_info_id = '" . (int)$customer_id . "'");
+      if ( isset($_SESSION['customer_id']) ) {
+        $global_query = tep_db_query("select global_product_notifications from customers_info where customers_info_id = '" . (int)$customer_id . "'");
         $global = tep_db_fetch_array($global_query);
 
         if ( $global['global_product_notifications'] != '1' ) {
@@ -45,10 +45,10 @@
 
               foreach ( $notify as $n ) {
                 if ( is_numeric($n) && ($n > 0) ) {
-                  $check_query = tep_db_query("select products_id from " . TABLE_PRODUCTS_NOTIFICATIONS . " where products_id = '" . (int)$n . "' and customers_id = '" . (int)$customer_id . "' limit 1");
+                  $check_query = tep_db_query("select products_id from products_notifications where products_id = '" . (int)$n . "' and customers_id = '" . (int)$customer_id . "' limit 1");
 
                   if ( !tep_db_num_rows($check_query) ) {
-                    tep_db_query("insert into " . TABLE_PRODUCTS_NOTIFICATIONS . " (products_id, customers_id, date_added) values ('" . (int)$n . "', '" . (int)$customer_id . "', now())");
+                    tep_db_query("insert into products_notifications (products_id, customers_id, date_added) values ('" . (int)$n . "', '" . (int)$customer_id . "', now())");
                   }
                 }
               }
@@ -57,14 +57,21 @@
 
           $products_displayed = array();
 
-          $products_query = tep_db_query("select products_id, products_name from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . (int)$order_id . "' order by products_name");
+          $products_query = tep_db_query("select products_id, products_name from orders_products where orders_id = '" . (int)$order_id . "' order by products_name");
           while ($products = tep_db_fetch_array($products_query)) {
             if ( !isset($products_displayed[$products['products_id']]) ) {
-              $products_displayed[$products['products_id']] = '<div class="checkbox"><label> ' . tep_draw_checkbox_field('notify[]', $products['products_id']) . ' ' . $products['products_name'] . '</label></div>';
+              $products_displayed[$products['products_id']]  = '<div class="form-group">';
+              $products_displayed[$products['products_id']] .= '  <label class="control-label col-xs-3">' . $products['products_name'] . '</label>';
+              $products_displayed[$products['products_id']] .= '  <div class="col-xs-9">';
+              $products_displayed[$products['products_id']] .= '    <div class="checkbox">';
+              $products_displayed[$products['products_id']] .= '      <label>' . tep_draw_checkbox_field('notify[]', $products['products_id']) . '&nbsp;</label>';
+              $products_displayed[$products['products_id']] .= '    </div>';
+              $products_displayed[$products['products_id']] .= '  </div>';
+              $products_displayed[$products['products_id']] .= '</div>';
             }
           }
 
-          $products_notifications = implode('', $products_displayed);
+          $products_notifications = implode('<br />', $products_displayed);
 
           ob_start();
           include(DIR_WS_MODULES . 'content/' . $this->group . '/templates/product_notifications.php');

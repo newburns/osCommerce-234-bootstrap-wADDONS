@@ -41,7 +41,7 @@
     ?>
 <?php /* ** Altered for CCGV ** */ ?>
 <?php
-  if (tep_session_is_registered('customer_id')) {
+  if (!isset($_SESSION['customer_id'])) {
     $gv_query = tep_db_query("select amount from coupon_gv_customer where customer_id = '" . (int)$customer_id . "'");
     $gv_result = tep_db_fetch_array($gv_query);
     if ($gv_result['amount'] > 0 ) {

@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,7 +24,7 @@
 
       $this->title = MODULE_CONTENT_HEADER_BUTTONS_TITLE;
       $this->description = MODULE_CONTENT_HEADER_BUTTONS_DESCRIPTION;
-      $this->description .= '<div class="secWarning">' . MODULE_CONTENT_BOOTSTRAP_ROW_DESCRIPTION . '</div>';
+      if (defined('MODULE_CONTENT_BOOTSTRAP_ROW_DESCRIPTION')) $this->description .= '<div class="secWarning">' . MODULE_CONTENT_BOOTSTRAP_ROW_DESCRIPTION . '</div>';
 
       if ( defined('MODULE_CONTENT_HEADER_BUTTONS_STATUS') ) {
         $this->sort_order = MODULE_CONTENT_HEADER_BUTTONS_SORT_ORDER;
@@ -33,7 +33,7 @@
     }
 
     function execute() {
-      global $oscTemplate, $cart;
+      global $oscTemplate;
       
       $content_width = (int)MODULE_CONTENT_HEADER_BUTTONS_CONTENT_WIDTH;
       

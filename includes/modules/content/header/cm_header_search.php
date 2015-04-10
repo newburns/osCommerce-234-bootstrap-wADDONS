@@ -5,7 +5,7 @@
   osCommerce, Open Source E-Commerce Solutions
   http://www.oscommerce.com
 
-  Copyright (c) 2014 osCommerce
+  Copyright (c) 2015 osCommerce
 
   Released under the GNU General Public License
 */
@@ -24,6 +24,7 @@
 
       $this->title = MODULE_CONTENT_HEADER_SEARCH_TITLE;
       $this->description = MODULE_CONTENT_HEADER_SEARCH_DESCRIPTION;
+      if (defined('MODULE_CONTENT_BOOTSTRAP_ROW_DESCRIPTION')) $this->description .= '<div class="secWarning">' . MODULE_CONTENT_BOOTSTRAP_ROW_DESCRIPTION . '</div>';
 
       if ( defined('MODULE_CONTENT_HEADER_SEARCH_STATUS') ) {
         $this->sort_order = MODULE_CONTENT_HEADER_SEARCH_SORT_ORDER;
@@ -35,16 +36,15 @@
       global $oscTemplate, $request_type;
       
       $content_width = MODULE_CONTENT_HEADER_SEARCH_CONTENT_WIDTH;
-
-
+      
       $search_box = '<div class="searchbox-margin">';
       $search_box .= tep_draw_form('quick_find', tep_href_link('advanced_search_result.php', '', $request_type, false), 'get', 'class="form-horizontal"');
       $search_box .= '  <div class="input-group">' .
                           tep_draw_input_field('keywords', '', 'required placeholder="' . TEXT_SEARCH_PLACEHOLDER . '"', 'search') . '<span class="input-group-btn"><button type="submit" class="btn btn-info"><i class="glyphicon glyphicon-search"></i></button></span>' .
-                      '  </div>';
+                     '  </div>';
       $search_box .=  tep_hide_session_id() . '</form>';
       $search_box .= '</div>';
-
+      
       ob_start();
       include(DIR_WS_MODULES . 'content/' . $this->group . '/templates/search.php');
       $template = ob_get_clean();
