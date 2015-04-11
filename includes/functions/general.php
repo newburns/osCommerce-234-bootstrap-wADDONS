@@ -1381,7 +1381,7 @@
   function osc_get_mini_description($products_id) {
     global $languages_id;
 
-    $product_query = tep_db_query("select coalesce(NULLIF(products_mini_description, ''), NULLIF(products_seo_description, ''), LEFT(products_description, 300)) as products_precis from " . TABLE_PRODUCTS_DESCRIPTION . " where products_id = '" . (int)$products_id . "' and language_id = '" . (int)$languages_id . "'");
+    $product_query = tep_db_query("select coalesce(NULLIF(products_mini_description, ''), NULLIF(products_seo_description, ''), LEFT(products_description, 300)) as products_precis from products_description where products_id = '" . (int)$products_id . "' and language_id = '" . (int)$_SESSION['languages_id'] . "'");
     $product = tep_db_fetch_array($product_query);
 
     return osc_split_mini_description($product['products_precis']);
