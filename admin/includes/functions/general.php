@@ -529,7 +529,7 @@
     global $languages_id;
 
     if (!$language_id) $language_id = $languages_id;
-    $orders_status_query = tep_db_query("select orders_status_name from " . TABLE_ORDERS_STATUS . " where orders_status_id = '" . (int)$orders_status_id . "' and language_id = '" . (int)$language_id . "'");
+    $orders_status_query = tep_db_query("select orders_status_name from orders_status where orders_status_id = '" . (int)$orders_status_id . "' and language_id = '" . (int)$language_id . "'");
     $orders_status = tep_db_fetch_array($orders_status_query);
 
     return $orders_status['orders_status_name'];
@@ -539,7 +539,7 @@
     global $languages_id;
 
     $orders_status_array = array();
-    $orders_status_query = tep_db_query("select orders_status_id, orders_status_name from " . TABLE_ORDERS_STATUS . " where language_id = '" . (int)$languages_id . "' order by orders_status_id");
+    $orders_status_query = tep_db_query("select orders_status_id, orders_status_name from orders_status where language_id = '" . (int)$languages_id . "' order by orders_status_id");
     while ($orders_status = tep_db_fetch_array($orders_status_query)) {
       $orders_status_array[] = array('id' => $orders_status['orders_status_id'],
                                      'text' => $orders_status['orders_status_name']);
@@ -746,9 +746,9 @@
 // Sets the status of a banner
   function tep_set_banner_status($banners_id, $status) {
     if ($status == '1') {
-      return tep_db_query("update " . TABLE_BANNERS . " set status = '1', expires_impressions = NULL, expires_date = NULL, date_status_change = NULL where banners_id = '" . $banners_id . "'");
+      return tep_db_query("update banners set status = '1', expires_impressions = NULL, expires_date = NULL, date_status_change = NULL where banners_id = '" . $banners_id . "'");
     } elseif ($status == '0') {
-      return tep_db_query("update " . TABLE_BANNERS . " set status = '0', date_status_change = now() where banners_id = '" . $banners_id . "'");
+      return tep_db_query("update banners set status = '0', date_status_change = now() where banners_id = '" . $banners_id . "'");
     } else {
       return -1;
     }
@@ -1044,7 +1044,7 @@ return tep_draw_password_field('configuration_value', $password);
       }
     }
 
-    tep_db_query("delete from " . TABLE_ORDERS . " where orders_id = '" . (int)$order_id . "'");
+    tep_db_query("delete from orders where orders_id = '" . (int)$order_id . "'");
     tep_db_query("delete from " . TABLE_ORDERS_PRODUCTS . " where orders_id = '" . (int)$order_id . "'");
     tep_db_query("delete from " . TABLE_ORDERS_PRODUCTS_ATTRIBUTES . " where orders_id = '" . (int)$order_id . "'");
     tep_db_query("delete from " . TABLE_ORDERS_STATUS_HISTORY . " where orders_id = '" . (int)$order_id . "'");
@@ -1338,7 +1338,7 @@ return tep_draw_password_field('configuration_value', $password);
     $name = (($key) ? 'configuration[' . $key . ']' : 'configuration_value');
 
     $statuses_array = array(array('id' => '0', 'text' => TEXT_DEFAULT));
-    $statuses_query = tep_db_query("select orders_status_id, orders_status_name from " . TABLE_ORDERS_STATUS . " where language_id = '" . (int)$languages_id . "' order by orders_status_name");
+    $statuses_query = tep_db_query("select orders_status_id, orders_status_name from orders_status where language_id = '" . (int)$languages_id . "' order by orders_status_name");
     while ($statuses = tep_db_fetch_array($statuses_query)) {
       $statuses_array[] = array('id' => $statuses['orders_status_id'],
                                 'text' => $statuses['orders_status_name']);
@@ -1354,7 +1354,7 @@ return tep_draw_password_field('configuration_value', $password);
 
     if (!is_numeric($language_id)) $language_id = $languages_id;
 
-    $status_query = tep_db_query("select orders_status_name from " . TABLE_ORDERS_STATUS . " where orders_status_id = '" . (int)$order_status_id . "' and language_id = '" . (int)$language_id . "'");
+    $status_query = tep_db_query("select orders_status_name from orders_status where orders_status_id = '" . (int)$order_status_id . "' and language_id = '" . (int)$language_id . "'");
     $status = tep_db_fetch_array($status_query);
 
     return $status['orders_status_name'];

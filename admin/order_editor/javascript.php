@@ -309,7 +309,7 @@ function updateShippingZone(field, value) {
 		<?php if (ORDER_EDITOR_USE_AJAX == 'true') { ?>
 		
 		createRequest();
-	    var url = "<?php echo ''edit_orders_ajax.php'; ?>?action=update_currency&oID=<?php echo $_GET['oID']; ?>&table=<?php echo TABLE_ORDERS; ?>&currency=" + currency + "&currency_value=" + currency_value;
+	    var url = "<?php echo ''edit_orders_ajax.php'; ?>?action=update_currency&oID=<?php echo $_GET['oID']; ?>&table=<?php echo orders; ?>&currency=" + currency + "&currency_value=" + currency_value;
 		
 		xmlHttp.open("GET", url, true);
         

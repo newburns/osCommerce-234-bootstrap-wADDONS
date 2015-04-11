@@ -68,7 +68,7 @@ if ($ok)
 }
 if ($ok)
 {
-    $my_order_query = tep_db_query("select orders_status, currency, currency_value from ".TABLE_ORDERS." where orders_id = '".$_POST['order_id']."'"); // TODO: fix PB to add all params"' and customers_id = '" . (int)$_POST['custom'] . "'");
+    $my_order_query = tep_db_query("select orders_status, currency, currency_value from ".orders." where orders_id = '".$_POST['order_id']."'"); // TODO: fix PB to add all params"' and customers_id = '" . (int)$_POST['custom'] . "'");
     if (tep_db_num_rows($my_order_query) <= 0)
     {
         $ok = false;
@@ -153,7 +153,7 @@ if ($result == 'VERIFIED')
     'customer_notified'=>$customer_notified,
     'comments'=>'Inpay '.ucfirst($_POST['invoice_status']).'['.$comment_status.']');
     tep_db_perform(TABLE_ORDERS_STATUS_HISTORY, $sql_data_array);
-    tep_db_query("update ".TABLE_ORDERS." set orders_status = '".$order_status_id."', last_modified = now() where orders_id = '".(int)$_POST['order_id']."'");
+    tep_db_query("update ".orders." set orders_status = '".$order_status_id."', last_modified = now() where orders_id = '".(int)$_POST['order_id']."'");
     if ($invoice_approved)
     {
     	// for email
@@ -360,7 +360,7 @@ if ($result == 'VERIFIED')
     //
     if ( isset ($_POST['order_id']) && is_numeric($_POST['order_id']) && ($_POST['order_id'] > 0))
     {
-        $check_query = tep_db_query("select orders_id from ".TABLE_ORDERS." where orders_id = '".$_POST['order_id']."'"); //TODO: fix custom "' and customers_id = '" . (int)$_POST['custom'] . "'");
+        $check_query = tep_db_query("select orders_id from ".orders." where orders_id = '".$_POST['order_id']."'"); //TODO: fix custom "' and customers_id = '" . (int)$_POST['custom'] . "'");
         $order_status_id = $order['orders_status'];
 		if (($order_status_id==null)||($order['orders_status']=='')){
 		  $order_status_id = DEFAULT_ORDERS_STATUS_ID;
@@ -368,7 +368,7 @@ if ($result == 'VERIFIED')
         if (tep_db_num_rows($check_query) > 0)
         {
             $comment_status = $result;
-            //tep_db_query("update ".TABLE_ORDERS." set orders_status = '".((MODULE_PAYMENT_INPAY_ORDER_STATUS_ID > 0)?MODULE_PAYMENT_INPAY_ORDER_STATUS_ID:DEFAULT_ORDERS_STATUS_ID)."', last_modified = now() where orders_id = '".$_POST['order_id']."'");
+            //tep_db_query("update ".orders." set orders_status = '".((MODULE_PAYMENT_INPAY_ORDER_STATUS_ID > 0)?MODULE_PAYMENT_INPAY_ORDER_STATUS_ID:DEFAULT_ORDERS_STATUS_ID)."', last_modified = now() where orders_id = '".$_POST['order_id']."'");
             $sql_data_array = array ('orders_id'=>$_POST['order_id'],
             'orders_status_id'=>$order_status_id,
             'date_added'=>'now()',

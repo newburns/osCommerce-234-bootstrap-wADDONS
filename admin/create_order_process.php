@@ -91,7 +91,7 @@
 
 	tep_db_perform(TABLE_CUSTOMERS_INFO, $sql_data_array);
 
-	tep_db_query("update " . TABLE_CUSTOMERS_INFO . " set customers_info_date_account_created = now() where customers_info_id = '" . (int)$customers_id . "'");
+	tep_db_query("update customers_info set customers_info_date_account_created = now() where customers_info_id = '" . (int)$customers_id . "'");
     
 	// do address book entry
 	$sql_data_array = array('customers_id' => (int)$customers_id,
@@ -173,7 +173,7 @@
 							); 
 
   //old
-  tep_db_perform(TABLE_ORDERS, $sql_data_array);
+  tep_db_perform(orders, $sql_data_array);
   $insert_id = tep_db_insert_id();
  
  

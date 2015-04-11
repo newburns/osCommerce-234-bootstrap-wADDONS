@@ -30,7 +30,7 @@
     }
   }
 
-  $banner_query = tep_db_query("select banners_title from " . TABLE_BANNERS . " where banners_id = '" . (int)$_GET['bID'] . "'");
+  $banner_query = tep_db_query("select banners_title from banners where banners_id = '" . (int)$_GET['bID'] . "'");
   $banner = tep_db_fetch_array($banner_query);
 
   $years_array = array();

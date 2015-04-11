@@ -42,7 +42,7 @@
    
   //1.  Update most the orders table
   if ($action == 'update_order_field') {
-	 tep_db_query("UPDATE " . TABLE_ORDERS . " SET " . $_GET['field'] . " = '" . oe_iconv($_GET['new_value']) . "' WHERE orders_id = '" . $_GET['oID'] . "'");
+	 tep_db_query("UPDATE orders SET " . $_GET['field'] . " = '" . oe_iconv($_GET['new_value']) . "' WHERE orders_id = '" . $_GET['oID'] . "'");
 	 
 	  
 	  //generate responseText
@@ -143,7 +143,7 @@ if ($action == 'update_downloads') {
   
   //6. Update the currency of the order
   if ($action == 'update_currency') {
-  	  tep_db_query("UPDATE " . TABLE_ORDERS . " SET currency = '" . tep_db_input(tep_db_prepare_input($_GET['currency'])) . "', currency_value = '" . tep_db_input(tep_db_prepare_input($_GET['currency_value'])) . "' WHERE orders_id = '" . $_GET['oID'] . "'");
+  	  tep_db_query("UPDATE orders SET currency = '" . tep_db_input(tep_db_prepare_input($_GET['currency'])) . "', currency_value = '" . tep_db_input(tep_db_prepare_input($_GET['currency_value'])) . "' WHERE orders_id = '" . $_GET['oID'] . "'");
   
   	 //generate responseText
 	  echo $_GET['currency'];
@@ -219,7 +219,7 @@ if ($action == 'update_downloads') {
 
 		if (tep_db_num_rows($lastorderstatus_query) > 0) {
 		$lastorderstatus_data = tep_db_fetch_array($lastorderstatus_query);
-		tep_db_query("UPDATE " . TABLE_ORDERS . " set orders_status='".$lastorderstatus_data['orders_status_id']."' WHERE orders_id = '" . $_GET['oID'] . "'");
+		tep_db_query("UPDATE orders set orders_status='".$lastorderstatus_data['orders_status_id']."' WHERE orders_id = '" . $_GET['oID'] . "'");
 
 	  //generate responseText
 	  echo TABLE_ORDERS_STATUS_HISTORY;
@@ -258,7 +258,7 @@ if ($action == 'update_downloads') {
 	   } //end if is_array
 	
 	  if (tep_not_null($shipping['id'])) {
-    tep_db_query("UPDATE " . TABLE_ORDERS . " SET shipping_module = '" . $shipping['id'] . "' WHERE orders_id = '" . $_POST['oID'] . "'");
+    tep_db_query("UPDATE orders SET shipping_module = '" . $shipping['id'] . "' WHERE orders_id = '" . $_POST['oID'] . "'");
 	   }
 	   
 		$order = new manualOrder($oID);
@@ -562,7 +562,7 @@ if ($action == 'update_downloads') {
          $orders_statuses = array();
          $orders_status_array = array();
          $orders_status_query = tep_db_query("SELECT orders_status_id, orders_status_name 
-                                              FROM " . TABLE_ORDERS_STATUS . " 
+                                              FROM orders_status 
 									          WHERE language_id = '" . (int)$languages_id . "'");
 									   
          while ($orders_status = tep_db_fetch_array($orders_status_query)) {
@@ -576,14 +576,14 @@ if ($action == 'update_downloads') {
 
     $check_status_query = tep_db_query("
 	                      SELECT customers_name, customers_email_address, orders_status, date_purchased 
-	                      FROM " . TABLE_ORDERS . " 
+	                      FROM orders 
 						  WHERE orders_id = '" . $_GET['oID'] . "'");
 						  
     $check_status = tep_db_fetch_array($check_status_query); 
 	
   if (($check_status['orders_status'] != $_GET['status']) || (tep_not_null($_GET['comments']))) {
 
-        tep_db_query("UPDATE " . TABLE_ORDERS . " SET 
+        tep_db_query("UPDATE orders SET 
 					  orders_status = '" . tep_db_input($_GET['status']) . "', 
                       last_modified = now() 
                       WHERE orders_id = '" . $_GET['oID'] . "'");
@@ -675,7 +675,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )    // wenn "Versendet"
 
         $oID = tep_db_prepare_input($_GET['oID']);
 
-        $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '" . (int)$oID . "'");
+        $orders_query = tep_db_query("select orders_id from orders where orders_id = '" . (int)$oID . "'");
         $order_exists = true;
         if (!tep_db_num_rows($orders_query))
         {
@@ -797,7 +797,7 @@ if (tep_db_num_rows($orders_history_query)) {
 					sort_order = '" . $_GET['sort_order'] . "'";
 					tep_db_query($Query);
 					
-	  tep_db_query("UPDATE " . TABLE_ORDERS . " SET shipping_module = '" . $_GET['id'] . "' WHERE orders_id = '" . $_GET['oID'] . "'");
+	  tep_db_query("UPDATE orders SET shipping_module = '" . $_GET['id'] . "' WHERE orders_id = '" . $_GET['oID'] . "'");
 	
 	    $order = new manualOrder($_GET['oID']);
         $shippingKey = $order->adjust_totals($_GET['oID']);

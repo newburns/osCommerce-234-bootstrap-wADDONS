@@ -522,12 +522,12 @@ if(isset($fieldsArray['special']) && $fieldsArray['special']['visible']){
 //NEEDED BY PRODUCTS QUANTY ORDER STATUS COLUMN
 if($fieldsArray['products_order_status']['visible']){
 
-	$os_query = tep_db_query("SELECT os.orders_status_name,os.orders_status_id FROM " . TABLE_ORDERS_STATUS . " os WHERE language_id= '" . (int)$languages_id . "' ORDER BY os.orders_status_id ASC");
+	$os_query = tep_db_query("SELECT os.orders_status_name,os.orders_status_id FROM orders_status os WHERE language_id= '" . (int)$languages_id . "' ORDER BY os.orders_status_id ASC");
 
 	$orders_status_array=array();
 	while($osr=tep_db_fetch_array($os_query)) $orders_status_array[$osr['orders_status_id']]=$osr['orders_status_name'];
 	
-	$pq_query = tep_db_query("SELECT op.products_id,o.orders_status, SUM(op.products_quantity) FROM " . TABLE_ORDERS . " o 
+	$pq_query = tep_db_query("SELECT op.products_id,o.orders_status, SUM(op.products_quantity) FROM orders o 
 	LEFT JOIN ".TABLE_ORDERS_PRODUCTS." op  ON o.orders_id=op.orders_id
 	GROUP BY op.products_id,o.orders_status ");
 	

@@ -266,8 +266,8 @@
 
           tep_session_close();
 
-          tep_db_query("delete from " . TABLE_WHOS_ONLINE);
-          tep_db_query("delete from " . TABLE_SESSIONS);
+          tep_db_query("delete from whos_online);
+          tep_db_query("delete from sessions);
 
           tep_db_query("delete from configuration where configuration_key = 'DB_LAST_RESTORE'");
           tep_db_query("insert into configuration values (null, 'Last Database Restore', 'DB_LAST_RESTORE', '" . $read_from . "', 'Last database restore file', '6', '0', null, now(), '', '')");

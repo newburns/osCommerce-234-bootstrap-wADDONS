@@ -87,7 +87,7 @@ function selectAll(FormName, SelectBox) {
 		if (isset($_GET['global']) && ($_GET['global'] == 'true')) {
 		  $count_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -105,7 +105,7 @@ function selectAll(FormName, SelectBox) {
 		  
 		  $count_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -126,7 +126,7 @@ function selectAll(FormName, SelectBox) {
 		  //get the target group
 		  $queue_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -140,7 +140,7 @@ function selectAll(FormName, SelectBox) {
 		  //count remaining email addresses in  target group (number to be mailed).
 		  $mailed_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '9'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -153,7 +153,7 @@ function selectAll(FormName, SelectBox) {
 		  
 		  //count how many email addresses have been mailed.
 		  $mail_query = tep_db_query("(SELECT customers_firstname, customers_lastname, customers_email_address, mmstatus
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -177,7 +177,7 @@ function selectAll(FormName, SelectBox) {
 		  //get the target group
 		  $queue_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -192,7 +192,7 @@ function selectAll(FormName, SelectBox) {
 		  //count remaining email addresses in  target group (number to be mailed).
 		  $mailed_query = tep_db_query("SELECT (
 			SELECT COUNT( * ) AS count
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '9'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id
@@ -206,7 +206,7 @@ function selectAll(FormName, SelectBox) {
 		  
 		  //count how many email addresses have been mailed.
 		  $mail_query = tep_db_query("(SELECT customers_firstname, customers_lastname, customers_email_address, mmstatus
-			FROM " . TABLE_CUSTOMERS . ", " . TABLE_CUSTOMERS_INFO . "
+			FROM " . TABLE_CUSTOMERS . ", customers_info
 			WHERE mmstatus =  '0'
 			AND global_product_notifications =  '1'
 			AND customers_id = customers_info_id

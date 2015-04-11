@@ -136,7 +136,7 @@
     $filter[] = " identifier like '%" . tep_db_input($_GET['search']) . "%' ";
   }
 
-  $actions_query_raw = "select * from " . TABLE_ACTION_RECORDER . (!empty($filter) ? " where " . implode(" and ", $filter) : "") . " order by date_added desc";
+  $actions_query_raw = "select * from action_recorder (!empty($filter) ? " where " . implode(" and ", $filter) : "") . " order by date_added desc";
   $actions_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $actions_query_raw, $actions_query_numrows);
   $actions_query = tep_db_query($actions_query_raw);
   while ($actions = tep_db_fetch_array($actions_query)) {

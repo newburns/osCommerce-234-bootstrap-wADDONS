@@ -50,7 +50,7 @@ $limit_xsell_products = '3';
  		//count the target group. mmstatus must be set to '0'
  		
  		$count_query = tep_db_query("select count(*) as count 
-					from " . TABLE_CUSTOMERS . " c, " . TABLE_ORDERS . " o
+					from " . TABLE_CUSTOMERS . " c, orders o
 					where o.customers_id = c.customers_id
 					and o.orders_status = '".$status_select."'
 					and o.date_purchased <= '" . $wait_until . "' 
@@ -64,7 +64,7 @@ $limit_xsell_products = '3';
 	case 'confirm_send';
 	    //count  email addresses in  target group (number to be mailed). mmstatus must be set to '0'
 	    $queue_query = tep_db_query("select count(*) as count 
-					from " . TABLE_CUSTOMERS . " c, " . TABLE_ORDERS . " o
+					from " . TABLE_CUSTOMERS . " c, orders o
 					where o.customers_id = c.customers_id
 					and o.orders_status = '".$status_select."' 
 					and o.date_purchased <= '" . $wait_until . "' 
@@ -75,7 +75,7 @@ $limit_xsell_products = '3';
  				
  		//count email addresses that have been mailed. mmstatus must be set to '9'
  		$mailed_query = tep_db_query("select count(*) as count 
-					from  " . TABLE_CUSTOMERS . " c, ". TABLE_ORDERS . " o
+					from  " . TABLE_CUSTOMERS . " c, ". orders . " o
 					where o.customers_id = c.customers_id
 					and o.orders_status = '".$status_updateto."'
 					and o.date_purchased <= '" . $wait_until . "' 
@@ -86,7 +86,7 @@ $limit_xsell_products = '3';
 //get the target group. mmstatus must be set to '0'
 		$mail_query = tep_db_query("select c.customers_firstname, c.customers_lastname, c.mmstatus, o.orders_id, 
 					o.customers_id, c.customers_email_address, o.date_purchased, o.date_purchased as status_date
-					from " . TABLE_ORDERS . " o, " . TABLE_CUSTOMERS . " c
+					from orders o, " . TABLE_CUSTOMERS . " c
 					where o.customers_id = c.customers_id
 					and o.orders_status = '".$status_select."'					
 					and o.date_purchased <= '" . $wait_until . "' 
@@ -154,7 +154,7 @@ $limit_xsell_products = '3';
 											  where op.products_id = p.products_id
 																					   and p.products_status = '1'                                                  
 																					   and op.orders_id in (
-											 select orders_id from " . TABLE_ORDERS . "
+											 select orders_id from orders
 											 where customers_id = '" . $mail['customers_id'] . "'))
 							order by sort_order asc limit " . $limit_xsell_products."");
 				        								
@@ -182,7 +182,7 @@ $limit_xsell_products = '3';
 
 				$order_id = $mail['orders_id'];
 				// change status
-				tep_db_query("update " . TABLE_ORDERS . " set  orders_status = '".$status_updateto."' where orders_id = '" . $order_id . "'");
+				tep_db_query("update orders set  orders_status = '".$status_updateto."' where orders_id = '" . $order_id . "'");
 			    // update order history
                 $comments = EMAIL_TEXT_MMCOMMENTS_UPDATE;            
 			    tep_db_query("insert into " . TABLE_ORDERS_STATUS_HISTORY . " (orders_id, orders_status_id, date_added, customer_notified, comments) values ('" . $order_id . "', '" . $status_updateto . "', now(), '2', '" . $comments . "')");

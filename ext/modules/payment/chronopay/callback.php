@@ -18,7 +18,7 @@
   if ( ($ip_address == '69.20.58.35') || ($ip_address == '207.97.201.192') ) {
     if (isset($_POST['cs1']) && is_numeric($_POST['cs1']) && isset($_POST['cs2']) && is_numeric($_POST['cs2']) && isset($_POST['cs3']) && !empty($_POST['cs3']) && isset($_POST['product_id']) && ($_POST['product_id'] == MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID) && isset($_POST['total']) && !empty($_POST['total']) && isset($_POST['transaction_type']) && !empty($_POST['transaction_type'])) {
       if ($_POST['cs3'] == md5(MODULE_PAYMENT_CHRONOPAY_PRODUCT_ID . $_POST['cs2'] . $_POST['cs1'] . $_POST['total'] . MODULE_PAYMENT_CHRONOPAY_MD5_HASH)) {
-        $order_query = tep_db_query("select order_status, currency, currency_value from " . TABLE_ORDERS . " where orders_id = '" . (int)$_POST['cs2'] . "' and customers_id = '" . (int)$_POST['cs1'] . "'");
+        $order_query = tep_db_query("select order_status, currency, currency_value from orders where orders_id = '" . (int)$_POST['cs2'] . "' and customers_id = '" . (int)$_POST['cs1'] . "'");
 
         if (tep_db_num_rows($order_query) > 0) {
           $order = tep_db_fetch_array($order_query);
@@ -31,7 +31,7 @@
 
             $order_status_id = (MODULE_PAYMENT_CHRONOPAY_ORDER_STATUS_ID > 0 ? (int)MODULE_PAYMENT_CHRONOPAY_ORDER_STATUS_ID : (int)DEFAULT_ORDERS_STATUS_ID);
 
-            tep_db_query("update " . TABLE_ORDERS . " set orders_status = '" . $order_status_id . "', last_modified = now() where orders_id = '" . (int)$_POST['cs2'] . "'");
+            tep_db_query("update orders set orders_status = '" . $order_status_id . "', last_modified = now() where orders_id = '" . (int)$_POST['cs2'] . "'");
 
             $sql_data_array = array('orders_id' => $_POST['cs2'],
                                     'orders_status_id' => $order_status_id,

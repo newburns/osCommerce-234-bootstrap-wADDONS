@@ -382,13 +382,13 @@ require('includes/form_check.js.php'); ?>
      }
    }
 
-   tep_db_perform(TABLE_ADDRESS_BOOK, $sql_data_array);
+   tep_db_perform(address_book, $sql_data_array);
 
 $address_id = tep_db_insert_id();
 
-tep_db_query("update " . TABLE_CUSTOMERS . " set customers_default_address_id = '" . (int)$address_id . "' where customers_id = '" . (int)$customer_id . "'");
+tep_db_query("update customers set customers_default_address_id = '" . (int)$address_id . "' where customers_id = '" . (int)$customer_id . "'");
 
-   tep_db_query("insert into " . TABLE_CUSTOMERS_INFO . " (customers_info_id, customers_info_number_of_logons, customers_info_date_account_created) values ('" . tep_db_input($customer_id) . "', '0', now())");
+   tep_db_query("insert into customers_info (customers_info_id, customers_info_number_of_logons, customers_info_date_account_created) values ('" . tep_db_input($customer_id) . "', '0', now())");
 
    $customer_first_name = $firstname;
    //$customer_default_address_id = 1;

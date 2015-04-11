@@ -33,7 +33,7 @@
         $days[date('Y-m-d', strtotime('-'. $i .' days'))] = 0;
       }
 
-      $orders_query = tep_db_query("select date_format(o.date_purchased, '%Y-%m-%d') as dateday, sum(ot.value) as total from " . TABLE_ORDERS . " o, " . TABLE_ORDERS_TOTAL . " ot where date_sub(curdate(), interval 30 day) <= o.date_purchased and o.orders_id = ot.orders_id and ot.class = 'ot_total' group by dateday");
+      $orders_query = tep_db_query("select date_format(o.date_purchased, '%Y-%m-%d') as dateday, sum(ot.value) as total from orders o, " . TABLE_ORDERS_TOTAL . " ot where date_sub(curdate(), interval 30 day) <= o.date_purchased and o.orders_id = ot.orders_id and ot.class = 'ot_total' group by dateday");
       while ($orders = tep_db_fetch_array($orders_query)) {
         $days[$orders['dateday']] = $orders['total'];
       }

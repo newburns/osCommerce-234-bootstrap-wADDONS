@@ -19,11 +19,7 @@
 */
 
 // define the database table names used in the project
-  define('TABLE_ACTION_RECORDER', 'action_recorder');
-  define('TABLE_ADDRESS_BOOK', 'address_book');
   define('TABLE_ADDRESS_FORMAT', 'address_format');
-  define('TABLE_ADMINISTRATORS', 'administrators');
-  define('TABLE_BANNERS', 'banners');
   define('TABLE_BANNERS_HISTORY', 'banners_history');
   define('TABLE_CATEGORIES', 'categories');
   define('TABLE_CATEGORIES_DESCRIPTION', 'categories_description');
@@ -39,7 +35,7 @@
   define('TABLE_MANUFACTURERS', 'manufacturers');
   define('TABLE_MANUFACTURERS_INFO', 'manufacturers_info');
   define('TABLE_NEWSLETTERS', 'newsletters');
-  define('TABLE_ORDERS', 'orders');
+  define('orders', 'orders');
   define('TABLE_ORDERS_PRODUCTS', 'orders_products');
   define('TABLE_ORDERS_PRODUCTS_ATTRIBUTES', 'orders_products_attributes');
   define('TABLE_ORDERS_PRODUCTS_DOWNLOAD', 'orders_products_download');

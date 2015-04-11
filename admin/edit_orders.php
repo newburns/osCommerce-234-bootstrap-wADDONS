@@ -44,7 +44,7 @@
   $orders_statuses = array();
   $orders_status_array = array();
   $orders_status_query = tep_db_query("SELECT orders_status_id, orders_status_name 
-                                       FROM " . TABLE_ORDERS_STATUS . " 
+                                       FROM orders_status 
 									   WHERE language_id = '" . (int)$languages_id . "' order by orders_status_name");
 									   
   while ($orders_status = tep_db_fetch_array($orders_status_query)) {
@@ -124,7 +124,7 @@
     'cc_expires' => tep_db_prepare_input($_POST['update_info_cc_expires']),
     'last_modified' => 'now()');
 
-        tep_db_perform(TABLE_ORDERS, $sql_data_array, 'update', 'orders_id = \'' . tep_db_input($oID) . '\'');
+        tep_db_perform(orders, $sql_data_array, 'update', 'orders_id = \'' . tep_db_input($oID) . '\'');
         $order_updated = true;
         
     
@@ -132,14 +132,14 @@
 
     $check_status_query = tep_db_query("
 	                      SELECT customers_name, customers_email_address, orders_status, date_purchased 
-	                      FROM " . TABLE_ORDERS . " 
+	                      FROM orders 
 						  WHERE orders_id = '" . (int)$oID . "'");
 						  
     $check_status = tep_db_fetch_array($check_status_query); 
 	
   if (($check_status['orders_status'] != $_POST['status']) || (tep_not_null($_POST['comments']))) {
 
-        tep_db_query("UPDATE " . TABLE_ORDERS . " SET 
+        tep_db_query("UPDATE orders SET 
 					  orders_status = '" . tep_db_input($_POST['status']) . "', 
                       last_modified = now() 
                       WHERE orders_id = '" . (int)$oID . "'");
@@ -236,7 +236,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
 
         $oID = tep_db_prepare_input($_GET['oID']);
 
-        $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '" . (int)$oID . "'");
+        $orders_query = tep_db_query("select orders_id from orders where orders_id = '" . (int)$oID . "'");
         $order_exists = true;
         if (!tep_db_num_rows($orders_query))
         {
@@ -466,7 +466,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
 	  } //end if is_array
 
        if (tep_not_null($shipping['id'])) {
-   tep_db_query("UPDATE " . TABLE_ORDERS . " SET shipping_module = '" . $shipping['id'] . "' WHERE orders_id = '" . (int)$oID . "'");
+   tep_db_query("UPDATE orders SET shipping_module = '" . $shipping['id'] . "' WHERE orders_id = '" . (int)$oID . "'");
        }
 
         $order = new manualOrder($oID);
@@ -922,7 +922,7 @@ if ($status == GOOGLE_MAP_ORDER_STATUS )     // wenn "Versendet"
           break;
 		  }
         $oID = tep_db_prepare_input($_GET['oID']);
-        $orders_query = tep_db_query("select orders_id from " . TABLE_ORDERS . " where orders_id = '" . (int)$oID . "'");
+        $orders_query = tep_db_query("select orders_id from orders where orders_id = '" . (int)$oID . "'");
         $order_exists = true;
         if (!tep_db_num_rows($orders_query)) {
         $order_exists = false;

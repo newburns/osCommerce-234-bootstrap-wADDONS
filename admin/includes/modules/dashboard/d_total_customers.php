@@ -33,7 +33,7 @@
         $days[date('Y-m-d', strtotime('-'. $i .' days'))] = 0;
       }
 
-      $orders_query = tep_db_query("select date_format(customers_info_date_account_created, '%Y-%m-%d') as dateday, count(*) as total from " . TABLE_CUSTOMERS_INFO . " where date_sub(curdate(), interval 30 day) <= customers_info_date_account_created group by dateday");
+      $orders_query = tep_db_query("select date_format(customers_info_date_account_created, '%Y-%m-%d') as dateday, count(*) as total from customers_info where date_sub(curdate(), interval 30 day) <= customers_info_date_account_created group by dateday");
       while ($orders = tep_db_fetch_array($orders_query)) {
         $days[$orders['dateday']] = $orders['total'];
       }

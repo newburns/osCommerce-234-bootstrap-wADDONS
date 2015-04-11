@@ -63,14 +63,14 @@
           tep_db_query("update configuration set configuration_value = '' where configuration_key = 'DEFAULT_ORDERS_STATUS_ID'");
         }
 
-        tep_db_query("delete from " . TABLE_ORDERS_STATUS . " where orders_status_id = '" . tep_db_input($oID) . "'");
+        tep_db_query("delete from orders_status where orders_status_id = '" . tep_db_input($oID) . "'");
 
         tep_redirect(tep_href_link(FILENAME_ORDERS_STATUS, 'page=' . $_GET['page']));
         break;
       case 'delete':
         $oID = tep_db_prepare_input($_GET['oID']);
 
-        $status_query = tep_db_query("select count(*) as count from " . TABLE_ORDERS . " where orders_status = '" . (int)$oID . "'");
+        $status_query = tep_db_query("select count(*) as count from orders where orders_status = '" . (int)$oID . "'");
         $status = tep_db_fetch_array($status_query);
 
         $remove_status = true;
@@ -115,7 +115,7 @@
                 <td class="dataTableHeadingContent" align="right"><?php echo TABLE_HEADING_ACTION; ?>&nbsp;</td>
               </tr>
 <?php
-  $orders_status_query_raw = "select * from " . TABLE_ORDERS_STATUS . " where language_id = '" . (int)$languages_id . "' order by orders_status_id";
+  $orders_status_query_raw = "select * from orders_status where language_id = '" . (int)$languages_id . "' order by orders_status_id";
   $orders_status_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $orders_status_query_raw, $orders_status_query_numrows);
   $orders_status_query = tep_db_query($orders_status_query_raw);
   while ($orders_status = tep_db_fetch_array($orders_status_query)) {

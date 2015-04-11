@@ -444,7 +444,7 @@ switch($item_post){
 
 	case'getAac':
 
-			$admins_query = tep_db_query("select id, user_name from " . TABLE_ADMINISTRATORS . " order by id ASC");
+			$admins_query = tep_db_query("select id, user_name from administrators order by id ASC");
 			$admins=array();
 			while ($admins_row = tep_db_fetch_array($admins_query)) $admins[$admins_row['id']]=$admins_row['user_name'];
 			
