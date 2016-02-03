@@ -6,6 +6,13 @@
   http://www.oscommerce.com
 
   Copyright (c) 2012 osCommerce
+  
+  Edited by 2014 Newburns Design and Technology
+  *************************************************
+  ************ New addon definitions **************
+  ************        Below          **************
+  *************************************************
+  Force Download Fix -- http://forums.oscommerce.com/topic/139546-force-downloads/
 
   Released under the GNU General Public License
 */
@@ -76,13 +83,23 @@ function tep_unlink_temp_dir($dir)
 
 
 // Now send the file with header() magic
+<?php /* ** Altered for Force Download fix **
   header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
   header("Cache-Control: no-cache, must-revalidate");
   header("Pragma: no-cache");
   header("Content-Type: Application/octet-stream");
   header("Content-disposition: attachment; filename=" . $downloads['orders_products_filename']);
-
+*/ ?>
+  header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
+  header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
+  header("Cache-Control: no-cache, must-revalidate");
+  header("Pragma: no-cache");
+  header("Content-Type: application/force-download");
+  header("Content-Type: application/download");
+  header("Content-Type: Application/octet-stream");
+  header("Content-disposition: attachment; filename=" . $downloads['orders_products_filename']);
+  
   if (DOWNLOAD_BY_REDIRECT == 'true') {
 // This will work only on Unix/Linux hosts
     tep_unlink_temp_dir(DIR_FS_DOWNLOAD_PUBLIC);
