@@ -83,14 +83,14 @@ function tep_unlink_temp_dir($dir)
 
 
 // Now send the file with header() magic
-<?php /* ** Altered for Force Download fix **
+/* ** Altered for Force Download fix **
   header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
   header("Cache-Control: no-cache, must-revalidate");
   header("Pragma: no-cache");
   header("Content-Type: Application/octet-stream");
   header("Content-disposition: attachment; filename=" . $downloads['orders_products_filename']);
-*/ ?>
+*/
   header("Expires: Mon, 26 Nov 1962 00:00:00 GMT");
   header("Last-Modified: " . gmdate("D,d M Y H:i:s") . " GMT");
   header("Cache-Control: no-cache, must-revalidate");
